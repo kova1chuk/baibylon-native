@@ -1,118 +1,104 @@
-import { Image } from 'expo-image';
-
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
-export default function TabTwoScreen() {
+import { useColorScheme } from '@/hooks/useColorScheme';
+
+export default function ExploreScreen() {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
+      headerBackgroundColor={{
+        light: '#EFF6FF',
+        dark: '#1E3A8A',
+      }}
       headerImage={
         <IconSymbol
           size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
+          color={isDark ? '#60A5FA' : '#3B82F6'}
+          name="magnifyingglass"
           style={styles.headerImage}
         />
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
+        <ThemedText type="title">Discover New Words</ThemedText>
       </ThemedView>
-      <ThemedText>
-        This app includes example code to help you get started.
+
+      <ThemedText style={styles.subtitle}>
+        Explore vocabulary through various learning methods and expand your
+        language skills.
       </ThemedText>
-      <Collapsible title="File-based routing">
+
+      <Collapsible title="📚 Text Analysis">
         <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText>{' '}
-          and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
+          Upload any text document and get intelligent analysis of vocabulary
+          difficulty, word frequency, and personalized learning recommendations.
         </ThemedText>
-        <ThemedText>
-          The layout file in{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the
-          web version, press <ThemedText type="defaultSemiBold">w</ThemedText>{' '}
-          in the terminal running this project.
+        <ThemedText style={styles.featureDetail}>
+          • Automatic difficulty assessment{'\n'}• Context-aware translations
+          {'\n'}• Learning path suggestions
         </ThemedText>
       </Collapsible>
-      <Collapsible title="Images">
+
+      <Collapsible title="🎯 Smart Training">
         <ThemedText>
-          For static images, you can use the{' '}
-          <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to
-          provide files for different screen densities
+          Engage with adaptive training sessions that adjust to your learning
+          pace and focus on words that need more practice.
         </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
+        <ThemedText style={styles.featureDetail}>
+          • Multiple question types{'\n'}• Spaced repetition system{'\n'}•
+          Progress tracking
+        </ThemedText>
       </Collapsible>
-      <Collapsible title="Custom fonts">
+
+      <Collapsible title="📊 Learning Analytics">
         <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText>{' '}
-          to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
+          Track your vocabulary progress with detailed statistics, review
+          history, and insights into your learning patterns.
         </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
+        <ThemedText style={styles.featureDetail}>
+          • Word mastery levels{'\n'}• Review scheduling{'\n'}• Performance
+          metrics
+        </ThemedText>
       </Collapsible>
-      <Collapsible title="Light and dark mode components">
+
+      <Collapsible title="🌍 Multi-language Support">
         <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook
-          lets you inspect what the user&apos;s current color scheme is, and so
-          you can adjust UI colors accordingly.
+          Learn vocabulary in multiple languages with support for various text
+          formats and learning contexts.
         </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
+        <ThemedText style={styles.featureDetail}>
+          • Multiple language pairs{'\n'}• Cultural context{'\n'}• Pronunciation
+          guides
+        </ThemedText>
       </Collapsible>
-      <Collapsible title="Animations">
+
+      <Collapsible title="💡 Study Tips">
         <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">
-            components/HelloWave.tsx
-          </ThemedText>{' '}
-          component uses the powerful{' '}
-          <ThemedText type="defaultSemiBold">
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
+          Get personalized study recommendations based on your learning history
+          and current vocabulary level.
         </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The{' '}
-              <ThemedText type="defaultSemiBold">
-                components/ParallaxScrollView.tsx
-              </ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
+        <ThemedText style={styles.featureDetail}>
+          • Optimal study times{'\n'}• Focus areas{'\n'}• Learning strategies
+        </ThemedText>
       </Collapsible>
+
+      <View style={styles.ctaContainer}>
+        <ThemedText style={styles.ctaText}>
+          Ready to start your vocabulary journey?
+        </ThemedText>
+        <ThemedText style={styles.ctaSubtext}>
+          Begin with text analysis or jump into training sessions to see
+          immediate results.
+        </ThemedText>
+      </View>
     </ParallaxScrollView>
   );
 }
@@ -127,5 +113,38 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
     gap: 8,
+    marginBottom: 16,
+  },
+  subtitle: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 24,
+    opacity: 0.8,
+  },
+  featureDetail: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: 8,
+    opacity: 0.8,
+  },
+  ctaContainer: {
+    alignItems: 'center',
+    marginTop: 32,
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    borderRadius: 16,
+  },
+  ctaText: {
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  ctaSubtext: {
+    fontSize: 14,
+    textAlign: 'center',
+    opacity: 0.7,
+    lineHeight: 20,
   },
 });

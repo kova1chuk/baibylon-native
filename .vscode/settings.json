@@ -28,5 +28,6 @@
     "**/dist": true,
     "**/.expo": true,
     "**/web-build": true
-  }
+  },
+  "kiroAgent.configureMCP": "Disabled"
 }
