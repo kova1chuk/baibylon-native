@@ -187,7 +187,9 @@ export const colors = {
 // Helper function to get theme-aware colors
 export const getThemeColors = (isDark: boolean) => ({
   primary: isDark ? colors.primary.dark : colors.primary.light,
-  background: isDark ? colors.background.primary.dark : colors.background.primary.light,
+  background: isDark
+    ? colors.background.primary.dark
+    : colors.background.primary.light,
   text: isDark ? colors.text.primary.dark : colors.text.primary.light,
   textSecondary: isDark
     ? colors.text.secondary.dark

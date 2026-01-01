@@ -6,7 +6,6 @@ import { Collapsible } from '@/components/Collapsible';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 
-
 export default function ExploreScreen() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';

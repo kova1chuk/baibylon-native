@@ -10,4 +10,3 @@ export type Conf = typeof appConfig;
 declare module 'tamagui' {
   interface TamaguiCustomConfig extends Conf {}
 }
-

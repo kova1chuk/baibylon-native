@@ -17,17 +17,15 @@ import { useDictionaryStats, useDictionaryWords } from '@/lib/api';
 
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 
-
 import WordsList from './WordsList/WordsList';
 
 import type { Word, WordStatus } from '@/lib/api/types';
-
 
 export default function DictionaryScreen() {
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabOverflow();
   const [selectedStatus, setSelectedStatus] = useState<WordStatus | 'all'>(
-    'all',
+    'all'
   );
   const [page, setPage] = useState(1);
   const pageSize = 20;
@@ -65,7 +63,7 @@ export default function DictionaryScreen() {
             Alert.alert('Info', 'Training functionality coming soon!');
           },
         },
-      ],
+      ]
     );
   };
 

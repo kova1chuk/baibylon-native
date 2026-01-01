@@ -1,23 +1,14 @@
 import React, { useState } from 'react';
 
-import {
-  View,
-  ScrollView,
-  Text,
-  YStack,
-  XStack,
-  Button,
-} from 'tamagui';
+import { View, ScrollView, Text, YStack, XStack, Button } from 'tamagui';
 
 import { Alert } from 'react-native';
-
 
 import { TrainingQuestion } from '../../../shared/types';
 
 import TrainingQuestionCard from './TrainingQuestionCard';
 
 export default function TrainingScreen() {
-
   // Mock training data - in real app this would come from API/context
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -164,32 +155,71 @@ export default function TrainingScreen() {
             shadowRadius={8}
             elevation={8}
           >
-            <Text fontSize="$9" fontWeight="bold" textAlign="center" marginBottom="$8">
+            <Text
+              fontSize="$9"
+              fontWeight="bold"
+              textAlign="center"
+              marginBottom="$8"
+            >
               Training Complete! 🎉
             </Text>
 
-            <XStack justifyContent="space-around" width="100%" marginBottom="$8">
+            <XStack
+              justifyContent="space-around"
+              width="100%"
+              marginBottom="$8"
+            >
               <YStack alignItems="center">
-                <Text fontSize="$10" fontWeight="bold" color="$color" marginBottom="$2">
+                <Text
+                  fontSize="$10"
+                  fontWeight="bold"
+                  color="$color"
+                  marginBottom="$2"
+                >
                   {score}
                 </Text>
-                <Text fontSize="$3" opacity={0.7} textAlign="center" color="$color">
+                <Text
+                  fontSize="$3"
+                  opacity={0.7}
+                  textAlign="center"
+                  color="$color"
+                >
                   Correct Answers
                 </Text>
               </YStack>
               <YStack alignItems="center">
-                <Text fontSize="$10" fontWeight="bold" color="$color" marginBottom="$2">
+                <Text
+                  fontSize="$10"
+                  fontWeight="bold"
+                  color="$color"
+                  marginBottom="$2"
+                >
                   {trainingSession.length}
                 </Text>
-                <Text fontSize="$3" opacity={0.7} textAlign="center" color="$color">
+                <Text
+                  fontSize="$3"
+                  opacity={0.7}
+                  textAlign="center"
+                  color="$color"
+                >
                   Total Questions
                 </Text>
               </YStack>
               <YStack alignItems="center">
-                <Text fontSize="$10" fontWeight="bold" color="$color" marginBottom="$2">
+                <Text
+                  fontSize="$10"
+                  fontWeight="bold"
+                  color="$color"
+                  marginBottom="$2"
+                >
                   {accuracy}%
                 </Text>
-                <Text fontSize="$3" opacity={0.7} textAlign="center" color="$color">
+                <Text
+                  fontSize="$3"
+                  opacity={0.7}
+                  textAlign="center"
+                  color="$color"
+                >
                   Accuracy
                 </Text>
               </YStack>
@@ -238,7 +268,11 @@ export default function TrainingScreen() {
         shadowRadius={4}
         elevation={4}
       >
-        <XStack justifyContent="space-between" alignItems="center" marginBottom="$4">
+        <XStack
+          justifyContent="space-between"
+          alignItems="center"
+          marginBottom="$4"
+        >
           <Text fontSize="$6" fontWeight="600" color="$color">
             Training Session
           </Text>
@@ -257,7 +291,12 @@ export default function TrainingScreen() {
           <Text fontSize="$3" marginBottom="$2" opacity={0.8} color="$color">
             Question {currentQuestionIndex + 1} of {trainingSession.length}
           </Text>
-          <View height={4} backgroundColor="$gray5" borderRadius={2} overflow="hidden">
+          <View
+            height={4}
+            backgroundColor="$gray5"
+            borderRadius={2}
+            overflow="hidden"
+          >
             <View
               height="100%"
               borderRadius={2}

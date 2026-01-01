@@ -13,7 +13,6 @@ import {
 
 import { Alert } from 'react-native';
 
-
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -54,9 +53,7 @@ export default function ProfileScreen() {
   };
 
   const userName =
-    user?.user_metadata?.name ||
-    user?.email?.split('@')[0] ||
-    'User';
+    user?.user_metadata?.name || user?.email?.split('@')[0] || 'User';
   const userEmail = user?.email || '';
 
   return (
@@ -135,7 +132,12 @@ export default function ProfileScreen() {
             borderBottomColor="$borderColor"
           >
             <YStack flex={1} marginRight="$4">
-              <Text fontSize="$4" fontWeight="500" marginBottom="$1" color="$color">
+              <Text
+                fontSize="$4"
+                fontWeight="500"
+                marginBottom="$1"
+                color="$color"
+              >
                 Notifications
               </Text>
               <Text fontSize="$3" opacity={0.7} color="$color">
@@ -156,7 +158,12 @@ export default function ProfileScreen() {
             paddingVertical="$3"
           >
             <YStack flex={1} marginRight="$4">
-              <Text fontSize="$4" fontWeight="500" marginBottom="$1" color="$color">
+              <Text
+                fontSize="$4"
+                fontWeight="500"
+                marginBottom="$1"
+                color="$color"
+              >
                 Dark Mode
               </Text>
               <Text fontSize="$3" opacity={0.7} color="$color">
@@ -189,26 +196,56 @@ export default function ProfileScreen() {
           </Text>
           <XStack justifyContent="space-around">
             <YStack alignItems="center">
-              <Text fontSize="$8" fontWeight="bold" marginBottom="$1" color="$color">
+              <Text
+                fontSize="$8"
+                fontWeight="bold"
+                marginBottom="$1"
+                color="$color"
+              >
                 0
               </Text>
-              <Text fontSize="$2" opacity={0.7} textAlign="center" color="$color">
+              <Text
+                fontSize="$2"
+                opacity={0.7}
+                textAlign="center"
+                color="$color"
+              >
                 Words Learned
               </Text>
             </YStack>
             <YStack alignItems="center">
-              <Text fontSize="$8" fontWeight="bold" marginBottom="$1" color="$color">
+              <Text
+                fontSize="$8"
+                fontWeight="bold"
+                marginBottom="$1"
+                color="$color"
+              >
                 0
               </Text>
-              <Text fontSize="$2" opacity={0.7} textAlign="center" color="$color">
+              <Text
+                fontSize="$2"
+                opacity={0.7}
+                textAlign="center"
+                color="$color"
+              >
                 Training Sessions
               </Text>
             </YStack>
             <YStack alignItems="center">
-              <Text fontSize="$8" fontWeight="bold" marginBottom="$1" color="$color">
+              <Text
+                fontSize="$8"
+                fontWeight="bold"
+                marginBottom="$1"
+                color="$color"
+              >
                 0
               </Text>
-              <Text fontSize="$2" opacity={0.7} textAlign="center" color="$color">
+              <Text
+                fontSize="$2"
+                opacity={0.7}
+                textAlign="center"
+                color="$color"
+              >
                 Days Streak
               </Text>
             </YStack>
@@ -229,4 +266,3 @@ export default function ProfileScreen() {
     </ScrollView>
   );
 }
-

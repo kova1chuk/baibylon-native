@@ -61,4 +61,3 @@ export interface FetchWordsPageResponse {
   page: number;
   hasMore: boolean;
 }
-

@@ -4,7 +4,6 @@ import { Text, YStack, XStack, Button } from 'tamagui';
 
 import { FlatList } from 'react-native';
 
-
 import type { Word, WordStatus } from '@/lib/api/types';
 
 interface WordsListProps {

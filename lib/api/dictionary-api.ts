@@ -14,7 +14,8 @@ import type {
 // Query keys
 export const dictionaryKeys = {
   all: ['dictionary'] as const,
-  stats: (langCode: string) => [...dictionaryKeys.all, 'stats', langCode] as const,
+  stats: (langCode: string) =>
+    [...dictionaryKeys.all, 'stats', langCode] as const,
   words: (params: FetchWordsPageParams) =>
     [...dictionaryKeys.all, 'words', params] as const,
   randomWord: (langCode?: string, translationLang?: string) =>
@@ -34,7 +35,7 @@ export function useDictionaryStats(langCode: string) {
       return {
         totalWords: Object.values(response || {}).reduce(
           (sum, count) => sum + count,
-          0,
+          0
         ),
         wordStats: response || {},
       };
@@ -75,7 +76,7 @@ export function useDictionaryWords(params: FetchWordsPageParams) {
       const rows = response || [];
       const totalWords = rows.length > 0 ? Number(rows[0].total_count) : 0;
 
-      const words: Word[] = rows.map((row) => ({
+      const words: Word[] = rows.map(row => ({
         id: row.word_id,
         word: row.text,
         definition: row.definition,
@@ -106,7 +107,7 @@ export function useDictionaryWords(params: FetchWordsPageParams) {
 // Get random word
 export function useRandomWord(
   langCode: string = 'en',
-  translationLang: string = 'uk',
+  translationLang: string = 'uk'
 ) {
   return useQuery({
     queryKey: dictionaryKeys.randomWord(langCode, translationLang),
@@ -123,4 +124,3 @@ export function useRandomWord(
     },
   });
 }
-

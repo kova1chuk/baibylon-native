@@ -4,7 +4,6 @@ import { Text, YStack, XStack, Button } from 'tamagui';
 
 import { Alert } from 'react-native';
 
-
 import { TrainingQuestion } from '../../../shared/types';
 
 interface TrainingQuestionCardProps {
@@ -18,7 +17,6 @@ export default function TrainingQuestionCard({
   onAnswer,
   onNext,
 }: TrainingQuestionCardProps) {
-
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
@@ -125,7 +123,11 @@ export default function TrainingQuestionCard({
       elevation={8}
     >
       {/* Timer */}
-      <XStack justifyContent="space-between" alignItems="center" marginBottom="$5">
+      <XStack
+        justifyContent="space-between"
+        alignItems="center"
+        marginBottom="$5"
+      >
         <Text fontSize="$3" opacity={0.7} color="$color">
           Time remaining:
         </Text>
@@ -158,7 +160,12 @@ export default function TrainingQuestionCard({
             borderLeftColor="$blue10"
             backgroundColor="$backgroundHover"
           >
-            <Text fontSize="$3" lineHeight={20} fontStyle="italic" color="$color">
+            <Text
+              fontSize="$3"
+              lineHeight={20}
+              fontStyle="italic"
+              color="$color"
+            >
               {question.word.context}
             </Text>
           </YStack>
@@ -232,4 +239,3 @@ export default function TrainingQuestionCard({
     </YStack>
   );
 }
-
