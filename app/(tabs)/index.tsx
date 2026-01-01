@@ -1,23 +1,15 @@
 import React from 'react';
 
-import { StyleSheet } from 'react-native';
+import { View } from 'tamagui';
 
-import { WelcomeScreen } from '@/src/features/main';
-
-import { ThemedView } from '@/components/ThemedView';
+import { WelcomeScreen } from '@/features/main';
 
 export default function HomeScreen() {
   // For now, show the welcome screen
   // TODO: Implement authentication check and show dashboard for authenticated users
   return (
-    <ThemedView style={styles.container}>
+    <View flex={1}>
       <WelcomeScreen />
-    </ThemedView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

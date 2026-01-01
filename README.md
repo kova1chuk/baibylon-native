@@ -1,4 +1,4 @@
-# WordFlow Native
+# Baibylon
 
 A modern React Native mobile application built with Expo, featuring a robust development environment and code quality tools.
 
@@ -34,7 +34,7 @@ A modern React Native mobile application built with Expo, featuring a robust dev
 ## 📁 Project Structure
 
 ```
-word-flow-native/
+baibylon/
 ├── app/                        # Expo Router app directory
 │   ├── _layout.tsx            # Root layout component
 │   ├── (tabs)/                # Tab-based navigation
@@ -67,7 +67,7 @@ word-flow-native/
 
    ```bash
    git clone <repository-url>
-   cd word-flow-native
+   cd baibylon
    ```
 
 2. **Install dependencies**

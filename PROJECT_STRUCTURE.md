@@ -1,10 +1,10 @@
-# WordFlow Native - Project Structure
+# Baibylon - Project Structure
 
-This document describes the architecture and organization of the WordFlow Native mobile application built with React Native and Expo.
+This document describes the architecture and organization of the Baibylon mobile application built with React Native and Expo.
 
 ## Overview
 
-WordFlow Native is a mobile application that follows modern React Native development practices with a focus on code quality, maintainability, and developer experience.
+Baibylon is a mobile application that follows modern React Native development practices with a focus on code quality, maintainability, and developer experience.
 
 ## Project Architecture
 
@@ -24,7 +24,7 @@ WordFlow Native is a mobile application that follows modern React Native develop
 ## Folder Structure
 
 ```
-word-flow-native/
+baibylon/
 ├── app/                        # Expo Router app directory
 │   ├── _layout.tsx            # Root layout component
 │   ├── (tabs)/                # Tab-based navigation

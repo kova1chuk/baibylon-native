@@ -21,7 +21,11 @@
       "@/hooks/*": ["./hooks/*"],
       "@/constants/*": ["./constants/*"],
       "@/scripts/*": ["./scripts/*"],
-      "@/assets/*": ["./assets/*"]
+      "@/assets/*": ["./assets/*"],
+      "@/features/*": ["./features/*"],
+      "@/lib/*": ["./lib/*"],
+      "@/shared/*": ["./shared/*"],
+      "@/types/*": ["./types/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"],

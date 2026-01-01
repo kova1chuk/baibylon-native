@@ -1,4 +1,6 @@
-import { SignUpPage } from '@/src/features/auth';
+import React from 'react';
+
+import { SignUpPage } from '@/features/auth';
 
 export default function SignUp() {
   return <SignUpPage />;
