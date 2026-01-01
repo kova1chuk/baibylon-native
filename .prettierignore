@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Build outputs
+dist/
+build/
+.expo/
+web-build/
+
+# Generated files
+expo-env.d.ts
+*.tsbuildinfo
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+

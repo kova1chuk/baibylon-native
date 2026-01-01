@@ -56,7 +56,7 @@ word-flow-native/
 ### Prerequisites
 
 - Node.js 18+
-- npm or yarn
+- pnpm
 - Expo CLI
 - iOS Simulator (for iOS development)
 - Android Studio (for Android development)
@@ -73,26 +73,26 @@ word-flow-native/
 2. **Install dependencies**
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. **Start the development server**
 
    ```bash
-   npm start
+   pnpm start
    ```
 
 4. **Run on specific platform**
 
    ```bash
    # iOS
-   npm run ios
+   pnpm run ios
 
    # Android
-   npm run android
+   pnpm run android
 
    # Web
-   npm run web
+   pnpm run web
    ```
 
 ## 🧹 Development Commands
@@ -101,32 +101,32 @@ word-flow-native/
 
 ```bash
 # Lint code
-npm run lint
+pnpm run lint
 
 # Fix linting issues automatically
-npm run lint:fix
+pnpm run lint:fix
 
 # Check code formatting
-npm run format:check
+pnpm run format:check
 
 # Format code automatically
-npm run format
+pnpm run format
 
 # Type checking
-npm run type-check
+pnpm run type-check
 ```
 
 ### Project Management
 
 ```bash
 # Reset project (cleans build artifacts)
-npm run reset-project
+pnpm run reset-project
 
 # Install dependencies
-npm install
+pnpm install
 
 # Update dependencies
-npm update
+pnpm update
 ```
 
 ## 🔧 Configuration
@@ -189,30 +189,30 @@ The project includes a comprehensive set of UI components:
 1. **Metro bundler issues**
 
    ```bash
-   npm run reset-project
-   npm start --clear
+   pnpm run reset-project
+   pnpm start --clear
    ```
 
 2. **Linting errors**
 
    ```bash
-   npm run lint:fix
+   pnpm run lint:fix
    ```
 
 3. **Formatting issues**
 
    ```bash
-   npm run format
+   pnpm run format
    ```
 
 4. **TypeScript errors**
    ```bash
-   npm run type-check
+   pnpm run type-check
    ```
 
 ### Development Tips
 
-- Always run `npm run lint` before committing
+- Always run `pnpm run lint` before committing
 - Use VS Code with recommended extensions
 - Keep imports organized and sorted
 - Follow the established component patterns

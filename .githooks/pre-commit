@@ -4,7 +4,7 @@ echo "🔄 Pre-commit: Running linting and formatting checks..."
 
 # Run ESLint
 echo "📝 Checking code with ESLint..."
-npx eslint . --ext .js,.jsx,.ts,.tsx
+pnpm exec eslint . --ext .js,.jsx,.ts,.tsx
 
 if [ $? -ne 0 ]; then
   echo "❌ Pre-commit: ESLint found issues. Please fix them before committing."
@@ -13,10 +13,10 @@ fi
 
 # Run Prettier check
 echo "🎨 Checking code formatting with Prettier..."
-npx prettier --check .
+pnpm exec prettier --check .
 
 if [ $? -ne 0 ]; then
-  echo "❌ Pre-commit: Prettier found formatting issues. Please run 'npx prettier --write .' to fix them."
+  echo "❌ Pre-commit: Prettier found formatting issues. Please run 'pnpm exec prettier --write .' to fix them."
   exit 1
 fi
 
