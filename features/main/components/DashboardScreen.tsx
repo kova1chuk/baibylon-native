@@ -32,13 +32,13 @@ interface WordStats {
 }
 
 const STATUS_COLORS: Record<keyof Omit<WordStats, 'total'>, string> = {
-  notLearned: '#6B7280', // gray
-  beginner: '#EF4444', // red
-  basic: '#F97316', // orange
-  intermediate: '#F59E0B', // yellow/orange
-  advanced: '#3B82F6', // blue
-  wellKnown: '#10B981', // green
-  mastered: '#8B5CF6', // purple
+  notLearned: '#6B7280',
+  beginner: '#EF4444',
+  basic: '#F97316',
+  intermediate: '#F59E0B',
+  advanced: '#3B82F6',
+  wellKnown: '#10B981',
+  mastered: '#8B5CF6',
 };
 
 const STATUS_LABELS: Record<keyof Omit<WordStats, 'total'>, string> = {
@@ -69,7 +69,6 @@ export default function DashboardScreen() {
     refetch();
   };
 
-  // Transform API response to local stats format
   const stats: WordStats = {
     notLearned: statsData?.wordStats?.['1'] || 0,
     beginner: statsData?.wordStats?.['2'] || 0,
@@ -81,7 +80,6 @@ export default function DashboardScreen() {
     total: statsData?.totalWords || 0,
   };
 
-  // Create doughnut chart data
   const chartData = [
     {
       key: 'notLearned',
@@ -104,13 +102,12 @@ export default function DashboardScreen() {
     { key: 'mastered', value: stats.mastered, color: STATUS_COLORS.mastered },
   ].filter(item => item.value > 0);
 
-  // Calculate angles for doughnut chart
   const size = 280;
   const center = size / 2;
   const radius = 100;
   const innerRadius = 80;
 
-  const total = chartData.reduce((sum, item) => sum + item.value, 0) || 1; // Avoid division by zero
+  const total = chartData.reduce((sum, item) => sum + item.value, 0) || 1;
 
   const generatePath = (
     startAngle: number,
@@ -127,7 +124,7 @@ export default function DashboardScreen() {
     return `M ${center} ${center} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
   };
 
-  let currentAngle = -90; // Start from top
+  let currentAngle = -90;
   const segments =
     total > 0
       ? chartData.map(item => {
@@ -163,11 +160,11 @@ export default function DashboardScreen() {
     <ScrollView
       flex={1}
       contentContainerStyle={{
-        paddingBottom: tabBarHeight + insets.bottom + 16,
+        paddingBottom: tabBarHeight,
         flexGrow: 1,
       }}
     >
-      {/* Header */}
+      {}
       <XStack
         alignItems="center"
         justifyContent="space-between"
@@ -196,7 +193,7 @@ export default function DashboardScreen() {
       </XStack>
 
       <YStack gap="$4" padding="$4">
-        {/* Doughnut Chart */}
+        {}
         <View
           alignItems="center"
           justifyContent="center"
@@ -216,7 +213,7 @@ export default function DashboardScreen() {
                     strokeWidth={2}
                   />
                 ))}
-                {/* Inner circle to create doughnut effect */}
+                {}
                 <Circle
                   cx={center}
                   cy={center}
@@ -239,7 +236,7 @@ export default function DashboardScreen() {
           </View>
         </View>
 
-        {/* Word Status Distribution */}
+        {}
         <YStack
           gap="$3"
           backgroundColor="$background"
@@ -281,7 +278,7 @@ export default function DashboardScreen() {
           </YStack>
         </YStack>
 
-        {/* Quick Actions */}
+        {}
         <YStack gap="$3">
           <Text fontSize="$6" fontWeight="600" color="$color" marginBottom="$2">
             Quick Actions

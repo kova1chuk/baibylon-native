@@ -16,7 +16,16 @@
     "type-check": "tsc --noEmit",
     "prepare": "git config core.hooksPath .githooks",
     "supabase:types": "supabase gen types typescript --linked > types/supabase.ts",
-    "supabase:types:project": "supabase gen types typescript --project-id"
+    "supabase:types:project": "supabase gen types typescript --project-id",
+    "build:android": "eas build --platform android --profile production",
+    "build:android:dev": "eas build --platform android --profile development",
+    "build:ios": "eas build --platform ios --profile production",
+    "build:ios:dev": "eas build --platform ios --profile development",
+    "build:all": "eas build --platform all --profile production",
+    "build:all:dev": "eas build --platform all --profile development",
+    "deploy:android": "eas submit --platform android --profile production",
+    "deploy:ios": "eas submit --platform ios --profile production",
+    "deploy:all": "eas submit --platform all --profile production"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

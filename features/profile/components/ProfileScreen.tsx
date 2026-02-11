@@ -31,7 +31,6 @@ export default function ProfileScreen() {
         text: 'Sign Out',
         style: 'destructive',
         onPress: () => {
-          // TODO: Implement actual sign out logic
           router.replace('/auth/signin');
         },
       },
@@ -39,13 +38,11 @@ export default function ProfileScreen() {
   };
 
   const handleEditProfile = () => {
-    // TODO: Navigate to edit profile screen
     Alert.alert('Info', 'Edit profile functionality coming soon!');
   };
 
   const handleNotificationsToggle = (value: boolean) => {
     setNotificationsEnabled(value);
-    // TODO: Implement actual notification toggle logic
   };
 
   const handleDarkModeToggle = (value: boolean) => {
@@ -59,7 +56,7 @@ export default function ProfileScreen() {
   return (
     <ScrollView flex={1} backgroundColor="$background">
       <YStack gap="$4" padding="$4">
-        {/* Profile Header */}
+        {}
         <YStack
           gap="$3"
           alignItems="center"
@@ -106,7 +103,7 @@ export default function ProfileScreen() {
           </Button>
         </YStack>
 
-        {/* Settings Section */}
+        {}
         <YStack
           gap="$2"
           padding="$5"
@@ -123,7 +120,7 @@ export default function ProfileScreen() {
             Settings
           </Text>
 
-          {/* Notifications Setting */}
+          {}
           <XStack
             alignItems="center"
             justifyContent="space-between"
@@ -151,7 +148,7 @@ export default function ProfileScreen() {
             />
           </XStack>
 
-          {/* Dark Mode Setting */}
+          {}
           <XStack
             alignItems="center"
             justifyContent="space-between"
@@ -178,7 +175,7 @@ export default function ProfileScreen() {
           </XStack>
         </YStack>
 
-        {/* Stats Section */}
+        {}
         <YStack
           gap="$4"
           padding="$5"
@@ -252,7 +249,7 @@ export default function ProfileScreen() {
           </XStack>
         </YStack>
 
-        {/* Sign Out Button */}
+        {}
         <Button
           size="$5"
           backgroundColor="$red10"

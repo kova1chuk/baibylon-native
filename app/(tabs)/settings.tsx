@@ -61,7 +61,7 @@ export default function SettingsScreen() {
       }}
     >
       <YStack gap="$4" padding="$4">
-        {/* Profile Section */}
+        {}
         <YStack
           gap="$3"
           backgroundColor="$background"
@@ -92,7 +92,7 @@ export default function SettingsScreen() {
           </XStack>
         </YStack>
 
-        {/* Settings Section */}
+        {}
         <YStack
           gap="$2"
           backgroundColor="$background"
@@ -131,7 +131,7 @@ export default function SettingsScreen() {
           </XStack>
         </YStack>
 
-        {/* Sign Out Button */}
+        {}
         <Button
           size="$5"
           backgroundColor="$red10"

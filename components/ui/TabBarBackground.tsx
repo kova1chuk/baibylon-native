@@ -2,7 +2,6 @@ import { View } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
 
-// This is a shim for web and Android where the tab bar is generally opaque.
 export default function TabBarBackground() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';

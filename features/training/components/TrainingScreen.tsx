@@ -9,7 +9,6 @@ import { TrainingQuestion } from '../../../shared/types';
 import TrainingQuestionCard from './TrainingQuestionCard';
 
 export default function TrainingScreen() {
-  // Mock training data - in real app this would come from API/context
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isTrainingComplete, setIsTrainingComplete] = useState(false);
@@ -124,7 +123,6 @@ export default function TrainingScreen() {
           text: 'Exit',
           style: 'destructive',
           onPress: () => {
-            // TODO: Navigate back to main screen
             Alert.alert('Info', 'Navigation back to main screen coming soon!');
           },
         },
@@ -256,7 +254,7 @@ export default function TrainingScreen() {
 
   return (
     <View flex={1} backgroundColor="$background">
-      {/* Header */}
+      {}
       <YStack
         padding="$5"
         margin="$4"
@@ -312,7 +310,7 @@ export default function TrainingScreen() {
         </XStack>
       </YStack>
 
-      {/* Training Question */}
+      {}
       <TrainingQuestionCard
         question={trainingSession[currentQuestionIndex]}
         onAnswer={handleAnswer}

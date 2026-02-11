@@ -78,7 +78,7 @@ export function AuthForm({
     value: string
   ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
+
     if (errors[field as keyof FormErrors]) {
       setErrors(prev => {
         const newErrors = { ...prev };

@@ -19,7 +19,6 @@ import {
 
 import config from '../tamagui.config';
 
-// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -36,7 +35,6 @@ function AppContent() {
   });
 
   if (!loaded) {
-    // Async font loading only occurs in development.
     return null;
   }
 

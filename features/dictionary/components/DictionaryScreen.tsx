@@ -30,7 +30,6 @@ export default function DictionaryScreen() {
   const [page, setPage] = useState(1);
   const pageSize = 20;
 
-  // Map WordStatus to API format
   const statusFilter: WordStatus[] | undefined =
     selectedStatus === 'all' ? undefined : [selectedStatus];
 
@@ -59,7 +58,6 @@ export default function DictionaryScreen() {
         {
           text: 'Start Training',
           onPress: () => {
-            // TODO: Navigate to training with this word
             Alert.alert('Info', 'Training functionality coming soon!');
           },
         },
@@ -69,20 +67,17 @@ export default function DictionaryScreen() {
 
   const handleStatusFilterChange = (status: WordStatus | 'all') => {
     setSelectedStatus(status);
-    setPage(1); // Reset to first page when filter changes
+    setPage(1);
   };
 
   const handleAddWord = () => {
-    // TODO: Navigate to add word screen
     Alert.alert('Info', 'Add word functionality coming soon!');
   };
 
   const handleImportWords = () => {
-    // TODO: Navigate to import words screen
     Alert.alert('Info', 'Import words functionality coming soon!');
   };
 
-  // Calculate stats from API response
   const stats = {
     total: statsData?.totalWords || 0,
     notLearned: statsData?.wordStats?.['1'] || 0,
@@ -131,7 +126,7 @@ export default function DictionaryScreen() {
         flexGrow: 1,
       }}
     >
-      {/* Header */}
+      {}
       <YStack
         gap="$4"
         padding="$6"
@@ -151,7 +146,7 @@ export default function DictionaryScreen() {
           Track your vocabulary progress and manage your word collection
         </Text>
 
-        {/* Action Buttons */}
+        {}
         <XStack gap="$3">
           <Button
             flex={1}
@@ -179,7 +174,7 @@ export default function DictionaryScreen() {
         </XStack>
       </YStack>
 
-      {/* Stats Overview */}
+      {}
       <YStack
         gap="$4"
         padding="$5"
@@ -231,7 +226,7 @@ export default function DictionaryScreen() {
         </XStack>
       </YStack>
 
-      {/* Words List */}
+      {}
       <WordsList
         words={words}
         onWordPress={handleWordPress}

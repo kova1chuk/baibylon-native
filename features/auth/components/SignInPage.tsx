@@ -19,7 +19,6 @@ export default function SignInPage() {
   const { session, loading: authLoading } = useAuth();
   const { promptAsync, isLoading: googleLoading } = useGoogleAuth();
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (session && !authLoading) {
       router.replace('/(tabs)');
@@ -40,8 +39,6 @@ export default function SignInPage() {
         );
         return;
       }
-
-      // Navigation will happen automatically via the useEffect above
     } catch {
       Alert.alert('Error', 'Failed to sign in. Please try again.');
     }

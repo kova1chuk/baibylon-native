@@ -11,7 +11,6 @@ import type {
   WordStatus,
 } from './types';
 
-// Query keys
 export const dictionaryKeys = {
   all: ['dictionary'] as const,
   stats: (langCode: string) =>
@@ -22,7 +21,6 @@ export const dictionaryKeys = {
     [...dictionaryKeys.all, 'randomWord', langCode, translationLang] as const,
 };
 
-// Get dictionary statistics
 export function useDictionaryStats(langCode: string) {
   return useQuery({
     queryKey: dictionaryKeys.stats(langCode),
@@ -43,7 +41,6 @@ export function useDictionaryStats(langCode: string) {
   });
 }
 
-// Fetch words page
 export function useDictionaryWords(params: FetchWordsPageParams) {
   return useQuery({
     queryKey: dictionaryKeys.words(params),
@@ -104,7 +101,6 @@ export function useDictionaryWords(params: FetchWordsPageParams) {
   });
 }
 
-// Get random word
 export function useRandomWord(
   langCode: string = 'en',
   translationLang: string = 'uk'

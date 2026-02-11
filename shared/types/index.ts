@@ -1,4 +1,3 @@
-// User types
 export interface User {
   id: string;
   email: string;
@@ -8,7 +7,6 @@ export interface User {
   updatedAt: string;
 }
 
-// Word types
 export interface Word {
   id: string;
   text: string;
@@ -35,7 +33,6 @@ export type WordStatus =
   | 'wellKnown'
   | 'mastered';
 
-// Dictionary types
 export interface Dictionary {
   id: string;
   name: string;
@@ -45,7 +42,6 @@ export interface Dictionary {
   updatedAt: string;
 }
 
-// Training types
 export interface TrainingSession {
   id: string;
   userId: string;
@@ -66,7 +62,6 @@ export interface TrainingQuestion {
   correctAnswer: string;
 }
 
-// Review types
 export interface Review {
   id: string;
   userId: string;
@@ -78,7 +73,6 @@ export interface Review {
   interval: number;
 }
 
-// Analysis types
 export interface WordAnalysis {
   id: string;
   text: string;
@@ -88,7 +82,6 @@ export interface WordAnalysis {
   createdAt: string;
 }
 
-// API Response types
 export interface ApiResponse<T> {
   data: T;
   message?: string;
@@ -103,7 +96,6 @@ export interface PaginatedResponse<T> {
   hasMore: boolean;
 }
 
-// Navigation types
 export type RootStackParamList = {
   '(tabs)': undefined;
   auth: undefined;
@@ -122,11 +114,9 @@ export type TabParamList = {
   profile: undefined;
 };
 
-// Theme types
 export type ColorScheme = 'light' | 'dark';
 export type Theme = 'system' | 'light' | 'dark';
 
-// Form types
 export interface LoginForm {
   email: string;
   password: string;
@@ -139,20 +129,17 @@ export interface SignUpForm {
   name?: string;
 }
 
-// Error types
 export interface AppError {
   code: string;
   message: string;
   details?: any;
 }
 
-// Loading states
 export interface LoadingState {
   isLoading: boolean;
   error?: AppError;
 }
 
-// Async state
 export interface AsyncState<T> extends LoadingState {
   data?: T;
 }

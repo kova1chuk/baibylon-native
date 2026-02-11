@@ -18,7 +18,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>('light');
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load theme from storage on mount
   useEffect(() => {
     const loadTheme = async () => {
       try {
@@ -49,7 +48,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  // Don't render until theme is loaded to avoid flash
   if (!isLoaded) {
     return null;
   }

@@ -19,7 +19,6 @@ export default function SignUpPage() {
   const { session, loading: authLoading } = useAuth();
   const { promptAsync, isLoading: googleLoading } = useGoogleAuth();
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (session && !authLoading) {
       router.replace('/(tabs)');
@@ -48,9 +47,6 @@ export default function SignUpPage() {
         );
         return;
       }
-
-      // Navigation will happen automatically via the useEffect above
-      // Note: Supabase may require email confirmation depending on your settings
     } catch {
       Alert.alert('Error', 'Failed to create account. Please try again.');
     }
@@ -58,8 +54,6 @@ export default function SignUpPage() {
 
   const handleGoogleSignUp = async () => {
     try {
-      // Google auth automatically creates a user if they don't exist
-      // Same flow as sign-in, just different UI text
       await promptAsync();
     } catch {
       Alert.alert('Error', 'Failed to sign up with Google. Please try again.');

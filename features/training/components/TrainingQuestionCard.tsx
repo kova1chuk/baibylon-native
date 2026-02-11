@@ -122,7 +122,7 @@ export default function TrainingQuestionCard({
       shadowRadius={8}
       elevation={8}
     >
-      {/* Timer */}
+      {}
       <XStack
         justifyContent="space-between"
         alignItems="center"
@@ -146,7 +146,7 @@ export default function TrainingQuestionCard({
         </XStack>
       </XStack>
 
-      {/* Question */}
+      {}
       <YStack marginBottom="$6">
         <Text fontSize="$6" marginBottom="$4" lineHeight={24} color="$color">
           {getQuestionText()}
@@ -172,7 +172,7 @@ export default function TrainingQuestionCard({
         )}
       </YStack>
 
-      {/* Answer Options */}
+      {}
       <YStack gap="$3" marginBottom="$6">
         {question.options ? (
           question.options.map((option, index) => {
@@ -210,7 +210,7 @@ export default function TrainingQuestionCard({
         )}
       </YStack>
 
-      {/* Next Button */}
+      {}
       {isAnswered && (
         <Button
           size="$5"
@@ -224,7 +224,7 @@ export default function TrainingQuestionCard({
         </Button>
       )}
 
-      {/* Progress Info */}
+      {}
       <YStack paddingTop="$4" borderTopWidth={1} borderTopColor="$borderColor">
         <Text fontSize="$2" opacity={0.6} marginBottom="$1" color="$color">
           Word: {question.word.text}

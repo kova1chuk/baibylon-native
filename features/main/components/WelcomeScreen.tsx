@@ -12,7 +12,6 @@ export default function WelcomeScreen() {
   const router = useRouter();
   const { user, session, loading } = useAuth();
 
-  // Redirect to auth if not logged in
   useEffect(() => {
     if (!loading && !session) {
       router.replace('/auth/signin');
@@ -27,17 +26,14 @@ export default function WelcomeScreen() {
     router.push('/auth/signup');
   };
 
-  // Show loading state
   if (loading) {
-    return null; // Or show a loading spinner
+    return null;
   }
 
-  // If user is logged in, show dashboard
   if (session && user) {
     return <DashboardScreen />;
   }
 
-  // Show welcome screen for non-authenticated users
   return (
     <ScrollView
       flex={1}
@@ -47,9 +43,9 @@ export default function WelcomeScreen() {
         paddingHorizontal: 20,
       }}
     >
-      {/* Hero Section */}
+      {}
       <YStack alignItems="center" marginBottom="$6">
-        {/* Animated Icon */}
+        {}
         <YStack position="relative" marginBottom="$5">
           <LinearGradient
             colors={['$blue10', '$blue11']}
@@ -64,7 +60,7 @@ export default function WelcomeScreen() {
             <Text fontSize={48}>📚</Text>
           </LinearGradient>
 
-          {/* Floating elements */}
+          {}
           <View
             position="absolute"
             width={24}
@@ -85,7 +81,7 @@ export default function WelcomeScreen() {
           />
         </YStack>
 
-        {/* Main Heading */}
+        {}
         <Text
           fontSize="$10"
           fontWeight="bold"
@@ -96,7 +92,7 @@ export default function WelcomeScreen() {
           Welcome to Baibylon
         </Text>
 
-        {/* Subtitle */}
+        {}
         <Text
           fontSize="$6"
           textAlign="center"
@@ -110,9 +106,9 @@ export default function WelcomeScreen() {
         </Text>
       </YStack>
 
-      {/* Features Grid */}
+      {}
       <YStack gap="$4" marginBottom="$6">
-        {/* Smart Analysis */}
+        {}
         <YStack
           backgroundColor="$background"
           padding="$5"
@@ -149,7 +145,7 @@ export default function WelcomeScreen() {
           </Text>
         </YStack>
 
-        {/* Interactive Training */}
+        {}
         <YStack
           backgroundColor="$background"
           padding="$5"
@@ -186,7 +182,7 @@ export default function WelcomeScreen() {
           </Text>
         </YStack>
 
-        {/* Progress Tracking */}
+        {}
         <YStack
           backgroundColor="$background"
           padding="$5"
@@ -224,7 +220,7 @@ export default function WelcomeScreen() {
         </YStack>
       </YStack>
 
-      {/* CTA Section */}
+      {}
       <YStack alignItems="center" gap="$4">
         <YStack gap="$4" marginBottom="$4" width="100%">
           <Button

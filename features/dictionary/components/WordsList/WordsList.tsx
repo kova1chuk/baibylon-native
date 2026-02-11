@@ -25,13 +25,13 @@ const STATUS_LABELS: Record<WordStatus | 'all', string> = {
 };
 
 const STATUS_COLORS: Record<WordStatus | 'all', string> = {
-  '1': '#6B7280', // gray
-  '2': '#EF4444', // red
-  '3': '#F97316', // orange
-  '4': '#F59E0B', // yellow/orange
-  '5': '#3B82F6', // blue
-  '6': '#10B981', // green
-  '7': '#8B5CF6', // purple
+  '1': '#6B7280',
+  '2': '#EF4444',
+  '3': '#F97316',
+  '4': '#F59E0B',
+  '5': '#3B82F6',
+  '6': '#10B981',
+  '7': '#8B5CF6',
   all: '#6B7280',
 };
 
@@ -153,7 +153,7 @@ export default function WordsList({
 
   return (
     <YStack flex={1}>
-      {/* Status Filters */}
+      {}
       <YStack
         paddingVertical="$4"
         borderBottomWidth={1}
@@ -169,7 +169,7 @@ export default function WordsList({
         />
       </YStack>
 
-      {/* Words List */}
+      {}
       <FlatList
         data={words}
         renderItem={renderWordItem}
