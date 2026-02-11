@@ -1,4 +1,4 @@
-package com.baibylon
+package com.vocairo
 
 import android.app.Application
 import android.content.res.Configuration

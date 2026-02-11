@@ -68,7 +68,7 @@ export function useGoogleAuth() {
       setIsLoading(true);
 
       const redirectUrl = makeRedirectUri({
-        scheme: 'baibylon',
+        scheme: 'vocairo',
         path: 'auth/callback',
       });
 

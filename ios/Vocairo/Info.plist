@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>Baibylon</string>
+    <string>Vocairo</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -27,8 +27,8 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>baibylon</string>
-          <string>com.baibylon</string>
+          <string>vocairo</string>
+          <string>com.vocairo</string>
           <string>com.googleusercontent.apps.7564913676-bpfcf2lui49hfvkmp1kunj30f4sor0ko</string>
         </array>
       </dict>
@@ -40,7 +40,7 @@
     <key>PLIST_VERSION</key>
     <string>1</string>
     <key>BUNDLE_ID</key>
-    <string>com.baibylon</string>
+    <string>com.vocairo</string>
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>LSMinimumSystemVersion</key>

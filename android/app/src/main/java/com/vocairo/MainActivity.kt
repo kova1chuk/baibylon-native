@@ -1,4 +1,4 @@
-package com.baibylon
+package com.vocairo
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

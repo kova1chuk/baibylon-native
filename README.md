@@ -1,4 +1,4 @@
-# Baibylon
+# Vocairo
 
 A modern React Native mobile application built with Expo, featuring a robust development environment and code quality tools.
 
@@ -34,7 +34,7 @@ A modern React Native mobile application built with Expo, featuring a robust dev
 ## 📁 Project Structure
 
 ```
-baibylon/
+vocairo/
 ├── app/                        # Expo Router app directory
 │   ├── _layout.tsx            # Root layout component
 │   ├── (tabs)/                # Tab-based navigation
@@ -67,7 +67,7 @@ baibylon/
 
    ```bash
    git clone <repository-url>
-   cd baibylon
+   cd vocairo
    ```
 
 2. **Install dependencies**

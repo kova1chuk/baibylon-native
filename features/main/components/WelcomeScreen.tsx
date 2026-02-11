@@ -89,7 +89,7 @@ export default function WelcomeScreen() {
           marginBottom="$3"
           lineHeight={44}
         >
-          Welcome to Baibylon
+          Welcome to Vocairo
         </Text>
 
         {}
@@ -245,7 +245,7 @@ export default function WelcomeScreen() {
         </YStack>
 
         <Text fontSize="$3" textAlign="center" opacity={0.7}>
-          Join thousands of learners improving their vocabulary with Baibylon
+          Join thousands of learners improving their vocabulary with Vocairo
         </Text>
       </YStack>
     </ScrollView>

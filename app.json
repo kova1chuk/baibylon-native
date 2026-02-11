@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "Baibylon",
-    "slug": "baibylon",
+    "name": "Vocairo",
+    "slug": "vocairo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "baibylon",
+    "scheme": "vocairo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.baibylon"
+      "bundleIdentifier": "com.vocairo"
     },
     "android": {
       "adaptiveIcon": {
@@ -18,7 +18,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.baibylon"
+      "package": "com.vocairo"
     },
     "web": {
       "bundler": "metro",

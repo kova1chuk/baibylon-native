@@ -1,10 +1,10 @@
-# Baibylon - Project Structure
+# Vocairo - Project Structure
 
-This document describes the architecture and organization of the Baibylon mobile application built with React Native and Expo.
+This document describes the architecture and organization of the Vocairo mobile application built with React Native and Expo.
 
 ## Overview
 
-Baibylon is a mobile application that follows modern React Native development practices with a focus on code quality, maintainability, and developer experience.
+Vocairo is a mobile application that follows modern React Native development practices with a focus on code quality, maintainability, and developer experience.
 
 ## Project Architecture
 
@@ -24,7 +24,7 @@ Baibylon is a mobile application that follows modern React Native development pr
 ## Folder Structure
 
 ```
-baibylon/
+vocairo/
 ├── app/                        # Expo Router app directory
 │   ├── _layout.tsx            # Root layout component
 │   ├── (tabs)/                # Tab-based navigation
