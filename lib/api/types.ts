@@ -14,8 +14,6 @@ export interface DictionaryWordRow {
   usagecount: number;
   total_count: number;
   in_reviews: boolean;
-  antonyms: string;
-  synonymous: string;
 }
 
 export interface GetDictStatsResponse {
