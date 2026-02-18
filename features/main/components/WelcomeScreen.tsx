@@ -48,7 +48,7 @@ export default function WelcomeScreen() {
         {}
         <YStack position="relative" marginBottom="$5">
           <LinearGradient
-            colors={['$blue10', '$blue11']}
+            colors={['#10B981', '#059669']}
             style={{
               width: 96,
               height: 96,
@@ -123,7 +123,7 @@ export default function WelcomeScreen() {
             width={48}
             height={48}
             borderRadius="$3"
-            backgroundColor="$blue3"
+            backgroundColor="$green3"
             alignItems="center"
             justifyContent="center"
             marginBottom="$4"
@@ -225,7 +225,7 @@ export default function WelcomeScreen() {
         <YStack gap="$4" marginBottom="$4" width="100%">
           <Button
             size="$5"
-            backgroundColor="$blue10"
+            backgroundColor="#10B981"
             color="white"
             fontWeight="600"
             onPress={handleGetStarted}

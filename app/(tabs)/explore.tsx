@@ -13,13 +13,13 @@ export default function ExploreScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{
-        light: '#EFF6FF',
-        dark: '#1E3A8A',
+        light: '#ECFDF5',
+        dark: '#064E3B',
       }}
       headerImage={
         <IconSymbol
           size={310}
-          color={isDark ? '#60A5FA' : '#3B82F6'}
+          color={isDark ? '#6EE7B7' : '#10B981'}
           name="magnifyingglass"
           style={{
             color: '#808080',
@@ -136,7 +136,7 @@ export default function ExploreScreen() {
         marginTop="$8"
         paddingVertical="$6"
         paddingHorizontal="$4"
-        backgroundColor="rgba(59, 130, 246, 0.1)"
+        backgroundColor="rgba(16, 185, 129, 0.1)"
         borderRadius="$4"
       >
         <Text

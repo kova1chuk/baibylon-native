@@ -1,8 +1,8 @@
 export const colors = {
   primary: {
-    light: '#3B82F6',
-    dark: '#2563EB',
-    hover: '#1D4ED8',
+    light: '#10B981',
+    dark: '#6EE7B7',
+    hover: '#059669',
   },
 
   secondary: {
@@ -13,40 +13,40 @@ export const colors = {
   text: {
     primary: {
       light: '#111827',
-      dark: '#FFFFFF',
+      dark: '#FAFAF9',
     },
     secondary: {
       light: '#4B5563',
       dark: '#D1D5DB',
     },
     muted: {
-      light: '#6B7280',
-      dark: '#9CA3AF',
+      light: '#78716C',
+      dark: '#A1A1AA',
     },
   },
 
   background: {
     primary: {
-      light: '#FFFFFF',
-      dark: '#1F2937',
+      light: '#FAF9F6',
+      dark: '#0A0A0F',
     },
     secondary: {
-      light: '#F9FAFB',
-      dark: '#374151',
+      light: '#F5F5F4',
+      dark: '#1F2937',
     },
     card: {
       light: '#FFFFFF',
-      dark: '#374151',
+      dark: '#111113',
     },
     page: {
-      light: '#F8FAFC',
-      dark: '#0F172A',
+      light: '#FAF9F6',
+      dark: '#0A0A0F',
     },
   },
 
   border: {
-    light: '#E5E7EB',
-    dark: '#374151',
+    light: '#E7E5E4',
+    dark: '#27272A',
   },
 
   features: {
@@ -84,22 +84,35 @@ export const colors = {
 
   button: {
     primary: {
-      background: '#3B82F6',
-      hover: '#2563EB',
+      background: '#10B981',
+      hover: '#059669',
       text: '#FFFFFF',
     },
     secondary: {
       background: 'transparent',
-      border: '#3B82F6',
+      border: '#10B981',
       text: {
-        light: '#2563EB',
-        dark: '#60A5FA',
+        light: '#059669',
+        dark: '#6EE7B7',
       },
       hover: {
-        light: '#EFF6FF',
-        dark: '#1E3A8A',
+        light: '#ECFDF5',
+        dark: '#064E3B',
       },
     },
+  },
+
+  grad: {
+    emerald: '#6EE7B7',
+    teal: '#10B981',
+    blue: '#3B82F6',
+    indigo: '#6366F1',
+    purple: '#A855F7',
+    violet: '#8B5CF6',
+    amber: '#F59E0B',
+    orange: '#F97316',
+    red: '#EF4444',
+    gold: '#EAB308',
   },
 
   statusFilters: {
@@ -173,6 +186,7 @@ export const colors = {
   error: '#EF4444',
   warning: '#F59E0B',
   info: '#3B82F6',
+  destructive: '#EF4444',
 } as const;
 
 export const getThemeColors = (isDark: boolean) => ({
@@ -184,8 +198,10 @@ export const getThemeColors = (isDark: boolean) => ({
   textSecondary: isDark
     ? colors.text.secondary.dark
     : colors.text.secondary.light,
+  textMuted: isDark ? colors.text.muted.dark : colors.text.muted.light,
   border: isDark ? colors.border.dark : colors.border.light,
   card: isDark ? colors.background.card.dark : colors.background.card.light,
+  destructive: colors.destructive,
 });
 
 export type ThemeColors = ReturnType<typeof getThemeColors>;

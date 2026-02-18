@@ -17,8 +17,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: isDark ? '#60A5FA' : '#3B82F6',
-        tabBarInactiveTintColor: isDark ? '#9CA3AF' : '#6B7280',
+        tabBarActiveTintColor: isDark ? '#6EE7B7' : '#10B981',
+        tabBarInactiveTintColor: isDark ? '#A1A1AA' : '#78716C',
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
@@ -32,12 +32,12 @@ export default function TabLayout() {
           android: {
             elevation: 8,
             borderTopWidth: 0,
-            backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+            backgroundColor: isDark ? '#111113' : '#FFFFFF',
           },
           default: {
             borderTopWidth: 1,
-            borderTopColor: isDark ? '#374151' : '#E5E7EB',
-            backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+            borderTopColor: isDark ? '#27272A' : '#E7E5E4',
+            backgroundColor: isDark ? '#111113' : '#FFFFFF',
           },
         }),
         tabBarLabelStyle: {

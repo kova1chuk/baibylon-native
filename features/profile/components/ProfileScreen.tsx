@@ -75,7 +75,7 @@ export default function ProfileScreen() {
               width={80}
               height={80}
               borderRadius={40}
-              backgroundColor="$blue10"
+              backgroundColor="#10B981"
               alignItems="center"
               justifyContent="center"
             >

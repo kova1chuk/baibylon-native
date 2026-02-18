@@ -24,7 +24,7 @@ export default function NavigationLinks() {
 
       <Button
         size="$4"
-        backgroundColor="$blue10"
+        backgroundColor="#10B981"
         color="white"
         fontWeight="600"
         onPress={() => handleNavigation('/training')}

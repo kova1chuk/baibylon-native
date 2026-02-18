@@ -81,9 +81,9 @@ export default function TrainingQuestionCard({
   const getAnswerButtonProps = (answer: string) => {
     if (!isAnswered) {
       return {
-        borderColor: selectedAnswer === answer ? '$blue10' : '$borderColor',
+        borderColor: selectedAnswer === answer ? '$green10' : '$borderColor',
         backgroundColor:
-          selectedAnswer === answer ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+          selectedAnswer === answer ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
       };
     }
 
@@ -157,7 +157,7 @@ export default function TrainingQuestionCard({
             padding="$4"
             borderRadius="$2"
             borderLeftWidth={4}
-            borderLeftColor="$blue10"
+            borderLeftColor="$green10"
             backgroundColor="$backgroundHover"
           >
             <Text
@@ -214,7 +214,7 @@ export default function TrainingQuestionCard({
       {isAnswered && (
         <Button
           size="$5"
-          backgroundColor="$blue10"
+          backgroundColor="#10B981"
           color="white"
           fontWeight="600"
           onPress={handleNext}

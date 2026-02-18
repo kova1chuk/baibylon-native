@@ -73,7 +73,7 @@ export default function SettingsScreen() {
               width={60}
               height={60}
               borderRadius={30}
-              backgroundColor="$blue10"
+              backgroundColor="#10B981"
               alignItems="center"
               justifyContent="center"
             >

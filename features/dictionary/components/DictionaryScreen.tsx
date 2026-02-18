@@ -151,7 +151,7 @@ export default function DictionaryScreen() {
           <Button
             flex={1}
             size="$4"
-            backgroundColor="$blue10"
+            backgroundColor="#10B981"
             color="white"
             fontWeight="600"
             onPress={handleAddWord}

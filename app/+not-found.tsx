@@ -10,7 +10,7 @@ export default function NotFoundScreen() {
           This screen does not exist.
         </Text>
         <Link href="/" style={{ marginTop: 15, paddingVertical: 15 }}>
-          <Text fontSize="$5" color="$blue10" textDecorationLine="underline">
+          <Text fontSize="$5" color="$green10" textDecorationLine="underline">
             Go to home screen!
           </Text>
         </Link>

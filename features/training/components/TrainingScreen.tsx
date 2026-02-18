@@ -226,7 +226,7 @@ export default function TrainingScreen() {
             <YStack gap="$4" width="100%">
               <Button
                 size="$5"
-                backgroundColor="$blue10"
+                backgroundColor="#10B981"
                 color="white"
                 fontWeight="600"
                 onPress={handleRestart}
@@ -298,7 +298,7 @@ export default function TrainingScreen() {
             <View
               height="100%"
               borderRadius={2}
-              backgroundColor="$blue10"
+              backgroundColor="#10B981"
               width={`${((currentQuestionIndex + 1) / trainingSession.length) * 100}%`}
             />
           </View>

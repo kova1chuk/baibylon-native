@@ -10,7 +10,7 @@ export default function TabBarBackground() {
     <View
       style={{
         flex: 1,
-        backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+        backgroundColor: isDark ? '#111113' : '#FFFFFF',
       }}
     />
   );

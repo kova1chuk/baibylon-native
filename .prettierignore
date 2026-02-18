@@ -17,6 +17,10 @@ expo-env.d.ts
 # Logs
 *.log
 
+# Native
+ios/
+android/
+
 # OS files
 .DS_Store
 
