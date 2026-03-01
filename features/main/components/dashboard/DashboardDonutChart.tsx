@@ -1,7 +1,8 @@
 import React from 'react';
 
 import Svg, { Circle, G, Path } from 'react-native-svg';
-import { Text, View, XStack, YStack, Spinner } from 'tamagui';
+
+import { View, Text, ActivityIndicator } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
 import { useDictionaryStats } from '@/lib/api';
@@ -43,8 +44,8 @@ export default function DashboardDonutChart() {
 
   if (isLoading) {
     return (
-      <View alignItems="center" justifyContent="center" height={200}>
-        <Spinner size="small" />
+      <View className="items-center justify-center h-[200px]">
+        <ActivityIndicator size="small" />
       </View>
     );
   }
@@ -108,24 +109,14 @@ export default function DashboardDonutChart() {
   });
 
   return (
-    <YStack
-      backgroundColor="$background"
-      borderRadius="$4"
-      padding="$4"
-      marginHorizontal="$4"
-      shadowColor="$shadowColor"
-      shadowOffset={{ width: 0, height: 1 }}
-      shadowOpacity={0.05}
-      shadowRadius={2}
-      elevation={1}
-    >
-      <Text fontSize="$5" fontWeight="600" color="$color" marginBottom="$3">
+    <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
+      <Text className="text-lg font-semibold text-foreground mb-3">
         Word Status
       </Text>
 
-      <XStack alignItems="center" gap="$4">
+      <View className="flex-row items-center gap-4">
         {/* Donut chart */}
-        <View position="relative" alignItems="center" justifyContent="center">
+        <View className="relative items-center justify-center">
           <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
             <G>
               {segments.map(segment => (
@@ -140,46 +131,36 @@ export default function DashboardDonutChart() {
               <Circle cx={center} cy={center} r={innerRadius} fill={bgColor} />
             </G>
           </Svg>
-          <View
-            position="absolute"
-            alignItems="center"
-            justifyContent="center"
-            width={120}
-            height={120}
-          >
-            <Text fontSize="$8" fontWeight="bold" color="$color">
+          <View className="absolute items-center justify-center w-[120px] h-[120px]">
+            <Text className="text-2xl font-bold text-foreground">
               {stats.total}
             </Text>
-            <Text fontSize="$2" opacity={0.5}>
-              total
-            </Text>
+            <Text className="text-xs text-muted-foreground">total</Text>
           </View>
         </View>
 
         {/* Legend */}
-        <YStack flex={1} gap="$2">
+        <View className="flex-1 gap-2">
           {Object.entries(STATUS_LABELS).map(([key, label]) => {
             const count = stats[key as keyof Omit<WordStats, 'total'>];
             const color = STATUS_COLORS[key as keyof Omit<WordStats, 'total'>];
             return (
-              <XStack key={key} alignItems="center" gap="$2">
+              <View key={key} className="flex-row items-center gap-2">
                 <View
-                  width={8}
-                  height={8}
-                  borderRadius={4}
-                  backgroundColor={color}
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: color }}
                 />
-                <Text fontSize="$2" flex={1} opacity={0.7}>
+                <Text className="text-xs flex-1 text-muted-foreground">
                   {label}
                 </Text>
-                <Text fontSize="$2" fontWeight="600" color="$color">
+                <Text className="text-xs font-semibold text-foreground">
                   {count}
                 </Text>
-              </XStack>
+              </View>
             );
           })}
-        </YStack>
-      </XStack>
-    </YStack>
+        </View>
+      </View>
+    </View>
   );
 }

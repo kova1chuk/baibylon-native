@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text, View, XStack, YStack, Spinner } from 'tamagui';
+import { View, Text, ActivityIndicator } from 'react-native';
 
 import { useDashboardSummary } from '@/lib/api';
 
@@ -13,31 +13,16 @@ interface MetricCardProps {
 
 function MetricCard({ label, value, subtitle, borderColor }: MetricCardProps) {
   return (
-    <YStack
-      flex={1}
-      backgroundColor="$background"
-      borderRadius="$4"
-      padding="$3"
-      borderTopWidth={3}
-      borderTopColor={borderColor}
-      shadowColor="$shadowColor"
-      shadowOffset={{ width: 0, height: 1 }}
-      shadowOpacity={0.05}
-      shadowRadius={2}
-      elevation={1}
+    <View
+      className="flex-1 bg-card rounded-2xl p-3 shadow-sm"
+      style={{ borderTopWidth: 3, borderTopColor: borderColor }}
     >
-      <Text fontSize="$3" opacity={0.6} marginBottom="$1">
-        {label}
-      </Text>
-      <Text fontSize="$8" fontWeight="bold" color="$color">
-        {value}
-      </Text>
+      <Text className="text-sm text-muted-foreground mb-1">{label}</Text>
+      <Text className="text-2xl font-bold text-foreground">{value}</Text>
       {subtitle && (
-        <Text fontSize="$2" opacity={0.5} marginTop="$1">
-          {subtitle}
-        </Text>
+        <Text className="text-xs text-muted-foreground mt-1">{subtitle}</Text>
       )}
-    </YStack>
+    </View>
   );
 }
 
@@ -46,8 +31,8 @@ export default function DashboardMetrics() {
 
   if (isLoading) {
     return (
-      <View alignItems="center" justifyContent="center" height={120}>
-        <Spinner size="small" />
+      <View className="items-center justify-center h-[120px]">
+        <ActivityIndicator size="small" />
       </View>
     );
   }
@@ -60,8 +45,8 @@ export default function DashboardMetrics() {
   const grammar = data?.grammar_level ?? 'A1';
 
   return (
-    <YStack gap="$3" paddingHorizontal="$4">
-      <XStack gap="$3">
+    <View className="gap-3 px-4">
+      <View className="flex-row gap-3">
         <MetricCard
           label="Total Words"
           value={String(totalWords)}
@@ -73,8 +58,8 @@ export default function DashboardMetrics() {
           subtitle={`${learnedPct}% of total`}
           borderColor="#3B82F6"
         />
-      </XStack>
-      <XStack gap="$3">
+      </View>
+      <View className="flex-row gap-3">
         <MetricCard
           label="Streak"
           value={`${streak} days`}
@@ -85,7 +70,7 @@ export default function DashboardMetrics() {
           value={grammar}
           borderColor="#8B5CF6"
         />
-      </XStack>
-    </YStack>
+      </View>
+    </View>
   );
 }

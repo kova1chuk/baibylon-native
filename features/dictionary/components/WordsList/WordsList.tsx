@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { Text, YStack, XStack, Button } from 'tamagui';
-
-import { FlatList } from 'react-native';
+import { View, Text, Pressable, FlatList } from 'react-native';
 
 import type { Word, WordStatus } from '@/lib/api/types';
 
@@ -61,18 +59,22 @@ export default function WordsList({
     const color = STATUS_COLORS[item.key];
 
     return (
-      <Button
-        size="$3"
-        borderWidth={1}
-        borderColor={isSelected ? color : '$borderColor'}
-        backgroundColor={isSelected ? color : 'transparent'}
-        color={isSelected ? 'white' : '$color'}
-        fontWeight="500"
+      <Pressable
+        className="rounded-lg px-4 py-2 min-w-[80px] items-center active:opacity-70"
+        style={{
+          borderWidth: 1,
+          borderColor: isSelected ? color : '#D1D5DB',
+          backgroundColor: isSelected ? color : 'transparent',
+        }}
         onPress={() => onStatusFilterChange?.(item.key)}
-        minWidth={80}
       >
-        {item.label}
-      </Button>
+        <Text
+          className="font-medium text-sm"
+          style={{ color: isSelected ? '#FFFFFF' : '#6B7280' }}
+        >
+          {item.label}
+        </Text>
+      </Pressable>
     );
   };
 
@@ -81,84 +83,56 @@ export default function WordsList({
     const label = STATUS_LABELS[item.status];
 
     return (
-      <Button
-        unstyled
+      <Pressable
+        className="mb-3 active:opacity-80"
         onPress={() => onWordPress?.(item)}
-        padding={0}
-        marginBottom="$3"
       >
-        <YStack
-          padding="$4"
-          borderRadius="$3"
-          backgroundColor="$background"
-          borderLeftWidth={4}
-          borderLeftColor={color}
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={4}
-          elevation={4}
+        <View
+          className="p-4 rounded-xl bg-card shadow-sm"
+          style={{ borderLeftWidth: 4, borderLeftColor: color }}
         >
-          <XStack
-            justifyContent="space-between"
-            alignItems="center"
-            marginBottom="$2"
-          >
-            <Text fontSize="$6" fontWeight="600" color="$color" flex={1}>
+          <View className="flex-row justify-between items-center mb-2">
+            <Text className="text-xl font-semibold text-foreground flex-1">
               {item.word}
             </Text>
-            <XStack
-              paddingHorizontal="$2"
-              paddingVertical="$1"
-              borderRadius="$3"
-              backgroundColor={color}
+            <View
+              className="px-2 py-1 rounded-lg"
+              style={{ backgroundColor: color }}
             >
-              <Text fontSize="$2" fontWeight="500" color="white">
-                {label}
-              </Text>
-            </XStack>
-          </XStack>
+              <Text className="text-xs font-medium text-white">{label}</Text>
+            </View>
+          </View>
 
-          <Text fontSize="$4" marginBottom="$2" opacity={0.8} color="$color">
+          <Text className="text-base mb-2 text-foreground opacity-80">
             {item.translation}
           </Text>
 
           {item.definition && (
             <Text
-              fontSize="$3"
-              marginBottom="$3"
-              opacity={0.6}
-              fontStyle="italic"
-              color="$color"
+              className="text-sm mb-3 text-muted-foreground italic"
               numberOfLines={2}
             >
               {item.definition}
             </Text>
           )}
 
-          <XStack justifyContent="space-between">
-            <YStack alignItems="center">
-              <Text fontSize="$2" opacity={0.6} color="$color">
-                Usage
-              </Text>
-              <Text fontSize="$4" fontWeight="600" color="$color">
+          <View className="flex-row justify-between">
+            <View className="items-center">
+              <Text className="text-xs text-muted-foreground">Usage</Text>
+              <Text className="text-base font-semibold text-foreground">
                 {item.usageCount}
               </Text>
-            </YStack>
-          </XStack>
-        </YStack>
-      </Button>
+            </View>
+          </View>
+        </View>
+      </Pressable>
     );
   };
 
   return (
-    <YStack flex={1}>
-      {}
-      <YStack
-        paddingVertical="$4"
-        borderBottomWidth={1}
-        borderBottomColor="$borderColor"
-      >
+    <View className="flex-1">
+      {/* Status filters */}
+      <View className="py-4 border-b border-border">
         <FlatList
           data={statusFilters}
           renderItem={renderStatusFilter}
@@ -167,9 +141,9 @@ export default function WordsList({
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}
         />
-      </YStack>
+      </View>
 
-      {}
+      {/* Word list */}
       <FlatList
         data={words}
         renderItem={renderWordItem}
@@ -177,13 +151,13 @@ export default function WordsList({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: 16 }}
         ListEmptyComponent={
-          <YStack alignItems="center" paddingVertical="$10">
-            <Text fontSize="$4" opacity={0.6} color="$color">
+          <View className="items-center py-10">
+            <Text className="text-base text-muted-foreground">
               No words found for the selected filter.
             </Text>
-          </YStack>
+          </View>
         }
       />
-    </YStack>
+    </View>
   );
 }

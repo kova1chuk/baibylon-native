@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Text, YStack, XStack, Button } from 'tamagui';
-
-import { Alert } from 'react-native';
+import { View, Text, Pressable, Alert } from 'react-native';
 
 import { TrainingQuestion } from '../../../shared/types';
 
@@ -78,10 +76,10 @@ export default function TrainingQuestionCard({
     }
   };
 
-  const getAnswerButtonProps = (answer: string) => {
+  const getAnswerStyle = (answer: string) => {
     if (!isAnswered) {
       return {
-        borderColor: selectedAnswer === answer ? '$green10' : '$borderColor',
+        borderColor: selectedAnswer === answer ? '#10B981' : '#D1D5DB',
         backgroundColor:
           selectedAnswer === answer ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
       };
@@ -89,153 +87,114 @@ export default function TrainingQuestionCard({
 
     if (answer === question.correctAnswer) {
       return {
-        borderColor: '$green10',
+        borderColor: '#10B981',
         backgroundColor: 'rgba(16, 185, 129, 0.1)',
       };
     }
 
     if (selectedAnswer === answer && answer !== question.correctAnswer) {
       return {
-        borderColor: '$red10',
+        borderColor: '#EF4444',
         backgroundColor: 'rgba(239, 68, 68, 0.1)',
       };
     }
 
     return {
-      borderColor: '$borderColor',
+      borderColor: '#D1D5DB',
       backgroundColor: 'transparent',
     };
   };
 
   const timerColor =
-    timeLeft > 10 ? '$green10' : timeLeft > 5 ? '$yellow10' : '$red10';
+    timeLeft > 10 ? '#10B981' : timeLeft > 5 ? '#F59E0B' : '#EF4444';
 
   return (
-    <YStack
-      padding="$6"
-      borderRadius="$4"
-      margin="$4"
-      backgroundColor="$background"
-      shadowColor="$shadowColor"
-      shadowOffset={{ width: 0, height: 4 }}
-      shadowOpacity={0.1}
-      shadowRadius={8}
-      elevation={8}
-    >
-      {}
-      <XStack
-        justifyContent="space-between"
-        alignItems="center"
-        marginBottom="$5"
-      >
-        <Text fontSize="$3" opacity={0.7} color="$color">
-          Time remaining:
-        </Text>
-        <XStack
-          paddingHorizontal="$3"
-          paddingVertical="$1.5"
-          borderRadius="$4"
-          backgroundColor={timerColor}
-          minWidth={50}
-          alignItems="center"
-          justifyContent="center"
+    <View className="p-6 rounded-2xl m-4 bg-card shadow-sm">
+      {/* Timer */}
+      <View className="flex-row justify-between items-center mb-5">
+        <Text className="text-sm text-muted-foreground">Time remaining:</Text>
+        <View
+          className="px-3 py-1.5 rounded-2xl min-w-[50px] items-center justify-center"
+          style={{ backgroundColor: timerColor }}
         >
-          <Text color="white" fontSize="$3" fontWeight="600">
-            {timeLeft}s
-          </Text>
-        </XStack>
-      </XStack>
+          <Text className="text-white text-sm font-semibold">{timeLeft}s</Text>
+        </View>
+      </View>
 
-      {}
-      <YStack marginBottom="$6">
-        <Text fontSize="$6" marginBottom="$4" lineHeight={24} color="$color">
+      {/* Question */}
+      <View className="mb-6">
+        <Text className="text-xl mb-4 leading-6 text-foreground">
           {getQuestionText()}
         </Text>
 
         {question.word.context && (
-          <YStack
-            padding="$4"
-            borderRadius="$2"
-            borderLeftWidth={4}
-            borderLeftColor="$green10"
-            backgroundColor="$backgroundHover"
+          <View
+            className="p-4 rounded-lg bg-muted"
+            style={{ borderLeftWidth: 4, borderLeftColor: '#10B981' }}
           >
-            <Text
-              fontSize="$3"
-              lineHeight={20}
-              fontStyle="italic"
-              color="$color"
-            >
+            <Text className="text-sm leading-5 italic text-foreground">
               {question.word.context}
             </Text>
-          </YStack>
+          </View>
         )}
-      </YStack>
+      </View>
 
-      {}
-      <YStack gap="$3" marginBottom="$6">
+      {/* Options */}
+      <View className="gap-3 mb-6">
         {question.options ? (
           question.options.map((option, index) => {
-            const buttonProps = getAnswerButtonProps(option);
+            const style = getAnswerStyle(option);
             return (
-              <Button
+              <Pressable
                 key={index}
-                size="$4"
-                borderWidth={2}
-                borderColor={buttonProps.borderColor}
-                backgroundColor={buttonProps.backgroundColor}
+                className="rounded-xl py-3 px-4 active:opacity-70"
+                style={{
+                  borderWidth: 2,
+                  borderColor: style.borderColor,
+                  backgroundColor: style.backgroundColor,
+                }}
                 onPress={() => handleAnswerSelect(option)}
                 disabled={isAnswered}
-                color="$color"
               >
-                <Text fontSize="$4" textAlign="center" color="$color">
+                <Text className="text-base text-center text-foreground">
                   {option}
                 </Text>
-              </Button>
+              </Pressable>
             );
           })
         ) : (
-          <YStack
-            padding="$4"
-            borderRadius="$2"
-            borderWidth={2}
-            borderColor="$borderColor"
-            borderStyle="dashed"
-            alignItems="center"
-          >
-            <Text fontSize="$3" opacity={0.7} color="$color">
+          <View className="p-4 rounded-lg border-2 border-dashed border-border items-center">
+            <Text className="text-sm text-muted-foreground">
               Type your answer in the input field below
             </Text>
-          </YStack>
+          </View>
         )}
-      </YStack>
+      </View>
 
-      {}
+      {/* Next button */}
       {isAnswered && (
-        <Button
-          size="$5"
-          backgroundColor="#10B981"
-          color="white"
-          fontWeight="600"
+        <Pressable
+          className="bg-primary rounded-xl py-4 items-center mb-5 active:opacity-80"
           onPress={handleNext}
-          marginBottom="$5"
         >
-          Next Question
-        </Button>
+          <Text className="text-white font-semibold text-lg">
+            Next Question
+          </Text>
+        </Pressable>
       )}
 
-      {}
-      <YStack paddingTop="$4" borderTopWidth={1} borderTopColor="$borderColor">
-        <Text fontSize="$2" opacity={0.6} marginBottom="$1" color="$color">
+      {/* Word info */}
+      <View className="pt-4 border-t border-border">
+        <Text className="text-xs text-muted-foreground mb-1">
           Word: {question.word.text}
         </Text>
-        <Text fontSize="$2" opacity={0.6} marginBottom="$1" color="$color">
+        <Text className="text-xs text-muted-foreground mb-1">
           Difficulty: {question.word.difficulty}
         </Text>
-        <Text fontSize="$2" opacity={0.6} color="$color">
+        <Text className="text-xs text-muted-foreground">
           Status: {question.word.status}
         </Text>
-      </YStack>
-    </YStack>
+      </View>
+    </View>
   );
 }

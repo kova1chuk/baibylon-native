@@ -1,4 +1,4 @@
-import { Text, YStack } from 'tamagui';
+import { View, Text } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -30,135 +30,82 @@ export default function ExploreScreen() {
         />
       }
     >
-      <YStack flexDirection="row" gap="$2" marginBottom="$4">
-        <Text fontSize="$9" fontWeight="bold" color="$color">
+      <View className="flex-row gap-2 mb-4">
+        <Text className="text-3xl font-bold text-foreground">
           Discover New Words
         </Text>
-      </YStack>
+      </View>
 
-      <Text
-        fontSize="$4"
-        lineHeight={24}
-        marginBottom="$6"
-        opacity={0.8}
-        color="$color"
-      >
+      <Text className="text-base leading-6 mb-6 opacity-80 text-foreground">
         Explore vocabulary through various learning methods and expand your
         language skills.
       </Text>
 
       <Collapsible title="📚 Text Analysis">
-        <Text color="$color">
+        <Text className="text-foreground">
           Upload any text document and get intelligent analysis of vocabulary
           difficulty, word frequency, and personalized learning recommendations.
         </Text>
-        <Text
-          fontSize="$3"
-          lineHeight={20}
-          marginTop="$2"
-          opacity={0.8}
-          color="$color"
-        >
-          • Automatic difficulty assessment{'\n'}• Context-aware translations
-          {'\n'}• Learning path suggestions
+        <Text className="text-sm leading-5 mt-2 opacity-80 text-foreground">
+          {
+            '• Automatic difficulty assessment\n• Context-aware translations\n• Learning path suggestions'
+          }
         </Text>
       </Collapsible>
 
       <Collapsible title="🎯 Smart Training">
-        <Text color="$color">
+        <Text className="text-foreground">
           Engage with adaptive training sessions that adjust to your learning
           pace and focus on words that need more practice.
         </Text>
-        <Text
-          fontSize="$3"
-          lineHeight={20}
-          marginTop="$2"
-          opacity={0.8}
-          color="$color"
-        >
-          • Multiple question types{'\n'}• Spaced repetition system{'\n'}•
-          Progress tracking
+        <Text className="text-sm leading-5 mt-2 opacity-80 text-foreground">
+          {
+            '• Multiple question types\n• Spaced repetition system\n• Progress tracking'
+          }
         </Text>
       </Collapsible>
 
       <Collapsible title="📊 Learning Analytics">
-        <Text color="$color">
+        <Text className="text-foreground">
           Track your vocabulary progress with detailed statistics, review
           history, and insights into your learning patterns.
         </Text>
-        <Text
-          fontSize="$3"
-          lineHeight={20}
-          marginTop="$2"
-          opacity={0.8}
-          color="$color"
-        >
-          • Word mastery levels{'\n'}• Review scheduling{'\n'}• Performance
-          metrics
+        <Text className="text-sm leading-5 mt-2 opacity-80 text-foreground">
+          {'• Word mastery levels\n• Review scheduling\n• Performance metrics'}
         </Text>
       </Collapsible>
 
       <Collapsible title="🌍 Multi-language Support">
-        <Text color="$color">
+        <Text className="text-foreground">
           Learn vocabulary in multiple languages with support for various text
           formats and learning contexts.
         </Text>
-        <Text
-          fontSize="$3"
-          lineHeight={20}
-          marginTop="$2"
-          opacity={0.8}
-          color="$color"
-        >
-          • Multiple language pairs{'\n'}• Cultural context{'\n'}• Pronunciation
-          guides
+        <Text className="text-sm leading-5 mt-2 opacity-80 text-foreground">
+          {
+            '• Multiple language pairs\n• Cultural context\n• Pronunciation guides'
+          }
         </Text>
       </Collapsible>
 
       <Collapsible title="💡 Study Tips">
-        <Text color="$color">
+        <Text className="text-foreground">
           Get personalized study recommendations based on your learning history
           and current vocabulary level.
         </Text>
-        <Text
-          fontSize="$3"
-          lineHeight={20}
-          marginTop="$2"
-          opacity={0.8}
-          color="$color"
-        >
-          • Optimal study times{'\n'}• Focus areas{'\n'}• Learning strategies
+        <Text className="text-sm leading-5 mt-2 opacity-80 text-foreground">
+          {'• Optimal study times\n• Focus areas\n• Learning strategies'}
         </Text>
       </Collapsible>
 
-      <YStack
-        alignItems="center"
-        marginTop="$8"
-        paddingVertical="$6"
-        paddingHorizontal="$4"
-        backgroundColor="rgba(16, 185, 129, 0.1)"
-        borderRadius="$4"
-      >
-        <Text
-          fontSize="$6"
-          fontWeight="600"
-          textAlign="center"
-          marginBottom="$2"
-          color="$color"
-        >
+      <View className="items-center mt-8 py-6 px-4 bg-primary/10 rounded-2xl">
+        <Text className="text-xl font-semibold text-center mb-2 text-foreground">
           Ready to start your vocabulary journey?
         </Text>
-        <Text
-          fontSize="$3"
-          textAlign="center"
-          opacity={0.7}
-          lineHeight={20}
-          color="$color"
-        >
+        <Text className="text-sm text-center opacity-70 leading-5 text-foreground">
           Begin with text analysis or jump into training sessions to see
           immediate results.
         </Text>
-      </YStack>
+      </View>
     </ParallaxScrollView>
   );
 }

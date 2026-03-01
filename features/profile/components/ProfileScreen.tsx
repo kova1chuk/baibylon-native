@@ -1,17 +1,8 @@
 import React, { useState } from 'react';
 
 import { useRouter } from 'expo-router';
-import {
-  View,
-  ScrollView,
-  Text,
-  YStack,
-  XStack,
-  Button,
-  Switch,
-} from 'tamagui';
 
-import { Alert } from 'react-native';
+import { View, ScrollView, Text, Pressable, Switch, Alert } from 'react-native';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -41,225 +32,106 @@ export default function ProfileScreen() {
     Alert.alert('Info', 'Edit profile functionality coming soon!');
   };
 
-  const handleNotificationsToggle = (value: boolean) => {
-    setNotificationsEnabled(value);
-  };
-
-  const handleDarkModeToggle = (value: boolean) => {
-    setTheme(value ? 'dark' : 'light');
-  };
-
   const userName =
     user?.user_metadata?.name || user?.email?.split('@')[0] || 'User';
   const userEmail = user?.email || '';
 
   return (
-    <ScrollView flex={1} backgroundColor="$background">
-      <YStack gap="$4" padding="$4">
-        {}
-        <YStack
-          gap="$3"
-          alignItems="center"
-          padding="$6"
-          borderRadius="$4"
-          marginBottom="$5"
-          backgroundColor="$background"
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={4}
-          elevation={4}
-        >
-          <YStack marginBottom="$4">
-            <View
-              width={80}
-              height={80}
-              borderRadius={40}
-              backgroundColor="#10B981"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Text fontSize="$10" fontWeight="bold" color="white">
+    <ScrollView className="flex-1 bg-background">
+      <View className="gap-4 p-4">
+        {/* Profile header */}
+        <View className="gap-3 items-center p-6 rounded-2xl mb-5 bg-card shadow-sm">
+          <View className="mb-4">
+            <View className="w-20 h-20 rounded-full bg-primary items-center justify-center">
+              <Text className="text-4xl font-bold text-white">
                 {userName.charAt(0).toUpperCase()}
               </Text>
             </View>
-          </YStack>
-          <Text fontSize="$8" fontWeight="bold" color="$color">
-            {userName}
-          </Text>
-          <Text fontSize="$4" opacity={0.7} marginBottom="$4" color="$color">
+          </View>
+          <Text className="text-2xl font-bold text-foreground">{userName}</Text>
+          <Text className="text-base text-muted-foreground mb-4">
             {userEmail}
           </Text>
-          <Button
-            size="$4"
-            borderColor="$borderColor"
-            borderWidth={1}
-            backgroundColor="transparent"
-            color="$color"
-            fontWeight="500"
+          <Pressable
+            className="border border-border rounded-xl py-3 px-6 active:opacity-80"
             onPress={handleEditProfile}
           >
-            Edit Profile
-          </Button>
-        </YStack>
+            <Text className="text-foreground font-medium">Edit Profile</Text>
+          </Pressable>
+        </View>
 
-        {}
-        <YStack
-          gap="$2"
-          padding="$5"
-          borderRadius="$4"
-          marginBottom="$5"
-          backgroundColor="$background"
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={4}
-          elevation={4}
-        >
-          <Text fontSize="$6" fontWeight="600" marginBottom="$4" color="$color">
+        {/* Settings */}
+        <View className="gap-2 p-5 rounded-2xl mb-5 bg-card shadow-sm">
+          <Text className="text-xl font-semibold text-foreground mb-4">
             Settings
           </Text>
 
-          {}
-          <XStack
-            alignItems="center"
-            justifyContent="space-between"
-            paddingVertical="$3"
-            borderBottomWidth={1}
-            borderBottomColor="$borderColor"
-          >
-            <YStack flex={1} marginRight="$4">
-              <Text
-                fontSize="$4"
-                fontWeight="500"
-                marginBottom="$1"
-                color="$color"
-              >
+          <View className="flex-row items-center justify-between py-3 border-b border-border">
+            <View className="flex-1 mr-4">
+              <Text className="text-base font-medium text-foreground mb-1">
                 Notifications
               </Text>
-              <Text fontSize="$3" opacity={0.7} color="$color">
+              <Text className="text-sm text-muted-foreground">
                 Receive learning reminders and updates
               </Text>
-            </YStack>
+            </View>
             <Switch
-              checked={notificationsEnabled}
-              onCheckedChange={handleNotificationsToggle}
-              size="$4"
+              value={notificationsEnabled}
+              onValueChange={setNotificationsEnabled}
+              trackColor={{ false: '#E5E7EB', true: '#10B981' }}
+              thumbColor="#FFFFFF"
             />
-          </XStack>
+          </View>
 
-          {}
-          <XStack
-            alignItems="center"
-            justifyContent="space-between"
-            paddingVertical="$3"
-          >
-            <YStack flex={1} marginRight="$4">
-              <Text
-                fontSize="$4"
-                fontWeight="500"
-                marginBottom="$1"
-                color="$color"
-              >
+          <View className="flex-row items-center justify-between py-3">
+            <View className="flex-1 mr-4">
+              <Text className="text-base font-medium text-foreground mb-1">
                 Dark Mode
               </Text>
-              <Text fontSize="$3" opacity={0.7} color="$color">
+              <Text className="text-sm text-muted-foreground">
                 Use dark theme for better readability
               </Text>
-            </YStack>
+            </View>
             <Switch
-              checked={isDark}
-              onCheckedChange={handleDarkModeToggle}
-              size="$4"
+              value={isDark}
+              onValueChange={value => setTheme(value ? 'dark' : 'light')}
+              trackColor={{ false: '#E5E7EB', true: '#10B981' }}
+              thumbColor="#FFFFFF"
             />
-          </XStack>
-        </YStack>
+          </View>
+        </View>
 
-        {}
-        <YStack
-          gap="$4"
-          padding="$5"
-          borderRadius="$4"
-          marginBottom="$5"
-          backgroundColor="$background"
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={4}
-          elevation={4}
-        >
-          <Text fontSize="$6" fontWeight="600" color="$color">
+        {/* Learning stats */}
+        <View className="gap-4 p-5 rounded-2xl mb-5 bg-card shadow-sm">
+          <Text className="text-xl font-semibold text-foreground">
             Learning Stats
           </Text>
-          <XStack justifyContent="space-around">
-            <YStack alignItems="center">
-              <Text
-                fontSize="$8"
-                fontWeight="bold"
-                marginBottom="$1"
-                color="$color"
-              >
-                0
-              </Text>
-              <Text
-                fontSize="$2"
-                opacity={0.7}
-                textAlign="center"
-                color="$color"
-              >
-                Words Learned
-              </Text>
-            </YStack>
-            <YStack alignItems="center">
-              <Text
-                fontSize="$8"
-                fontWeight="bold"
-                marginBottom="$1"
-                color="$color"
-              >
-                0
-              </Text>
-              <Text
-                fontSize="$2"
-                opacity={0.7}
-                textAlign="center"
-                color="$color"
-              >
-                Training Sessions
-              </Text>
-            </YStack>
-            <YStack alignItems="center">
-              <Text
-                fontSize="$8"
-                fontWeight="bold"
-                marginBottom="$1"
-                color="$color"
-              >
-                0
-              </Text>
-              <Text
-                fontSize="$2"
-                opacity={0.7}
-                textAlign="center"
-                color="$color"
-              >
-                Days Streak
-              </Text>
-            </YStack>
-          </XStack>
-        </YStack>
+          <View className="flex-row justify-around">
+            {[
+              { value: '0', label: 'Words Learned' },
+              { value: '0', label: 'Training Sessions' },
+              { value: '0', label: 'Days Streak' },
+            ].map(item => (
+              <View key={item.label} className="items-center">
+                <Text className="text-2xl font-bold text-foreground mb-1">
+                  {item.value}
+                </Text>
+                <Text className="text-xs text-muted-foreground text-center">
+                  {item.label}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
 
-        {}
-        <Button
-          size="$5"
-          backgroundColor="$red10"
-          color="white"
-          fontWeight="600"
+        {/* Sign out */}
+        <Pressable
+          className="bg-destructive rounded-xl py-4 items-center active:opacity-80"
           onPress={handleSignOut}
         >
-          Sign Out
-        </Button>
-      </YStack>
+          <Text className="text-white font-semibold text-base">Sign Out</Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 }

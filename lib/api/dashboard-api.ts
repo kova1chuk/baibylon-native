@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from 'react';
 
 import { supabaseRpcQuery } from './supabase-rpc';
 
@@ -15,22 +15,18 @@ export interface ActivityDay {
   session_count: number;
 }
 
-export const dashboardKeys = {
-  all: ['dashboard'] as const,
-  summary: () => [...dashboardKeys.all, 'summary'] as const,
-  heatmap: (weeks?: number) =>
-    [...dashboardKeys.all, 'heatmap', weeks] as const,
-};
-
 export function useDashboardSummary() {
-  return useQuery({
-    queryKey: dashboardKeys.summary(),
-    queryFn: async (): Promise<DashboardSummary> => {
+  const [data, setData] = useState<DashboardSummary | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setIsLoading(true);
+    try {
       const response = await supabaseRpcQuery<DashboardSummary>({
         functionName: 'get_dashboard_summary',
       });
-
-      return (
+      setData(
         response || {
           total_words: 0,
           words_learned: 0,
@@ -39,20 +35,43 @@ export function useDashboardSummary() {
           topics_completed: 0,
         }
       );
-    },
-  });
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error('Unknown error'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { data, isLoading, error, refetch };
 }
 
 export function useActivityHeatmap(weeks: number = 12) {
-  return useQuery({
-    queryKey: dashboardKeys.heatmap(weeks),
-    queryFn: async (): Promise<ActivityDay[]> => {
+  const [data, setData] = useState<ActivityDay[] | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setIsLoading(true);
+    try {
       const response = await supabaseRpcQuery<ActivityDay[]>({
         functionName: 'get_activity_heatmap',
         args: { p_weeks: weeks },
       });
+      setData(response || []);
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error('Unknown error'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [weeks]);
 
-      return response || [];
-    },
-  });
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { data, isLoading, error, refetch };
 }

@@ -1,15 +1,11 @@
 import React from 'react';
 
-import { RefreshCw } from '@tamagui/lucide-icons';
+import { RefreshCw } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import {
-  Button,
-  Text,
-  XStack,
-  YStack,
-  ScrollView,
-  useTheme as useTamaguiTheme,
-} from 'tamagui';
+
+import { View, Text, ScrollView, Pressable } from 'react-native';
+
+import { useTheme } from '@/contexts/ThemeContext';
 
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 
@@ -27,78 +23,51 @@ import {
 export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabOverflow();
-  const tamaguiTheme = useTamaguiTheme();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [refreshing, setRefreshing] = React.useState(false);
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    // Small delay to show refresh animation
     setTimeout(() => setRefreshing(false), 500);
   };
 
   return (
     <ScrollView
-      flex={1}
+      className="flex-1"
       contentContainerStyle={{
         paddingBottom: tabBarHeight + 20,
         flexGrow: 1,
       }}
     >
       {/* Header */}
-      <XStack
-        alignItems="center"
-        justifyContent="space-between"
-        paddingHorizontal="$4"
-        paddingTop={insets.top + 16}
-        paddingBottom="$2"
+      <View
+        className="flex-row items-center justify-between px-4 pb-2"
+        style={{ paddingTop: insets.top + 16 }}
       >
-        <Text
-          fontSize="$3"
-          fontWeight="600"
-          color="$color"
-          opacity={0.5}
-          textTransform="uppercase"
-          letterSpacing={1}
-        >
+        <Text className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
           Dashboard
         </Text>
-        <Button
-          size="$3"
-          circular
-          backgroundColor="transparent"
+        <Pressable
           onPress={handleRefresh}
           disabled={refreshing}
-          opacity={refreshing ? 0.5 : 1}
+          className="p-2 active:opacity-50"
+          style={{ opacity: refreshing ? 0.5 : 1 }}
         >
-          <RefreshCw size={20} color={tamaguiTheme.color?.val} />
-        </Button>
-      </XStack>
+          <RefreshCw size={20} color={isDark ? '#FAFAF9' : '#111827'} />
+        </Pressable>
+      </View>
 
-      <YStack gap="$4" paddingTop="$2" paddingBottom="$4">
-        {/* 1. Hero greeting */}
+      <View className="gap-4 pt-2 pb-4">
         <DashboardHero />
-
-        {/* 2. Metrics cards */}
         <DashboardMetrics />
-
-        {/* 3. Donut chart */}
         <DashboardDonutChart />
-
-        {/* 4. Quick actions */}
         <QuickActions />
-
-        {/* 5. Streak tracker */}
         <StreakTracker />
-
-        {/* 6. Word of the moment */}
         <WordOfTheMoment />
-
-        {/* 7. Activity heatmap */}
         <ActivityHeatmap />
-
-        {/* 8. English skills */}
         <EnglishSkillsChart />
-      </YStack>
+      </View>
     </ScrollView>
   );
 }

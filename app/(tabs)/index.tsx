@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { View } from 'tamagui';
+import { View } from 'react-native';
 
 import { WelcomeScreen } from '@/features/main';
 
 export default function HomeScreen() {
   return (
-    <View flex={1}>
+    <View className="flex-1">
       <WelcomeScreen />
     </View>
   );

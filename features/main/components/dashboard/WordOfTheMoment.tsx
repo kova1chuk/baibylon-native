@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Volume2 } from '@tamagui/lucide-icons';
-import { Text, View, XStack, YStack, Spinner, Button } from 'tamagui';
+import { Volume2 } from 'lucide-react-native';
+
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 
 import { useRandomWord } from '@/lib/api';
 
@@ -30,8 +31,8 @@ export default function WordOfTheMoment() {
 
   if (isLoading) {
     return (
-      <View alignItems="center" justifyContent="center" height={120}>
-        <Spinner size="small" />
+      <View className="items-center justify-center h-[120px]">
+        <ActivityIndicator size="small" />
       </View>
     );
   }
@@ -45,75 +46,52 @@ export default function WordOfTheMoment() {
   const statusName = STATUS_NAMES[statusKey] || 'Unknown';
 
   return (
-    <YStack
-      backgroundColor="$background"
-      borderRadius="$4"
-      padding="$4"
-      marginHorizontal="$4"
-      shadowColor="$shadowColor"
-      shadowOffset={{ width: 0, height: 1 }}
-      shadowOpacity={0.05}
-      shadowRadius={2}
-      elevation={1}
-    >
-      <XStack
-        alignItems="center"
-        justifyContent="space-between"
-        marginBottom="$3"
-      >
-        <Text fontSize="$5" fontWeight="600" color="$color">
+    <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
+      <View className="flex-row items-center justify-between mb-3">
+        <Text className="text-lg font-semibold text-foreground">
           Word of the Moment
         </Text>
-        <Button
-          size="$2"
-          circular
-          backgroundColor="transparent"
-          onPress={() => refetch()}
-        >
-          <Text fontSize="$3">🔄</Text>
-        </Button>
-      </XStack>
+        <Pressable className="p-2 active:opacity-50" onPress={() => refetch()}>
+          <Text style={{ fontSize: 14 }}>🔄</Text>
+        </Pressable>
+      </View>
 
-      <YStack gap="$2">
-        <XStack alignItems="center" gap="$2">
-          <Text fontSize="$7" fontWeight="bold" color="$color">
+      <View className="gap-2">
+        <View className="flex-row items-center gap-2">
+          <Text className="text-2xl font-bold text-foreground">
             {word.text}
           </Text>
           {word.phonetic_text && (
-            <XStack alignItems="center" gap="$1">
-              <Volume2 size={14} opacity={0.4} />
-              <Text fontSize="$3" opacity={0.5}>
+            <View className="flex-row items-center gap-1">
+              <Volume2 size={14} color="#999" />
+              <Text className="text-sm text-muted-foreground">
                 {word.phonetic_text}
               </Text>
-            </XStack>
+            </View>
           )}
-        </XStack>
+        </View>
 
         {word.definition && (
-          <Text fontSize="$3" opacity={0.7} numberOfLines={2}>
+          <Text className="text-sm text-muted-foreground" numberOfLines={2}>
             {word.definition}
           </Text>
         )}
 
         {word.translation && (
-          <Text fontSize="$3" opacity={0.5} fontStyle="italic">
+          <Text className="text-sm text-muted-foreground italic">
             {word.translation}
           </Text>
         )}
 
         <View
-          alignSelf="flex-start"
-          backgroundColor={badge.bg}
-          paddingHorizontal="$2"
-          paddingVertical="$1"
-          borderRadius="$2"
-          marginTop="$1"
+          className="self-start px-2 py-1 rounded-lg mt-1"
+          style={{ backgroundColor: badge.bg }}
         >
-          <Text fontSize="$2" color={badge.text} fontWeight="500">
+          <Text className="text-xs font-medium" style={{ color: badge.text }}>
             {statusName}
           </Text>
         </View>
-      </YStack>
-    </YStack>
+      </View>
+    </View>
   );
 }

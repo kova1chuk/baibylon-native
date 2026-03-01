@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { View, Text, ScrollView, YStack, Button } from 'tamagui';
+
+import { View, Text, ScrollView, Pressable } from 'react-native';
 
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -36,17 +37,15 @@ export default function WelcomeScreen() {
 
   return (
     <ScrollView
-      flex={1}
-      backgroundColor="$background"
+      className="flex-1 bg-background"
       contentContainerStyle={{
         paddingVertical: 40,
         paddingHorizontal: 20,
       }}
     >
-      {}
-      <YStack alignItems="center" marginBottom="$6">
-        {}
-        <YStack position="relative" marginBottom="$5">
+      {/* Hero section */}
+      <View className="items-center mb-6">
+        <View className="relative mb-5">
           <LinearGradient
             colors={['#10B981', '#059669']}
             style={{
@@ -57,197 +56,82 @@ export default function WelcomeScreen() {
               justifyContent: 'center',
             }}
           >
-            <Text fontSize={48}>📚</Text>
+            <Text style={{ fontSize: 48 }}>📚</Text>
           </LinearGradient>
 
-          {}
-          <View
-            position="absolute"
-            width={24}
-            height={24}
-            borderRadius={999}
-            backgroundColor="$yellow10"
-            top={-8}
-            right={-8}
-          />
-          <View
-            position="absolute"
-            width={16}
-            height={16}
-            borderRadius={999}
-            backgroundColor="$green10"
-            bottom={-8}
-            left={-8}
-          />
-        </YStack>
+          <View className="absolute w-6 h-6 rounded-full bg-yellow-400 -top-2 -right-2" />
+          <View className="absolute w-4 h-4 rounded-full bg-primary -bottom-2 -left-2" />
+        </View>
 
-        {}
-        <Text
-          fontSize="$10"
-          fontWeight="bold"
-          textAlign="center"
-          marginBottom="$3"
-          lineHeight={44}
-        >
+        <Text className="text-4xl font-bold text-center mb-3 text-foreground leading-[44px]">
           Welcome to Vocairo
         </Text>
 
-        {}
-        <Text
-          fontSize="$6"
-          textAlign="center"
-          marginBottom="$5"
-          lineHeight={26}
-          paddingHorizontal="$4"
-          opacity={0.8}
-        >
+        <Text className="text-xl text-center mb-5 leading-[26px] px-4 opacity-80 text-foreground">
           Master vocabulary through intelligent analysis, personalized training,
           and seamless learning experiences
         </Text>
-      </YStack>
+      </View>
 
-      {}
-      <YStack gap="$4" marginBottom="$6">
-        {}
-        <YStack
-          backgroundColor="$background"
-          padding="$5"
-          borderRadius="$4"
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={4}
-          elevation={4}
-        >
-          <YStack
-            width={48}
-            height={48}
-            borderRadius="$3"
-            backgroundColor="$green3"
-            alignItems="center"
-            justifyContent="center"
-            marginBottom="$4"
-            alignSelf="center"
-          >
-            <Text fontSize={24}>📊</Text>
-          </YStack>
-          <Text
-            fontSize="$6"
-            fontWeight="600"
-            marginBottom="$2"
-            textAlign="center"
-          >
-            Smart Analysis
-          </Text>
-          <Text fontSize="$4" lineHeight={20} textAlign="center" opacity={0.8}>
-            Upload texts and get intelligent word analysis with difficulty
-            levels and learning recommendations
-          </Text>
-        </YStack>
+      {/* Feature cards */}
+      <View className="gap-4 mb-6">
+        {[
+          {
+            emoji: '📊',
+            title: 'Smart Analysis',
+            desc: 'Upload texts and get intelligent word analysis with difficulty levels and learning recommendations',
+          },
+          {
+            emoji: '⚡',
+            title: 'Interactive Training',
+            desc: 'Engage with various training modes including quizzes, translations, and context exercises',
+          },
+          {
+            emoji: '📈',
+            title: 'Progress Tracking',
+            desc: 'Monitor your learning progress with detailed statistics and personalized insights',
+          },
+        ].map(card => (
+          <View key={card.title} className="bg-card rounded-2xl p-5 shadow-sm">
+            <View className="w-12 h-12 rounded-xl bg-primary/10 items-center justify-center mb-4 self-center">
+              <Text style={{ fontSize: 24 }}>{card.emoji}</Text>
+            </View>
+            <Text className="text-xl font-semibold mb-2 text-center text-foreground">
+              {card.title}
+            </Text>
+            <Text className="text-base leading-5 text-center opacity-80 text-foreground">
+              {card.desc}
+            </Text>
+          </View>
+        ))}
+      </View>
 
-        {}
-        <YStack
-          backgroundColor="$background"
-          padding="$5"
-          borderRadius="$4"
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={4}
-          elevation={4}
-        >
-          <YStack
-            width={48}
-            height={48}
-            borderRadius="$3"
-            backgroundColor="$green3"
-            alignItems="center"
-            justifyContent="center"
-            marginBottom="$4"
-            alignSelf="center"
-          >
-            <Text fontSize={24}>⚡</Text>
-          </YStack>
-          <Text
-            fontSize="$6"
-            fontWeight="600"
-            marginBottom="$2"
-            textAlign="center"
-          >
-            Interactive Training
-          </Text>
-          <Text fontSize="$4" lineHeight={20} textAlign="center" opacity={0.8}>
-            Engage with various training modes including quizzes, translations,
-            and context exercises
-          </Text>
-        </YStack>
-
-        {}
-        <YStack
-          backgroundColor="$background"
-          padding="$5"
-          borderRadius="$4"
-          shadowColor="$shadowColor"
-          shadowOffset={{ width: 0, height: 2 }}
-          shadowOpacity={0.1}
-          shadowRadius={4}
-          elevation={4}
-        >
-          <YStack
-            width={48}
-            height={48}
-            borderRadius="$3"
-            backgroundColor="$purple3"
-            alignItems="center"
-            justifyContent="center"
-            marginBottom="$4"
-            alignSelf="center"
-          >
-            <Text fontSize={24}>📈</Text>
-          </YStack>
-          <Text
-            fontSize="$6"
-            fontWeight="600"
-            marginBottom="$2"
-            textAlign="center"
-          >
-            Progress Tracking
-          </Text>
-          <Text fontSize="$4" lineHeight={20} textAlign="center" opacity={0.8}>
-            Monitor your learning progress with detailed statistics and
-            personalized insights
-          </Text>
-        </YStack>
-      </YStack>
-
-      {}
-      <YStack alignItems="center" gap="$4">
-        <YStack gap="$4" marginBottom="$4" width="100%">
-          <Button
-            size="$5"
-            backgroundColor="#10B981"
-            color="white"
-            fontWeight="600"
+      {/* CTA buttons */}
+      <View className="items-center gap-4">
+        <View className="gap-4 mb-4 w-full">
+          <Pressable
+            className="bg-primary rounded-xl py-4 items-center active:opacity-80"
             onPress={handleGetStarted}
           >
-            Get Started
-          </Button>
+            <Text className="text-white font-semibold text-lg">
+              Get Started
+            </Text>
+          </Pressable>
 
-          <Button
-            size="$5"
-            borderColor="$borderColor"
-            borderWidth={2}
-            backgroundColor="transparent"
+          <Pressable
+            className="border-2 border-border rounded-xl py-4 items-center active:opacity-80"
             onPress={handleCreateAccount}
           >
-            Create Account
-          </Button>
-        </YStack>
+            <Text className="text-foreground font-semibold text-lg">
+              Create Account
+            </Text>
+          </Pressable>
+        </View>
 
-        <Text fontSize="$3" textAlign="center" opacity={0.7}>
+        <Text className="text-sm text-center opacity-70 text-foreground">
           Join thousands of learners improving their vocabulary with Vocairo
         </Text>
-      </YStack>
+      </View>
     </ScrollView>
   );
 }

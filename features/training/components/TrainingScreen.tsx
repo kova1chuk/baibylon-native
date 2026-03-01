@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 
-import { View, ScrollView, Text, YStack, XStack, Button } from 'tamagui';
-
-import { Alert } from 'react-native';
+import { View, ScrollView, Text, Pressable, Alert } from 'react-native';
 
 import { TrainingQuestion } from '../../../shared/types';
 
@@ -133,184 +131,95 @@ export default function TrainingScreen() {
   if (isTrainingComplete) {
     const accuracy = Math.round((score / trainingSession.length) * 100);
     return (
-      <View flex={1} backgroundColor="$background">
+      <View className="flex-1 bg-background">
         <ScrollView
-          flex={1}
+          className="flex-1"
           contentContainerStyle={{
             flexGrow: 1,
             justifyContent: 'center',
             padding: 20,
           }}
         >
-          <YStack
-            padding="$8"
-            borderRadius="$4"
-            alignItems="center"
-            backgroundColor="$background"
-            shadowColor="$shadowColor"
-            shadowOffset={{ width: 0, height: 4 }}
-            shadowOpacity={0.1}
-            shadowRadius={8}
-            elevation={8}
-          >
-            <Text
-              fontSize="$9"
-              fontWeight="bold"
-              textAlign="center"
-              marginBottom="$8"
-            >
+          <View className="p-8 rounded-2xl items-center bg-card shadow-sm">
+            <Text className="text-3xl font-bold text-center mb-8 text-foreground">
               Training Complete! 🎉
             </Text>
 
-            <XStack
-              justifyContent="space-around"
-              width="100%"
-              marginBottom="$8"
-            >
-              <YStack alignItems="center">
-                <Text
-                  fontSize="$10"
-                  fontWeight="bold"
-                  color="$color"
-                  marginBottom="$2"
-                >
-                  {score}
-                </Text>
-                <Text
-                  fontSize="$3"
-                  opacity={0.7}
-                  textAlign="center"
-                  color="$color"
-                >
-                  Correct Answers
-                </Text>
-              </YStack>
-              <YStack alignItems="center">
-                <Text
-                  fontSize="$10"
-                  fontWeight="bold"
-                  color="$color"
-                  marginBottom="$2"
-                >
-                  {trainingSession.length}
-                </Text>
-                <Text
-                  fontSize="$3"
-                  opacity={0.7}
-                  textAlign="center"
-                  color="$color"
-                >
-                  Total Questions
-                </Text>
-              </YStack>
-              <YStack alignItems="center">
-                <Text
-                  fontSize="$10"
-                  fontWeight="bold"
-                  color="$color"
-                  marginBottom="$2"
-                >
-                  {accuracy}%
-                </Text>
-                <Text
-                  fontSize="$3"
-                  opacity={0.7}
-                  textAlign="center"
-                  color="$color"
-                >
-                  Accuracy
-                </Text>
-              </YStack>
-            </XStack>
+            <View className="flex-row justify-around w-full mb-8">
+              {[
+                { value: score, label: 'Correct Answers' },
+                { value: trainingSession.length, label: 'Total Questions' },
+                { value: `${accuracy}%`, label: 'Accuracy' },
+              ].map(item => (
+                <View key={item.label} className="items-center">
+                  <Text className="text-4xl font-bold text-foreground mb-2">
+                    {item.value}
+                  </Text>
+                  <Text className="text-sm text-muted-foreground text-center">
+                    {item.label}
+                  </Text>
+                </View>
+              ))}
+            </View>
 
-            <YStack gap="$4" width="100%">
-              <Button
-                size="$5"
-                backgroundColor="#10B981"
-                color="white"
-                fontWeight="600"
+            <View className="gap-4 w-full">
+              <Pressable
+                className="bg-primary rounded-xl py-4 items-center active:opacity-80"
                 onPress={handleRestart}
               >
-                Try Again
-              </Button>
+                <Text className="text-white font-semibold text-lg">
+                  Try Again
+                </Text>
+              </Pressable>
 
-              <Button
-                size="$5"
-                borderColor="$borderColor"
-                borderWidth={2}
-                backgroundColor="transparent"
-                color="$color"
-                fontWeight="600"
+              <Pressable
+                className="border-2 border-border rounded-xl py-4 items-center active:opacity-80"
                 onPress={handleExit}
               >
-                Exit
-              </Button>
-            </YStack>
-          </YStack>
+                <Text className="text-foreground font-semibold text-lg">
+                  Exit
+                </Text>
+              </Pressable>
+            </View>
+          </View>
         </ScrollView>
       </View>
     );
   }
 
   return (
-    <View flex={1} backgroundColor="$background">
-      {}
-      <YStack
-        padding="$5"
-        margin="$4"
-        borderRadius="$4"
-        backgroundColor="$background"
-        shadowColor="$shadowColor"
-        shadowOffset={{ width: 0, height: 2 }}
-        shadowOpacity={0.1}
-        shadowRadius={4}
-        elevation={4}
-      >
-        <XStack
-          justifyContent="space-between"
-          alignItems="center"
-          marginBottom="$4"
-        >
-          <Text fontSize="$6" fontWeight="600" color="$color">
+    <View className="flex-1 bg-background">
+      {/* Training header */}
+      <View className="p-5 m-4 rounded-2xl bg-card shadow-sm">
+        <View className="flex-row justify-between items-center mb-4">
+          <Text className="text-xl font-semibold text-foreground">
             Training Session
           </Text>
-          <Button
-            size="$3"
-            circular
-            backgroundColor="transparent"
-            onPress={handleExit}
-          >
-            <Text fontSize="$6" fontWeight="bold" opacity={0.7} color="$color">
-              ✕
-            </Text>
-          </Button>
-        </XStack>
-        <YStack marginBottom="$3">
-          <Text fontSize="$3" marginBottom="$2" opacity={0.8} color="$color">
+          <Pressable className="p-2 active:opacity-50" onPress={handleExit}>
+            <Text className="text-xl font-bold text-muted-foreground">✕</Text>
+          </Pressable>
+        </View>
+        <View className="mb-3">
+          <Text className="text-sm mb-2 text-muted-foreground">
             Question {currentQuestionIndex + 1} of {trainingSession.length}
           </Text>
-          <View
-            height={4}
-            backgroundColor="$gray5"
-            borderRadius={2}
-            overflow="hidden"
-          >
+          <View className="h-1 bg-muted rounded-full overflow-hidden">
             <View
-              height="100%"
-              borderRadius={2}
-              backgroundColor="#10B981"
-              width={`${((currentQuestionIndex + 1) / trainingSession.length) * 100}%`}
+              className="h-full rounded-full bg-primary"
+              style={{
+                width: `${((currentQuestionIndex + 1) / trainingSession.length) * 100}%`,
+              }}
             />
           </View>
-        </YStack>
-        <XStack alignItems="flex-end">
-          <Text fontSize="$4" fontWeight="600" color="$color">
+        </View>
+        <View className="items-end">
+          <Text className="text-base font-semibold text-foreground">
             Score: {score}/{currentQuestionIndex + 1}
           </Text>
-        </XStack>
-      </YStack>
+        </View>
+      </View>
 
-      {}
+      {/* Question card */}
       <TrainingQuestionCard
         question={trainingSession[currentQuestionIndex]}
         onAnswer={handleAnswer}

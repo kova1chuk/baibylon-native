@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Text, View, XStack, YStack, Spinner } from 'tamagui';
+import { View, Text, ActivityIndicator } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
 import { useActivityHeatmap } from '@/lib/api';
@@ -36,20 +36,19 @@ export default function ActivityHeatmap() {
   const { data: activityData, isLoading } = useActivityHeatmap(12);
 
   const { grid, monthHeaders } = useMemo(() => {
-    // Build a map of date → session_count
     const dateMap = new Map<string, number>();
-    (activityData || []).forEach(day => {
-      dateMap.set(day.activity_date, day.session_count);
-    });
+    (activityData || []).forEach(
+      (day: { activity_date: string; session_count: number }) => {
+        dateMap.set(day.activity_date, day.session_count);
+      }
+    );
 
-    // Generate 12 weeks of dates (84 days)
     const today = new Date();
     const weeks: { date: Date; count: number }[][] = [];
     const totalDays = 12 * 7;
     const startDate = new Date(today);
     startDate.setDate(startDate.getDate() - totalDays + 1);
 
-    // Align to Monday
     const dayOfWeek = startDate.getDay();
     const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
     startDate.setDate(startDate.getDate() + mondayOffset);
@@ -71,7 +70,6 @@ export default function ActivityHeatmap() {
       weeks.push(currentWeek);
     }
 
-    // Build month headers
     const headers: { label: string; weekIndex: number }[] = [];
     let lastMonth = -1;
     weeks.forEach((week, weekIdx) => {
@@ -88,83 +86,69 @@ export default function ActivityHeatmap() {
 
   if (isLoading) {
     return (
-      <View alignItems="center" justifyContent="center" height={140}>
-        <Spinner size="small" />
+      <View className="items-center justify-center h-[140px]">
+        <ActivityIndicator size="small" />
       </View>
     );
   }
 
   return (
-    <YStack
-      backgroundColor="$background"
-      borderRadius="$4"
-      padding="$4"
-      marginHorizontal="$4"
-      shadowColor="$shadowColor"
-      shadowOffset={{ width: 0, height: 1 }}
-      shadowOpacity={0.05}
-      shadowRadius={2}
-      elevation={1}
-    >
-      <Text fontSize="$5" fontWeight="600" color="$color" marginBottom="$3">
+    <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
+      <Text className="text-lg font-semibold text-foreground mb-3">
         Activity
       </Text>
 
       {/* Month headers */}
-      <XStack marginBottom="$1" paddingLeft={0}>
+      <View className="mb-1 h-4 relative">
         {monthHeaders.map((header, idx) => (
           <Text
             key={`${header.label}-${idx}`}
-            fontSize={10}
-            opacity={0.5}
-            position="absolute"
-            left={header.weekIndex * (CELL_SIZE + CELL_GAP)}
+            className="text-[10px] text-muted-foreground absolute"
+            style={{ left: header.weekIndex * (CELL_SIZE + CELL_GAP) }}
           >
             {header.label}
           </Text>
         ))}
-      </XStack>
+      </View>
 
       {/* Grid */}
-      <XStack gap={CELL_GAP} marginTop={18}>
+      <View className="flex-row mt-[18px]" style={{ gap: CELL_GAP }}>
         {grid.map((week, weekIdx) => (
-          <YStack key={weekIdx} gap={CELL_GAP}>
+          <View key={weekIdx} style={{ gap: CELL_GAP }}>
             {week.map((day, dayIdx) => (
               <View
                 key={`${weekIdx}-${dayIdx}`}
-                width={CELL_SIZE}
-                height={CELL_SIZE}
-                borderRadius={3}
-                backgroundColor={getIntensityColor(day.count, isDark)}
+                style={{
+                  width: CELL_SIZE,
+                  height: CELL_SIZE,
+                  borderRadius: 3,
+                  backgroundColor: getIntensityColor(day.count, isDark),
+                }}
               />
             ))}
-          </YStack>
+          </View>
         ))}
-      </XStack>
+      </View>
 
       {/* Legend */}
-      <XStack
-        alignItems="center"
-        justifyContent="flex-end"
-        gap="$1"
-        marginTop="$2"
+      <View
+        className="flex-row items-center justify-end mt-2"
+        style={{ gap: 4 }}
       >
-        <Text fontSize={10} opacity={0.5}>
-          Less
-        </Text>
+        <Text className="text-[10px] text-muted-foreground">Less</Text>
         {[0, 1, 2, 4, 6].map(count => (
           <View
             key={count}
-            width={CELL_SIZE}
-            height={CELL_SIZE}
-            borderRadius={3}
-            backgroundColor={getIntensityColor(count, isDark)}
+            style={{
+              width: CELL_SIZE,
+              height: CELL_SIZE,
+              borderRadius: 3,
+              backgroundColor: getIntensityColor(count, isDark),
+            }}
           />
         ))}
-        <Text fontSize={10} opacity={0.5}>
-          More
-        </Text>
-      </XStack>
-    </YStack>
+        <Text className="text-[10px] text-muted-foreground">More</Text>
+      </View>
+    </View>
   );
 }

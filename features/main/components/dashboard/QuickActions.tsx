@@ -1,21 +1,17 @@
 import React from 'react';
 
+import { useRouter } from 'expo-router';
 import {
   ChevronRight,
   BookOpen,
   GraduationCap,
   RotateCcw,
   Bot,
-} from '@tamagui/lucide-icons';
-import { useRouter } from 'expo-router';
-import {
-  Button,
-  Text,
-  View,
-  XStack,
-  YStack,
-  useTheme as useTamaguiTheme,
-} from 'tamagui';
+} from 'lucide-react-native';
+
+import { View, Text, Pressable } from 'react-native';
+
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface ActionItem {
   label: string;
@@ -26,7 +22,8 @@ interface ActionItem {
 
 export default function QuickActions() {
   const router = useRouter();
-  const tamaguiTheme = useTamaguiTheme();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   const actions: ActionItem[] = [
     {
@@ -56,59 +53,37 @@ export default function QuickActions() {
   ];
 
   return (
-    <YStack
-      backgroundColor="$background"
-      borderRadius="$4"
-      padding="$4"
-      marginHorizontal="$4"
-      shadowColor="$shadowColor"
-      shadowOffset={{ width: 0, height: 1 }}
-      shadowOpacity={0.05}
-      shadowRadius={2}
-      elevation={1}
-    >
-      <Text fontSize="$5" fontWeight="600" color="$color" marginBottom="$3">
+    <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
+      <Text className="text-lg font-semibold text-foreground mb-3">
         Quick Actions
       </Text>
 
-      <YStack gap="$2">
+      <View className="gap-2">
         {actions.map(action => (
-          <Button
+          <Pressable
             key={action.label}
-            size="$4"
-            backgroundColor="transparent"
-            borderWidth={1}
-            borderColor="$borderColor"
-            borderRadius="$3"
+            className="flex-row items-center gap-3 px-3 py-3 border border-border rounded-xl active:opacity-70"
             onPress={() => action.route && router.push(action.route as any)}
             disabled={!action.route}
-            opacity={action.route ? 1 : 0.5}
-            justifyContent="flex-start"
-            paddingHorizontal="$3"
+            style={{ opacity: action.route ? 1 : 0.5 }}
           >
-            <XStack flex={1} alignItems="center" gap="$3">
-              <View
-                width={36}
-                height={36}
-                borderRadius={10}
-                backgroundColor={`${action.color}15`}
-                alignItems="center"
-                justifyContent="center"
-              >
-                {action.icon}
-              </View>
-              <Text flex={1} fontSize="$4" fontWeight="500" color="$color">
-                {action.label}
-              </Text>
-              <ChevronRight
-                size={16}
-                color={tamaguiTheme.color?.val}
-                opacity={0.4}
-              />
-            </XStack>
-          </Button>
+            <View
+              className="w-9 h-9 rounded-[10px] items-center justify-center"
+              style={{ backgroundColor: `${action.color}15` }}
+            >
+              {action.icon}
+            </View>
+            <Text className="flex-1 text-base font-medium text-foreground">
+              {action.label}
+            </Text>
+            <ChevronRight
+              size={16}
+              color={isDark ? '#FAFAF9' : '#111827'}
+              opacity={0.4}
+            />
+          </Pressable>
         ))}
-      </YStack>
-    </YStack>
+      </View>
+    </View>
   );
 }

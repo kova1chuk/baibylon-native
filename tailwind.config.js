@@ -3,8 +3,9 @@ module.exports = {
   darkMode: 'class',
   content: [
     './app/**/*.{js,jsx,ts,tsx}',
-    './components/ui/**/*.{js,jsx,ts,tsx}',
-    './features/auth/**/*.{js,jsx,ts,tsx}',
+    './components/**/*.{js,jsx,ts,tsx}',
+    './features/**/*.{js,jsx,ts,tsx}',
+    './shared/**/*.{js,jsx,ts,tsx}',
   ],
   presets: [require('nativewind/preset')],
   theme: {
@@ -39,6 +40,9 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        warning: 'hsl(var(--warning))',
+        info: 'hsl(var(--info))',
+        success: 'hsl(var(--success))',
       },
     },
   },

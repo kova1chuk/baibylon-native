@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import {
   View,
   Text,
-  YStack,
-  XStack,
-  Button,
-  Spinner,
   ScrollView,
-} from 'tamagui';
-
-import { Alert } from 'react-native';
+  Pressable,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 
 import { useDictionaryStats, useDictionaryWords } from '@/lib/api';
 
@@ -91,27 +89,16 @@ export default function DictionaryScreen() {
 
   if (wordsLoading && !wordsData) {
     return (
-      <View
-        flex={1}
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="$background"
-      >
-        <Spinner size="large" />
+      <View className="flex-1 items-center justify-center bg-background">
+        <ActivityIndicator size="large" />
       </View>
     );
   }
 
   if (wordsError) {
     return (
-      <View
-        flex={1}
-        alignItems="center"
-        justifyContent="center"
-        padding="$4"
-        backgroundColor="$background"
-      >
-        <Text fontSize="$6" color="$red10" textAlign="center">
+      <View className="flex-1 items-center justify-center p-4 bg-background">
+        <Text className="text-xl text-destructive text-center">
           Error loading words. Please try again.
         </Text>
       </View>
@@ -120,113 +107,64 @@ export default function DictionaryScreen() {
 
   return (
     <ScrollView
-      flex={1}
+      className="flex-1"
       contentContainerStyle={{
         paddingBottom: tabBarHeight + insets.bottom + 16,
         flexGrow: 1,
       }}
     >
-      {}
-      <YStack
-        gap="$4"
-        padding="$6"
-        margin="$4"
-        backgroundColor="$background"
-        borderRadius="$4"
-        shadowColor="$shadowColor"
-        shadowOffset={{ width: 0, height: 2 }}
-        shadowOpacity={0.1}
-        shadowRadius={4}
-        elevation={4}
-      >
-        <Text fontSize="$9" fontWeight="bold" color="$color">
+      {/* Header card */}
+      <View className="gap-4 p-6 m-4 bg-card rounded-2xl shadow-sm">
+        <Text className="text-3xl font-bold text-foreground">
           My Dictionary
         </Text>
-        <Text fontSize="$4" opacity={0.7} lineHeight={22} color="$color">
+        <Text className="text-base text-muted-foreground leading-[22px]">
           Track your vocabulary progress and manage your word collection
         </Text>
 
-        {}
-        <XStack gap="$3">
-          <Button
-            flex={1}
-            size="$4"
-            backgroundColor="#10B981"
-            color="white"
-            fontWeight="600"
+        <View className="flex-row gap-3">
+          <Pressable
+            className="flex-1 bg-primary rounded-xl py-3 items-center active:opacity-80"
             onPress={handleAddWord}
           >
-            + Add Word
-          </Button>
+            <Text className="text-white font-semibold">+ Add Word</Text>
+          </Pressable>
 
-          <Button
-            flex={1}
-            size="$4"
-            borderColor="$borderColor"
-            borderWidth={1}
-            backgroundColor="transparent"
-            color="$color"
-            fontWeight="600"
+          <Pressable
+            className="flex-1 border border-border rounded-xl py-3 items-center active:opacity-80"
             onPress={handleImportWords}
           >
-            Import
-          </Button>
-        </XStack>
-      </YStack>
+            <Text className="text-foreground font-semibold">Import</Text>
+          </Pressable>
+        </View>
+      </View>
 
-      {}
-      <YStack
-        gap="$4"
-        padding="$5"
-        margin="$4"
-        backgroundColor="$background"
-        borderRadius="$4"
-        shadowColor="$shadowColor"
-        shadowOffset={{ width: 0, height: 2 }}
-        shadowOpacity={0.1}
-        shadowRadius={4}
-        elevation={4}
-      >
-        <Text fontSize="$6" fontWeight="600" color="$color">
-          Overview
-        </Text>
-        <XStack justifyContent="space-around">
-          <YStack alignItems="center">
-            <Text fontSize="$8" fontWeight="bold" color="$color">
-              {stats.total}
-            </Text>
-            <Text fontSize="$3" opacity={0.7} textAlign="center" color="$color">
-              Total Words
-            </Text>
-          </YStack>
-          <YStack alignItems="center">
-            <Text fontSize="$8" fontWeight="bold" color="$color">
-              {stats.notLearned + stats.beginner + stats.basic}
-            </Text>
-            <Text fontSize="$3" opacity={0.7} textAlign="center" color="$color">
-              Learning
-            </Text>
-          </YStack>
-          <YStack alignItems="center">
-            <Text fontSize="$8" fontWeight="bold" color="$color">
-              {stats.intermediate + stats.advanced}
-            </Text>
-            <Text fontSize="$3" opacity={0.7} textAlign="center" color="$color">
-              Practicing
-            </Text>
-          </YStack>
-          <YStack alignItems="center">
-            <Text fontSize="$8" fontWeight="bold" color="$color">
-              {stats.wellKnown + stats.mastered}
-            </Text>
-            <Text fontSize="$3" opacity={0.7} textAlign="center" color="$color">
-              Mastered
-            </Text>
-          </YStack>
-        </XStack>
-      </YStack>
+      {/* Overview card */}
+      <View className="gap-4 p-5 m-4 bg-card rounded-2xl shadow-sm">
+        <Text className="text-xl font-semibold text-foreground">Overview</Text>
+        <View className="flex-row justify-around">
+          {[
+            { label: 'Total Words', value: stats.total },
+            {
+              label: 'Learning',
+              value: stats.notLearned + stats.beginner + stats.basic,
+            },
+            { label: 'Practicing', value: stats.intermediate + stats.advanced },
+            { label: 'Mastered', value: stats.wellKnown + stats.mastered },
+          ].map(item => (
+            <View key={item.label} className="items-center">
+              <Text className="text-2xl font-bold text-foreground">
+                {item.value}
+              </Text>
+              <Text className="text-sm text-muted-foreground text-center">
+                {item.label}
+              </Text>
+            </View>
+          ))}
+        </View>
+      </View>
 
-      {}
+      {/* Words list */}
       <WordsList
         words={words}
         onWordPress={handleWordPress}

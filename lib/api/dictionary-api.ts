@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from 'react';
 
 import { supabaseRpcQuery } from './supabase-rpc';
 import type {
@@ -11,40 +11,47 @@ import type {
   WordStatus,
 } from './types';
 
-export const dictionaryKeys = {
-  all: ['dictionary'] as const,
-  stats: (langCode: string) =>
-    [...dictionaryKeys.all, 'stats', langCode] as const,
-  words: (params: FetchWordsPageParams) =>
-    [...dictionaryKeys.all, 'words', params] as const,
-  randomWord: (langCode?: string, translationLang?: string) =>
-    [...dictionaryKeys.all, 'randomWord', langCode, translationLang] as const,
-};
-
 export function useDictionaryStats(langCode: string) {
-  return useQuery({
-    queryKey: dictionaryKeys.stats(langCode),
-    queryFn: async (): Promise<UserDictionaryStatsResponse> => {
+  const [data, setData] = useState<UserDictionaryStatsResponse | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setIsLoading(true);
+    try {
       const response = await supabaseRpcQuery<GetDictStatsResponse>({
         functionName: 'get_dict_stat',
         args: { p_lang_code: langCode },
       });
-
-      return {
+      setData({
         totalWords: Object.values(response || {}).reduce(
           (sum, count) => sum + count,
           0
         ),
         wordStats: response || {},
-      };
-    },
-  });
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error('Unknown error'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [langCode]);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { data, isLoading, error, refetch };
 }
 
 export function useDictionaryWords(params: FetchWordsPageParams) {
-  return useQuery({
-    queryKey: dictionaryKeys.words(params),
-    queryFn: async (): Promise<FetchWordsPageResponse> => {
+  const [data, setData] = useState<FetchWordsPageResponse | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setIsLoading(true);
+    try {
       const {
         page,
         pageSize,
@@ -91,23 +98,44 @@ export function useDictionaryWords(params: FetchWordsPageParams) {
         usageCount: row.usagecount,
       }));
 
-      return {
+      setData({
         words,
         totalWords,
         page,
         hasMore: page * pageSize < totalWords,
-      };
-    },
-  });
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error('Unknown error'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [
+    params.page,
+    params.pageSize,
+    params.langCode,
+    params.translationLang,
+    params.search,
+    JSON.stringify(params.statusFilter),
+  ]);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { data, isLoading, error, refetch };
 }
 
 export function useRandomWord(
   langCode: string = 'en',
   translationLang: string = 'uk'
 ) {
-  return useQuery({
-    queryKey: dictionaryKeys.randomWord(langCode, translationLang),
-    queryFn: async (): Promise<DictionaryWordRow | null> => {
+  const [data, setData] = useState<DictionaryWordRow | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const refetch = useCallback(async () => {
+    setIsLoading(true);
+    try {
       const response = await supabaseRpcQuery<DictionaryWordRow[]>({
         functionName: 'get_random_word',
         args: {
@@ -115,8 +143,17 @@ export function useRandomWord(
           p_translation_lang: translationLang,
         },
       });
+      setData(response && response.length > 0 ? response[0] : null);
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error('Unknown error'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [langCode, translationLang]);
 
-      return response && response.length > 0 ? response[0] : null;
-    },
-  });
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { data, isLoading, error, refetch };
 }

@@ -1,46 +1,42 @@
 import React from 'react';
 
 import { useRouter } from 'expo-router';
-import { YStack, Button } from 'tamagui';
+
+import { View, Text, Pressable } from 'react-native';
 
 export default function NavigationLinks() {
   const router = useRouter();
 
   const handleNavigation = (route: string) => {
-    router.push(route);
+    router.push(route as any);
   };
 
   return (
-    <YStack gap="$4" width="100%">
-      <Button
-        size="$4"
-        backgroundColor="$gray10"
-        color="white"
-        fontWeight="600"
+    <View className="gap-4 w-full">
+      <Pressable
+        className="bg-muted rounded-xl py-3 items-center active:opacity-80"
         onPress={() => handleNavigation('/dictionary')}
       >
-        Dictionary
-      </Button>
+        <Text className="text-foreground font-semibold text-base">
+          Dictionary
+        </Text>
+      </Pressable>
 
-      <Button
-        size="$4"
-        backgroundColor="#10B981"
-        color="white"
-        fontWeight="600"
+      <Pressable
+        className="bg-primary rounded-xl py-3 items-center active:opacity-80"
         onPress={() => handleNavigation('/training')}
       >
-        Training Words
-      </Button>
+        <Text className="text-white font-semibold text-base">
+          Training Words
+        </Text>
+      </Pressable>
 
-      <Button
-        size="$4"
-        backgroundColor="$green10"
-        color="white"
-        fontWeight="600"
+      <Pressable
+        className="bg-primary rounded-xl py-3 items-center active:opacity-80"
         onPress={() => handleNavigation('/reviews')}
       >
-        Reviews
-      </Button>
-    </YStack>
+        <Text className="text-white font-semibold text-base">Reviews</Text>
+      </Pressable>
+    </View>
   );
 }

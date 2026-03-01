@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text, View, XStack, YStack } from 'tamagui';
+import { View, Text } from 'react-native';
 
 interface Skill {
   name: string;
@@ -19,48 +19,34 @@ const SKILLS: Skill[] = [
 
 export default function EnglishSkillsChart() {
   return (
-    <YStack
-      backgroundColor="$background"
-      borderRadius="$4"
-      padding="$4"
-      marginHorizontal="$4"
-      shadowColor="$shadowColor"
-      shadowOffset={{ width: 0, height: 1 }}
-      shadowOpacity={0.05}
-      shadowRadius={2}
-      elevation={1}
-    >
-      <Text fontSize="$5" fontWeight="600" color="$color" marginBottom="$3">
+    <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
+      <Text className="text-lg font-semibold text-foreground mb-3">
         English Skills
       </Text>
 
-      <YStack gap="$3">
+      <View className="gap-3">
         {SKILLS.map(skill => (
-          <YStack key={skill.name} gap="$1">
-            <XStack justifyContent="space-between" alignItems="center">
-              <Text fontSize="$3" opacity={0.7}>
+          <View key={skill.name} className="gap-1">
+            <View className="flex-row justify-between items-center">
+              <Text className="text-sm text-muted-foreground">
                 {skill.name}
               </Text>
-              <Text fontSize="$3" fontWeight="600" color="$color">
+              <Text className="text-sm font-semibold text-foreground">
                 {skill.value}%
               </Text>
-            </XStack>
-            <View
-              height={8}
-              borderRadius={4}
-              backgroundColor="$gray5"
-              overflow="hidden"
-            >
+            </View>
+            <View className="h-2 rounded-full bg-muted overflow-hidden">
               <View
-                height={8}
-                borderRadius={4}
-                backgroundColor={skill.color}
-                width={`${skill.value}%`}
+                className="h-2 rounded-full"
+                style={{
+                  backgroundColor: skill.color,
+                  width: `${skill.value}%`,
+                }}
               />
             </View>
-          </YStack>
+          </View>
         ))}
-      </YStack>
-    </YStack>
+      </View>
+    </View>
   );
 }

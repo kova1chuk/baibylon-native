@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text, YStack } from 'tamagui';
+import { View, Text } from 'react-native';
 
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -20,13 +20,13 @@ export default function DashboardHero() {
     'Learner';
 
   return (
-    <YStack gap="$1" paddingHorizontal="$4">
-      <Text fontSize="$9" fontWeight="bold" color="$color">
+    <View className="gap-1 px-4">
+      <Text className="text-3xl font-bold text-foreground">
         {getGreeting()}, {name}
       </Text>
-      <Text fontSize="$4" opacity={0.6}>
+      <Text className="text-base text-muted-foreground">
         {"Let's continue building your vocabulary"}
       </Text>
-    </YStack>
+    </View>
   );
 }
