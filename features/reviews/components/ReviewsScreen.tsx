@@ -19,6 +19,8 @@ import {
   useDeleteReviewMutation,
 } from '@/entities/review/api/reviewApi';
 
+import { useColors } from '@/hooks/useColors';
+
 import type { Review } from '@/entities/review/api/reviewApi';
 
 function calculateProgress(wordsStat: Record<number, number>): number {
@@ -132,6 +134,7 @@ export default function ReviewsScreen() {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
@@ -179,7 +182,10 @@ export default function ReviewsScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center bg-background">
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
         <ActivityIndicator size="large" />
         <Text className="text-muted-foreground mt-2">
           {t('common.loading')}
@@ -189,7 +195,7 @@ export default function ReviewsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1" style={{ backgroundColor: colors.background }}>
       <View className="flex-row items-center gap-3 px-4 py-3">
         <View
           className="flex-1 flex-row items-center gap-2 px-3 py-2.5 rounded-xl"

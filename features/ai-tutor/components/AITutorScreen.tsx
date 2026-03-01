@@ -15,6 +15,8 @@ import {
 } from '@/shared/api/tutorApi';
 import { useAppDispatch, useAppSelector } from '@/shared/model/store';
 
+import { useColors } from '@/hooks/useColors';
+
 import {
   setView,
   setMode,
@@ -35,6 +37,7 @@ export default function AITutorScreen() {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
   const dispatch = useAppDispatch();
 
   const view = useAppSelector(state => state.aiTutor.view);
@@ -133,8 +136,8 @@ export default function AITutorScreen() {
 
   return (
     <View
-      className="flex-1 bg-background"
-      style={{ paddingTop: insets.top + 8 }}
+      className="flex-1"
+      style={{ paddingTop: insets.top + 8, backgroundColor: colors.background }}
     >
       <View className="flex-row items-center justify-between px-4 pb-3">
         <Pressable onPress={handleBack} className="p-2 active:opacity-50">

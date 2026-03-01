@@ -7,11 +7,14 @@ import { View, Text, ScrollView, Pressable } from 'react-native';
 
 import { useAuth } from '@/contexts/AuthContext';
 
+import { useColors } from '@/hooks/useColors';
+
 import DashboardScreen from './DashboardScreen';
 
 export default function WelcomeScreen() {
   const router = useRouter();
   const { user, session, loading } = useAuth();
+  const colors = useColors();
 
   useEffect(() => {
     if (!loading && !session) {
@@ -37,7 +40,8 @@ export default function WelcomeScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         paddingVertical: 40,
         paddingHorizontal: 20,

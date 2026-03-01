@@ -21,6 +21,8 @@ import {
 
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 
+import { useColors } from '@/hooks/useColors';
+
 import WordsList from './WordsList/WordsList';
 
 import type { WordStatus } from '@/shared/types';
@@ -33,6 +35,7 @@ export default function DictionaryScreen() {
   const tabBarHeight = useBottomTabOverflow();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const [selectedStatus, setSelectedStatus] = useState<WordStatus | 'all'>(
     'all'
@@ -100,7 +103,10 @@ export default function DictionaryScreen() {
 
   if (wordsLoading && !wordsData) {
     return (
-      <View className="flex-1 items-center justify-center bg-background">
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
         <ActivityIndicator size="large" />
       </View>
     );
@@ -108,8 +114,8 @@ export default function DictionaryScreen() {
 
   return (
     <View
-      className="flex-1 bg-background"
-      style={{ paddingTop: insets.top + 8 }}
+      className="flex-1"
+      style={{ paddingTop: insets.top + 8, backgroundColor: colors.background }}
     >
       {/* Header */}
       <View className="px-4 pb-3">

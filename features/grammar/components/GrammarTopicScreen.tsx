@@ -25,6 +25,8 @@ import {
   useUpdateRuleProgressMutation,
 } from '@/entities/grammar/api/grammarApi';
 
+import { useColors } from '@/hooks/useColors';
+
 import {
   GrammarExplanation,
   GrammarSentence,
@@ -394,6 +396,7 @@ export default function GrammarTopicScreen() {
   const { topicId } = useLocalSearchParams<{ topicId: string }>();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const {
     data: content,
@@ -474,7 +477,8 @@ export default function GrammarTopicScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: 16 }}
     >
       <View className="bg-card rounded-2xl overflow-hidden mb-5">

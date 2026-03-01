@@ -21,10 +21,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Text } from '@/components/ui/text';
 
+import { useColors } from '@/hooks/useColors';
+
 export default function ResetPasswordPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const { theme } = useTheme();
+  const colors = useColors();
   const primaryColor = theme === 'dark' ? '#6EE7B7' : '#10B981';
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -80,7 +83,8 @@ export default function ResetPasswordPage() {
   if (success) {
     return (
       <ScrollView
-        className="flex-1 bg-background"
+        className="flex-1"
+        style={{ backgroundColor: colors.background }}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'center',
@@ -112,7 +116,8 @@ export default function ResetPasswordPage() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         flexGrow: 1,
         justifyContent: 'center',

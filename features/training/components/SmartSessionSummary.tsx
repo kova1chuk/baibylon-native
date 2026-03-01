@@ -7,6 +7,8 @@ import { View, Text, ScrollView, Pressable } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
 
+import { useColors } from '@/hooks/useColors';
+
 interface SmartSessionSummaryProps {
   stats: {
     total: number;
@@ -41,6 +43,7 @@ export default function SmartSessionSummary({
   const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const getPerformanceLevel = () => {
     if (stats.accuracy >= 90)
@@ -54,7 +57,8 @@ export default function SmartSessionSummary({
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: 20, flexGrow: 1 }}
     >
       <View className="items-center mb-6">

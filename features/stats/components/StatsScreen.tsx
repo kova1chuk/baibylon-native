@@ -20,6 +20,8 @@ import {
 } from '@/entities/learning-queue/api/multiSessionApi';
 import { useGetActivityHeatmapQuery } from '@/features/hub/api/dashboardApi';
 
+import { useColors } from '@/hooks/useColors';
+
 import ActivityHeatmapSection from './ActivityHeatmapSection';
 
 interface StatCardProps {
@@ -70,6 +72,7 @@ export default function StatsScreen() {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const { data: streak, isLoading: loadingStreak } = useGetStreakInfoQuery();
   const { data: stats, isLoading: loadingStats } =
@@ -80,7 +83,10 @@ export default function StatsScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center bg-background">
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
         <ActivityIndicator size="large" />
         <Text className="text-muted-foreground mt-2">
           {t('common.loading')}
@@ -91,7 +97,8 @@ export default function StatsScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: 16 }}
     >
       <View className="flex-row items-center gap-2 mb-5">

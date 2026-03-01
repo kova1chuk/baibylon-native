@@ -19,6 +19,8 @@ import {
   useGetCategoryTopicsQuery,
 } from '@/entities/grammar/api/grammarApi';
 
+import { useColors } from '@/hooks/useColors';
+
 const LEVEL_COLORS: Record<string, string> = {
   A1: '#10B981',
   A2: '#059669',
@@ -144,6 +146,7 @@ export default function GrammarLevelDetailScreen() {
   }>();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const levelCode = (rawLevel ?? '').toUpperCase();
   const levelColor = LEVEL_COLORS[levelCode] ?? '#6B7280';
@@ -220,7 +223,8 @@ export default function GrammarLevelDetailScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: 16 }}
     >
       <View className="bg-card rounded-2xl p-5 mb-5">

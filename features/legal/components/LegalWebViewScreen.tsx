@@ -6,6 +6,8 @@ import { View, ActivityIndicator } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
 
+import { useColors } from '@/hooks/useColors';
+
 interface LegalWebViewScreenProps {
   path: string;
 }
@@ -15,10 +17,11 @@ const WEB_APP_URL = 'https://vocairo.com';
 export default function LegalWebViewScreen({ path }: LegalWebViewScreenProps) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
   const [loading, setLoading] = useState(true);
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1" style={{ backgroundColor: colors.background }}>
       {loading && (
         <View className="absolute inset-0 items-center justify-center z-10">
           <ActivityIndicator size="large" />

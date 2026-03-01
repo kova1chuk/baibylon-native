@@ -8,6 +8,8 @@ import { View, Text, Pressable, ScrollView } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useGetWeeklyStatsQuery } from '@/shared/api/tutorApi';
 
+import { useColors } from '@/hooks/useColors';
+
 import type { TutorMode } from '../model/aiTutorSlice';
 
 interface WelcomeViewProps {
@@ -54,6 +56,7 @@ export default function WelcomeView({
   const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const { data: weeklyStats } = useGetWeeklyStatsQuery();
 
@@ -66,7 +69,8 @@ export default function WelcomeView({
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: 20, flexGrow: 1 }}
     >
       <View className="items-center mb-8 mt-4">

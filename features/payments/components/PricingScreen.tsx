@@ -22,6 +22,8 @@ import {
 import { useTheme } from '@/contexts/ThemeContext';
 import { useGetSubscriptionQuery } from '@/entities/payments/api/subscriptionApi';
 
+import { useColors } from '@/hooks/useColors';
+
 const WEB_APP_URL = 'https://vocairo.com';
 
 interface PlanFeature {
@@ -73,6 +75,7 @@ export default function PricingScreen() {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const { data, isLoading } = useGetSubscriptionQuery();
   const isActive = data?.subscription?.status === 'active';
@@ -94,7 +97,10 @@ export default function PricingScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center bg-background">
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
         <ActivityIndicator size="large" />
         <Text className="text-muted-foreground mt-2">
           {t('common.loading')}
@@ -105,7 +111,8 @@ export default function PricingScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: 16 }}
     >
       {isActive && (

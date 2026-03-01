@@ -8,6 +8,8 @@ import { View } from 'react-native';
 
 import { Text } from '@/components/ui/text';
 
+import { useColors } from '@/hooks/useColors';
+
 import {
   useSubmitLanguagesMutation,
   useSubmitGoalMutation,
@@ -25,6 +27,7 @@ export default function OnboardingPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const colors = useColors();
 
   const [step, setStep] = useState<Step>('welcome');
   const [nativeLanguage, setNativeLanguage] = useState('');
@@ -76,8 +79,12 @@ export default function OnboardingPage() {
 
   return (
     <View
-      className="flex-1 bg-background"
-      style={{ paddingTop: insets.top + 12, paddingBottom: insets.bottom }}
+      className="flex-1"
+      style={{
+        paddingTop: insets.top + 12,
+        paddingBottom: insets.bottom,
+        backgroundColor: colors.background,
+      }}
     >
       <View className="flex-row items-center justify-between px-5 mb-6">
         <View className="flex-row items-center gap-2">

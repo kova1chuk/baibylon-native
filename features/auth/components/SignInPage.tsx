@@ -8,6 +8,7 @@ import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 
+import { useColors } from '@/hooks/useColors';
 import { useGoogleAuth } from '@/hooks/useGoogleAuth';
 
 import { AuthForm } from './AuthForm';
@@ -16,6 +17,7 @@ export default function SignInPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const { session, loading: authLoading } = useAuth();
+  const colors = useColors();
   const { promptAsync, isLoading: googleLoading } = useGoogleAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,7 +56,10 @@ export default function SignInPage() {
 
   if (authLoading) {
     return (
-      <View className="flex-1 items-center justify-center bg-background">
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
         <ActivityIndicator size="large" />
       </View>
     );
@@ -62,7 +67,8 @@ export default function SignInPage() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         flexGrow: 1,
         justifyContent: 'center',

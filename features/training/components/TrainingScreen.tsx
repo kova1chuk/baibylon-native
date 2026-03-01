@@ -23,6 +23,8 @@ import {
   isTypeTheWordContent,
 } from '@/entities/exercise/api/exerciseApi';
 
+import { useColors } from '@/hooks/useColors';
+
 import { useSmartSession } from '../hooks/useSmartSession';
 
 import ContextFillCard from './ContextFillCard';
@@ -52,6 +54,7 @@ export default function TrainingScreen({ onBack }: TrainingScreenProps = {}) {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const { data: queueItems, isLoading: queueLoading } = useGetUnifiedQueueQuery(
     { size: 20 }
@@ -100,7 +103,10 @@ export default function TrainingScreen({ onBack }: TrainingScreenProps = {}) {
 
   if (queueLoading) {
     return (
-      <View className="flex-1 bg-background items-center justify-center">
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
         <ActivityIndicator size="large" />
         <Text className="text-muted-foreground mt-4">
           {t('learningFeed.loadingQueue')}
@@ -134,8 +140,11 @@ export default function TrainingScreen({ onBack }: TrainingScreenProps = {}) {
 
     return (
       <View
-        className="flex-1 bg-background"
-        style={{ paddingTop: insets.top + 8 }}
+        className="flex-1"
+        style={{
+          paddingTop: insets.top + 8,
+          backgroundColor: colors.background,
+        }}
       >
         <View className="flex-row items-center justify-between px-4 pb-4">
           <Text className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
@@ -211,8 +220,8 @@ export default function TrainingScreen({ onBack }: TrainingScreenProps = {}) {
 
   return (
     <View
-      className="flex-1 bg-background"
-      style={{ paddingTop: insets.top + 8 }}
+      className="flex-1"
+      style={{ paddingTop: insets.top + 8, backgroundColor: colors.background }}
     >
       <View className="flex-row items-center justify-between px-4 pb-3">
         <Pressable onPress={handleExit} className="p-2 active:opacity-50">

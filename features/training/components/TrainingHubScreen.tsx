@@ -27,6 +27,8 @@ import {
   useGetStreakInfoQuery,
 } from '@/entities/learning-queue/api/multiSessionApi';
 
+import { useColors } from '@/hooks/useColors';
+
 interface SessionCardProps {
   icon: React.ReactNode;
   title: string;
@@ -134,6 +136,7 @@ export default function TrainingHubScreen({
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
 
   const { data: queueItems, isLoading: queueLoading } = useGetUnifiedQueueQuery(
     { size: 20 }
@@ -154,7 +157,10 @@ export default function TrainingHubScreen({
 
   if (queueLoading) {
     return (
-      <View className="flex-1 bg-background items-center justify-center">
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: colors.background }}
+      >
         <ActivityIndicator size="large" />
         <Text className="text-muted-foreground mt-4">
           {t('common.loading')}
@@ -165,7 +171,8 @@ export default function TrainingHubScreen({
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         padding: 16,
         paddingTop: insets.top + 8,

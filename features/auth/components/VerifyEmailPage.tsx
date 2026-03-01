@@ -19,10 +19,13 @@ import {
 } from '@/components/ui/card';
 import { Text } from '@/components/ui/text';
 
+import { useColors } from '@/hooks/useColors';
+
 export default function VerifyEmailPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const { theme } = useTheme();
+  const colors = useColors();
   const primaryColor = theme === 'dark' ? '#6EE7B7' : '#10B981';
   const { email } = useLocalSearchParams<{ email?: string }>();
   const [resending, setResending] = useState(false);
@@ -38,7 +41,8 @@ export default function VerifyEmailPage() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         flexGrow: 1,
         justifyContent: 'center',

@@ -7,10 +7,13 @@ import { View, ScrollView, Text, Pressable, Switch, Alert } from 'react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 
+import { useColors } from '@/hooks/useColors';
+
 export default function ProfileScreen() {
   const router = useRouter();
   const { user } = useAuth();
-  const { theme, setTheme } = useTheme();
+  const { theme, setPreference } = useTheme();
+  const colors = useColors();
 
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const isDark = theme === 'dark';
@@ -37,7 +40,10 @@ export default function ProfileScreen() {
   const userEmail = user?.email || '';
 
   return (
-    <ScrollView className="flex-1 bg-background">
+    <ScrollView
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
+    >
       <View className="gap-4 p-4">
         {/* Profile header */}
         <View className="gap-3 items-center p-6 rounded-2xl mb-5 bg-card shadow-sm">
@@ -94,7 +100,7 @@ export default function ProfileScreen() {
             </View>
             <Switch
               value={isDark}
-              onValueChange={value => setTheme(value ? 'dark' : 'light')}
+              onValueChange={value => setPreference(value ? 'dark' : 'light')}
               trackColor={{ false: '#E5E7EB', true: '#10B981' }}
               thumbColor="#FFFFFF"
             />

@@ -10,17 +10,20 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useGetDashboardHomeQuery } from '@/features/hub/api/dashboardApi';
 
+import { useColors } from '@/hooks/useColors';
+
 import AmbientOrbs from './dashboard/AmbientOrbs';
 import CefrLevelCard from './dashboard/CefrLevelCard';
 import DetailedStatsLink from './dashboard/DetailedStatsLink';
 import GreetingCard from './dashboard/GreetingCard';
-import TodayProgressCard from './dashboard/TodayProgressCard';
+import TodayProgressChart from './dashboard/TodayProgressChart';
 import WellKnownWordsCard from './dashboard/WellKnownWordsCard';
 
 export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const colors = useColors();
   const router = useRouter();
   const { user } = useAuth();
 
@@ -33,7 +36,7 @@ export default function DashboardScreen() {
     '';
 
   return (
-    <View className="flex-1 bg-background">
+    <View className="flex-1" style={{ backgroundColor: colors.background }}>
       <ScrollView
         className="flex-1"
         contentContainerStyle={{
@@ -61,7 +64,7 @@ export default function DashboardScreen() {
 
             <GreetingCard firstName={firstName} />
 
-            <TodayProgressCard
+            <TodayProgressChart
               points={dashboardHome?.todayPoints ?? 0}
               exercises={dashboardHome?.todayExercises ?? 0}
               activeTimeMs={dashboardHome?.todayActiveTimeMs ?? 0}

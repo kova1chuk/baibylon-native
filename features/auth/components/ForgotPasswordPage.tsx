@@ -21,10 +21,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Text } from '@/components/ui/text';
 
+import { useColors } from '@/hooks/useColors';
+
 export default function ForgotPasswordPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const { theme } = useTheme();
+  const colors = useColors();
   const primaryColor = theme === 'dark' ? '#6EE7B7' : '#10B981';
   const [email, setEmail] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -62,7 +65,8 @@ export default function ForgotPasswordPage() {
   if (submitted) {
     return (
       <ScrollView
-        className="flex-1 bg-background"
+        className="flex-1"
+        style={{ backgroundColor: colors.background }}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'center',
@@ -96,7 +100,8 @@ export default function ForgotPasswordPage() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         flexGrow: 1,
         justifyContent: 'center',

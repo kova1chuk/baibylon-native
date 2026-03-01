@@ -40,7 +40,10 @@ export default class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <View className="flex-1 items-center justify-center bg-background p-6">
+        <View
+          className="flex-1 items-center justify-center p-6"
+          style={{ backgroundColor: '#FAF9F6' }}
+        >
           <AlertTriangle size={48} color="#EF4444" />
           <Text className="text-lg font-semibold text-foreground mt-4">
             Something went wrong

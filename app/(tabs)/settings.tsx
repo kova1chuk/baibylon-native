@@ -129,7 +129,8 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView
-      className="flex-1 bg-background"
+      className="flex-1"
+      style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         paddingBottom: tabBarHeight + insets.bottom + 16,
         paddingTop: insets.top + 16,
