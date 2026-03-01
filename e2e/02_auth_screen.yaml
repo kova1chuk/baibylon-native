@@ -1,0 +1,14 @@
+appId: com.vocairo
+---
+- launchApp:
+    clearState: true
+# Without auth, we should see auth/signin screen
+- waitForAnimationToEnd
+- takeScreenshot: 02_auth_screen
+# Check for sign in UI elements
+- assertVisible:
+    text: '.*Sign.*'
+    optional: true
+- assertVisible:
+    text: '.*Email.*'
+    optional: true

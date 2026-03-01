@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { RefreshCw } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
@@ -7,40 +7,65 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
-import { dictionaryApi } from '@/entities/dictionary/api/dictionaryApi';
-import { dashboardApi } from '@/features/hub/api/dashboardApi';
+import {
+  dictionaryApi,
+  useGetDictStatsQuery,
+  useGetRandomWordQuery,
+} from '@/entities/dictionary/api/dictionaryApi';
+import {
+  dashboardApi,
+  useGetDashboardHomeQuery,
+  useGetDashboardSummaryQuery,
+  useGetActivityHeatmapQuery,
+} from '@/features/hub/api/dashboardApi';
 import { useAppDispatch } from '@/shared/model/store';
-
-import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 
 import {
   DashboardHero,
   DashboardMetrics,
   DashboardDonutChart,
-  QuickActions,
   WordOfTheMoment,
   ActivityHeatmap,
   EnglishSkillsChart,
 } from './dashboard';
+import { HEATMAP_WEEKS } from './dashboard/ActivityHeatmap';
 
 export default function DashboardScreen() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const tabBarHeight = useBottomTabOverflow();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const dispatch = useAppDispatch();
+
+  // Lift all RTK Query calls here to avoid navigation context crash in child components
+  const { data: dictStats } = useGetDictStatsQuery({ langCode: 'en' });
+  const { data: summaryData } = useGetDashboardSummaryQuery();
+  const { data: dashboardHome } = useGetDashboardHomeQuery();
+  const { data: activityData } = useGetActivityHeatmapQuery({
+    weeks: HEATMAP_WEEKS,
+  });
+
+  const [wordTimestamp, setWordTimestamp] = useState(() => Date.now());
+  const { data: randomWord } = useGetRandomWordQuery({
+    langCode: 'en',
+    translationLang: 'uk',
+    _timestamp: wordTimestamp,
+  });
 
   const handleRefresh = useCallback(() => {
     dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
     dispatch(dictionaryApi.util.invalidateTags(['DictionaryStats']));
   }, [dispatch]);
 
+  const handleRefreshWord = useCallback(() => {
+    setWordTimestamp(Date.now());
+  }, []);
+
   return (
     <ScrollView
       className="flex-1"
       contentContainerStyle={{
-        paddingBottom: tabBarHeight + 20,
+        paddingBottom: 100,
         flexGrow: 1,
       }}
     >
@@ -58,12 +83,11 @@ export default function DashboardScreen() {
 
       <View className="gap-4 pt-2 pb-4">
         <DashboardHero />
-        <DashboardMetrics />
-        <DashboardDonutChart />
-        <QuickActions />
-        <WordOfTheMoment />
-        <ActivityHeatmap />
-        <EnglishSkillsChart />
+        <DashboardMetrics data={summaryData} />
+        <DashboardDonutChart statsData={dictStats} />
+        <WordOfTheMoment word={randomWord} onRefresh={handleRefreshWord} />
+        <ActivityHeatmap activityData={activityData} />
+        <EnglishSkillsChart data={dashboardHome} />
       </View>
     </ScrollView>
   );

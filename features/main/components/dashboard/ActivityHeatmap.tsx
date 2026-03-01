@@ -2,10 +2,11 @@ import React, { useMemo } from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
-import { useGetActivityHeatmapQuery } from '@/features/hub/api/dashboardApi';
+
+import type { ActivityHeatmapData } from '@/features/hub/types/dashboard';
 
 const CELL_SIZE = 14;
 const CELL_GAP = 3;
@@ -32,15 +33,16 @@ function getIntensityColor(count: number, isDark: boolean): string {
   return isDark ? '#39D353' : '#216E39';
 }
 
-const WEEKS = 12;
+export const HEATMAP_WEEKS = 12;
 
-export default function ActivityHeatmap() {
+interface Props {
+  activityData?: ActivityHeatmapData[] | null;
+}
+
+export default function ActivityHeatmap({ activityData }: Props) {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-  const { data: activityData, isLoading } = useGetActivityHeatmapQuery({
-    weeks: WEEKS,
-  });
 
   const { grid, monthHeaders } = useMemo(() => {
     const dateMap = new Map<string, number>();
@@ -50,7 +52,7 @@ export default function ActivityHeatmap() {
 
     const today = new Date();
     const weeks: { date: Date; count: number }[][] = [];
-    const totalDays = WEEKS * 7;
+    const totalDays = HEATMAP_WEEKS * 7;
     const startDate = new Date(today);
     startDate.setDate(startDate.getDate() - totalDays + 1);
 
@@ -89,18 +91,10 @@ export default function ActivityHeatmap() {
     return { grid: weeks, monthHeaders: headers };
   }, [activityData]);
 
-  if (isLoading) {
-    return (
-      <View className="items-center justify-center h-[140px]">
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }
-
   return (
     <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
       <Text className="text-lg font-semibold text-foreground mb-3">
-        {t('dashboard.activityLabel', { weeks: WEEKS })}
+        {t('dashboard.activityLabel', { weeks: HEATMAP_WEEKS })}
       </Text>
 
       <View className="mb-1 h-4 relative">

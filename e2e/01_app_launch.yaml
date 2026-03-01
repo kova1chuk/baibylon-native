@@ -1,0 +1,7 @@
+appId: com.vocairo
+---
+- launchApp:
+    clearState: true
+- assertVisible: '.*'
+  # App should render without crashing
+- takeScreenshot: 01_app_launch

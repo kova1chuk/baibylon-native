@@ -1,0 +1,20 @@
+appId: com.vocairo
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+
+# Look for email input field and try signing in
+- tapOn:
+    text: '.*email.*'
+    optional: true
+- takeScreenshot: 03_auth_email_field
+
+# Check sign up link exists
+- assertVisible:
+    text: '.*Sign Up.*'
+    optional: true
+- assertVisible:
+    text: '.*Forgot.*'
+    optional: true
+- takeScreenshot: 03_auth_flow

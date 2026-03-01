@@ -1,0 +1,8 @@
+appId: com.vocairo
+---
+- launchApp
+- extendedWaitUntil:
+    visible: '.*'
+    timeout: 30000
+- waitForAnimationToEnd
+- takeScreenshot: 10_wait_launch

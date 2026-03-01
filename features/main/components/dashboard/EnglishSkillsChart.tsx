@@ -2,9 +2,9 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
 
-import { useGetDashboardHomeQuery } from '@/features/hub/api/dashboardApi';
+import type { DashboardHomeResponse } from '@/features/hub/types/dashboard';
 
 interface Skill {
   labelKey: string;
@@ -12,17 +12,12 @@ interface Skill {
   color: string;
 }
 
-export default function EnglishSkillsChart() {
-  const { t } = useTranslation();
-  const { data, isLoading } = useGetDashboardHomeQuery();
+interface Props {
+  data?: DashboardHomeResponse | null;
+}
 
-  if (isLoading) {
-    return (
-      <View className="items-center justify-center h-[200px]">
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }
+export default function EnglishSkillsChart({ data }: Props) {
+  const { t } = useTranslation();
 
   const skills: Skill[] = [
     {

@@ -2,9 +2,9 @@ import React from 'react';
 
 import { useTranslation } from 'react-i18next';
 
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text } from 'react-native';
 
-import { useGetDashboardSummaryQuery } from '@/features/hub/api/dashboardApi';
+import type { DashboardSummary } from '@/features/hub/types/dashboard';
 
 interface MetricCardProps {
   label: string;
@@ -28,17 +28,12 @@ function MetricCard({ label, value, subtitle, borderColor }: MetricCardProps) {
   );
 }
 
-export default function DashboardMetrics() {
-  const { t } = useTranslation();
-  const { data, isLoading } = useGetDashboardSummaryQuery();
+interface Props {
+  data?: DashboardSummary | null;
+}
 
-  if (isLoading) {
-    return (
-      <View className="items-center justify-center h-[120px]">
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }
+export default function DashboardMetrics({ data }: Props) {
+  const { t } = useTranslation();
 
   const totalWords = data?.total_words ?? 0;
   const learned = data?.words_learned ?? 0;

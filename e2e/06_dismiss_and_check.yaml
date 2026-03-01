@@ -1,0 +1,9 @@
+appId: com.vocairo
+---
+- launchApp
+- waitForAnimationToEnd
+- tapOn:
+    text: 'Dismiss'
+    optional: true
+- waitForAnimationToEnd
+- takeScreenshot: 06_after_dismiss

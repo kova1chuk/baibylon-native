@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
 import { Volume2 } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 
-import { View, Text, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
-import { useGetRandomWordQuery } from '@/entities/dictionary/api/dictionaryApi';
+import type { DictionaryWordRow } from '@/entities/dictionary/api/types';
 
 const STATUS_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
   '1': { bg: '#6B728015', text: '#6B7280' },
@@ -17,26 +17,13 @@ const STATUS_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
   '7': { bg: '#8B5CF615', text: '#8B5CF6' },
 };
 
-export default function WordOfTheMoment() {
+interface Props {
+  word?: DictionaryWordRow | null;
+  onRefresh?: () => void;
+}
+
+export default function WordOfTheMoment({ word, onRefresh }: Props) {
   const { t } = useTranslation();
-  const [timestamp, setTimestamp] = useState(() => Date.now());
-  const { data: word, isLoading } = useGetRandomWordQuery({
-    langCode: 'en',
-    translationLang: 'uk',
-    _timestamp: timestamp,
-  });
-
-  const handleRefresh = useCallback(() => {
-    setTimestamp(Date.now());
-  }, []);
-
-  if (isLoading) {
-    return (
-      <View className="items-center justify-center h-[120px]">
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }
 
   if (!word) {
     return null;
@@ -52,7 +39,7 @@ export default function WordOfTheMoment() {
         <Text className="text-lg font-semibold text-foreground">
           {t('dashboard.wordOfTheMoment')}
         </Text>
-        <Pressable className="p-2 active:opacity-50" onPress={handleRefresh}>
+        <Pressable className="p-2 active:opacity-50" onPress={onRefresh}>
           <Text style={{ fontSize: 14 }}>🔄</Text>
         </Pressable>
       </View>

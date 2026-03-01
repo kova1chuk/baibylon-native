@@ -1,0 +1,13 @@
+appId: com.vocairo
+---
+- launchApp
+- extendedWaitUntil:
+    visible: '.*morning.*'
+    timeout: 30000
+- waitForAnimationToEnd
+- takeScreenshot: 11_dashboard_top
+- swipe:
+    direction: UP
+    duration: 400
+- waitForAnimationToEnd
+- takeScreenshot: 11_dashboard_bottom

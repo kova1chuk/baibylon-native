@@ -1,0 +1,5 @@
+appId: com.vocairo
+---
+- launchApp
+- waitForAnimationToEnd
+- takeScreenshot: 09_simple_launch

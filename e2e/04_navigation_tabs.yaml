@@ -1,0 +1,28 @@
+appId: com.vocairo
+---
+# This test requires being logged in
+# If not logged in, it will show auth screen
+- launchApp
+- waitForAnimationToEnd
+- takeScreenshot: 04_initial_state
+
+# Try tapping Dictionary tab (if visible)
+- tapOn:
+    text: '.*Dictionary.*'
+    optional: true
+- waitForAnimationToEnd
+- takeScreenshot: 04_dictionary_tab
+
+# Try tapping Settings tab (if visible)
+- tapOn:
+    text: '.*Settings.*'
+    optional: true
+- waitForAnimationToEnd
+- takeScreenshot: 04_settings_tab
+
+# Try tapping Home tab
+- tapOn:
+    text: '.*Home.*'
+    optional: true
+- waitForAnimationToEnd
+- takeScreenshot: 04_home_tab

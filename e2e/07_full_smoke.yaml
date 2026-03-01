@@ -1,0 +1,6 @@
+appId: com.vocairo
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+- takeScreenshot: 07_01_fresh_launch
