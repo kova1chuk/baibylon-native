@@ -15,6 +15,7 @@ import {
   useTheme,
 } from '@/contexts/ThemeContext';
 import { store } from '@/shared/model/store';
+import { ErrorBoundary } from '@/shared/ui';
 
 const LightNavTheme = {
   dark: false,
@@ -92,10 +93,12 @@ function AppContent() {
 
 export default function RootLayout() {
   return (
-    <Provider store={store}>
-      <AppThemeProvider>
-        <AppContent />
-      </AppThemeProvider>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <AppThemeProvider>
+          <AppContent />
+        </AppThemeProvider>
+      </Provider>
+    </ErrorBoundary>
   );
 }
