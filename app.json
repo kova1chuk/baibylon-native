@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Vocairo",
-    "slug": "vocairo",
+    "slug": "vocairo-u0-ghulvnqrebuemqnum",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -35,7 +35,18 @@
           "resizeMode": "contain",
           "backgroundColor": "#09090b"
         }
-      ]
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 35
+          }
+        }
+      ],
+      "./plugins/withAndroidCoreFix",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true
@@ -43,9 +54,13 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "d6f45476-0569-4ff6-a4b2-9b0ed1326f04"
+        "projectId": "ea817ad5-8058-4278-a33b-04a6473b3de6"
       }
     },
-    "owner": "kova1chuk"
+    "owner": "kova1chuk",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/ea817ad5-8058-4278-a33b-04a6473b3de6"
+    }
   }
 }

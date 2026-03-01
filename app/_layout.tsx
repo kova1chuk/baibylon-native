@@ -54,7 +54,7 @@ const DarkNavTheme = {
 };
 
 function AppContent() {
-  const { theme } = useTheme();
+  const { isDark } = useTheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -65,7 +65,7 @@ function AppContent() {
 
   return (
     <AuthProvider>
-      <ThemeProvider value={theme === 'dark' ? DarkNavTheme : LightNavTheme}>
+      <ThemeProvider value={isDark ? DarkNavTheme : LightNavTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="auth" options={{ headerShown: false }} />
@@ -85,7 +85,7 @@ function AppContent() {
           <Stack.Screen name="terms" />
           <Stack.Screen name="+not-found" />
         </Stack>
-        <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+        <StatusBar style={isDark ? 'light' : 'dark'} />
       </ThemeProvider>
     </AuthProvider>
   );

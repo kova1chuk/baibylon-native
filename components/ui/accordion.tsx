@@ -9,8 +9,9 @@ import Animated, {
 
 import { View, Pressable, Text } from 'react-native';
 
-import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
+
+import { useColors } from '@/hooks/useColors';
 
 interface AccordionItemProps {
   title: string;
@@ -26,8 +27,7 @@ function AccordionItem({
   className,
 }: AccordionItemProps) {
   const [isOpen, setIsOpen] = React.useState(defaultOpen);
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const colors = useColors();
   const rotation = useSharedValue(defaultOpen ? 180 : 0);
 
   const toggleOpen = () => {
@@ -49,7 +49,7 @@ function AccordionItem({
           {title}
         </Text>
         <Animated.View style={chevronStyle}>
-          <ChevronDown size={18} color={isDark ? '#FAFAF9' : '#111827'} />
+          <ChevronDown size={18} color={colors.text} />
         </Animated.View>
       </Pressable>
       {isOpen && <View className="pb-4">{children}</View>}

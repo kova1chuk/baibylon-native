@@ -3,8 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 import { useAuth } from '@/contexts/AuthContext';
-
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3006';
+import { API_BASE_URL } from '@/shared/config/api';
 
 interface UseSocketOptions {
   autoConnect?: boolean;

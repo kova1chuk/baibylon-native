@@ -1,10 +1,9 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { API_BASE_URL } from '@/shared/config/api';
 
 import { useSocket } from './useSocket';
-
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3006';
 
 export interface ChatMessageWidget {
   type: string;

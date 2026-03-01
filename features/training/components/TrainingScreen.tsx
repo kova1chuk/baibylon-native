@@ -42,7 +42,11 @@ import type {
   TypeTheWordContent,
 } from '@/entities/exercise/api/exerciseApi';
 
-export default function TrainingScreen() {
+interface TrainingScreenProps {
+  onBack?: () => void;
+}
+
+export default function TrainingScreen({ onBack }: TrainingScreenProps = {}) {
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -70,6 +74,11 @@ export default function TrainingScreen() {
     ),
   });
 
+  const goBack = useCallback(() => {
+    if (onBack) onBack();
+    else router.back();
+  }, [onBack, router]);
+
   const handleExit = useCallback(() => {
     Alert.alert(t('training.exit'), t('training.stopAnytime'), [
       { text: t('common.cancel'), style: 'cancel' },
@@ -78,16 +87,16 @@ export default function TrainingScreen() {
         style: 'destructive',
         onPress: () => {
           session.reset();
-          router.back();
+          goBack();
         },
       },
     ]);
-  }, [session, router, t]);
+  }, [session, goBack, t]);
 
   const handleDone = useCallback(() => {
     session.reset();
-    router.back();
-  }, [session, router]);
+    goBack();
+  }, [session, goBack]);
 
   if (queueLoading) {
     return (
@@ -132,7 +141,7 @@ export default function TrainingScreen() {
           <Text className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
             {t('training.smartSession')}
           </Text>
-          <Pressable onPress={() => router.back()} className="p-2">
+          <Pressable onPress={goBack} className="p-2">
             <X size={20} color={isDark ? '#FAFAF9' : '#111827'} />
           </Pressable>
         </View>

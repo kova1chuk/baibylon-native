@@ -1,94 +1,97 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
-import { RefreshCw } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
+import { useRouter } from 'expo-router';
+import { Settings } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { View, Text, ScrollView, Pressable } from 'react-native';
+import { View, ScrollView, Pressable } from 'react-native';
 
+import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import {
-  dictionaryApi,
-  useGetDictStatsQuery,
-  useGetRandomWordQuery,
-} from '@/entities/dictionary/api/dictionaryApi';
-import {
-  dashboardApi,
-  useGetDashboardHomeQuery,
-  useGetDashboardSummaryQuery,
-  useGetActivityHeatmapQuery,
-} from '@/features/hub/api/dashboardApi';
-import { useAppDispatch } from '@/shared/model/store';
+import { useGetDashboardHomeQuery } from '@/features/hub/api/dashboardApi';
 
-import {
-  DashboardHero,
-  DashboardMetrics,
-  DashboardDonutChart,
-  WordOfTheMoment,
-  ActivityHeatmap,
-  EnglishSkillsChart,
-} from './dashboard';
-import { HEATMAP_WEEKS } from './dashboard/ActivityHeatmap';
+import AmbientOrbs from './dashboard/AmbientOrbs';
+import CefrLevelCard from './dashboard/CefrLevelCard';
+import DetailedStatsLink from './dashboard/DetailedStatsLink';
+import GreetingCard from './dashboard/GreetingCard';
+import TodayProgressCard from './dashboard/TodayProgressCard';
+import WellKnownWordsCard from './dashboard/WellKnownWordsCard';
 
 export default function DashboardScreen() {
-  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { user } = useAuth();
 
-  // Lift all RTK Query calls here to avoid navigation context crash in child components
-  const { data: dictStats } = useGetDictStatsQuery({ langCode: 'en' });
-  const { data: summaryData } = useGetDashboardSummaryQuery();
   const { data: dashboardHome } = useGetDashboardHomeQuery();
-  const { data: activityData } = useGetActivityHeatmapQuery({
-    weeks: HEATMAP_WEEKS,
-  });
 
-  const [wordTimestamp, setWordTimestamp] = useState(() => Date.now());
-  const { data: randomWord } = useGetRandomWordQuery({
-    langCode: 'en',
-    translationLang: 'uk',
-    _timestamp: wordTimestamp,
-  });
-
-  const handleRefresh = useCallback(() => {
-    dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
-    dispatch(dictionaryApi.util.invalidateTags(['DictionaryStats']));
-  }, [dispatch]);
-
-  const handleRefreshWord = useCallback(() => {
-    setWordTimestamp(Date.now());
-  }, []);
+  const firstName =
+    user?.user_metadata?.full_name?.split(' ')[0] ||
+    user?.user_metadata?.name?.split(' ')[0] ||
+    user?.email?.split('@')[0] ||
+    '';
 
   return (
-    <ScrollView
-      className="flex-1"
-      contentContainerStyle={{
-        paddingBottom: 100,
-        flexGrow: 1,
-      }}
-    >
-      <View
-        className="flex-row items-center justify-between px-4 pb-2"
-        style={{ paddingTop: insets.top + 16 }}
+    <View className="flex-1 bg-background">
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{
+          paddingBottom: 100,
+          paddingTop: insets.top + 8,
+          flexGrow: 1,
+        }}
       >
-        <Text className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-          {t('dashboard.title')}
-        </Text>
-        <Pressable onPress={handleRefresh} className="p-2 active:opacity-50">
-          <RefreshCw size={20} color={isDark ? '#FAFAF9' : '#111827'} />
-        </Pressable>
-      </View>
+        <View
+          className="relative"
+          style={{ maxWidth: 540, alignSelf: 'center', width: '100%' }}
+        >
+          <AmbientOrbs />
 
-      <View className="gap-4 pt-2 pb-4">
-        <DashboardHero />
-        <DashboardMetrics data={summaryData} />
-        <DashboardDonutChart statsData={dictStats} />
-        <WordOfTheMoment word={randomWord} onRefresh={handleRefreshWord} />
-        <ActivityHeatmap activityData={activityData} />
-        <EnglishSkillsChart data={dashboardHome} />
-      </View>
-    </ScrollView>
+          <View className="relative z-[1] px-5" style={{ gap: 8 }}>
+            <View className="flex-row items-center justify-end mb-1">
+              <Pressable
+                onPress={() => router.push('/(tabs)/settings' as never)}
+                className="p-2 active:opacity-50"
+                accessibilityLabel="Settings"
+              >
+                <Settings size={20} color={isDark ? '#A1A1AA' : '#78716C'} />
+              </Pressable>
+            </View>
+
+            <GreetingCard firstName={firstName} />
+
+            <TodayProgressCard
+              points={dashboardHome?.todayPoints ?? 0}
+              exercises={dashboardHome?.todayExercises ?? 0}
+              activeTimeMs={dashboardHome?.todayActiveTimeMs ?? 0}
+              wordsReviewed={dashboardHome?.todayWordsReviewed ?? 0}
+            />
+
+            <View className="flex-row" style={{ gap: 8 }}>
+              <View className="flex-1">
+                <WellKnownWordsCard
+                  wellKnown={dashboardHome?.wellKnownWords ?? 0}
+                  total={dashboardHome?.totalWords ?? 0}
+                />
+              </View>
+              <View className="flex-1">
+                <CefrLevelCard
+                  level={dashboardHome?.cefrLevel ?? 'A1'}
+                  skillVocabulary={dashboardHome?.skillVocabulary ?? 0}
+                  skillGrammar={dashboardHome?.skillGrammar ?? 0}
+                  skillReading={dashboardHome?.skillReading ?? 0}
+                  skillWriting={dashboardHome?.skillWriting ?? 0}
+                  skillListening={dashboardHome?.skillListening ?? 0}
+                  skillSpeaking={dashboardHome?.skillSpeaking ?? 0}
+                />
+              </View>
+            </View>
+
+            <DetailedStatsLink />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 }

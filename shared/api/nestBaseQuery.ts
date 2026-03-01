@@ -1,10 +1,14 @@
-import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  fetchBaseQuery,
+  type BaseQueryFn,
+  type FetchArgs,
+  type FetchBaseQueryError,
+} from '@reduxjs/toolkit/query/react';
 
 import { supabase } from '@/lib/supabase';
+import { API_BASE_URL } from '@/shared/config/api';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3006';
-
-export const nestBaseQuery = fetchBaseQuery({
+const rawBaseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   prepareHeaders: async headers => {
     const {
@@ -16,3 +20,21 @@ export const nestBaseQuery = fetchBaseQuery({
     return headers;
   },
 });
+
+export const nestBaseQuery: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await rawBaseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.status === 401) {
+    const { data, error } = await supabase.auth.refreshSession();
+
+    if (!error && data.session) {
+      result = await rawBaseQuery(args, api, extraOptions);
+    }
+  }
+
+  return result;
+};

@@ -1,16 +1,15 @@
 import { View } from 'react-native';
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useColors } from '@/hooks/useColors';
 
 export default function TabBarBackground() {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const colors = useColors();
 
   return (
     <View
       style={{
         flex: 1,
-        backgroundColor: isDark ? '#111113' : '#FFFFFF',
+        backgroundColor: colors.card,
       }}
     />
   );

@@ -8,6 +8,7 @@ import {
   FileText,
   Globe,
   LogOut,
+  Monitor,
   Moon,
   Shield,
   ShieldCheck,
@@ -23,13 +24,12 @@ import {
   View,
   Text,
   ScrollView,
-  Switch,
   Pressable,
   ActivityIndicator,
 } from 'react-native';
 
 import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme, ThemePreference } from '@/contexts/ThemeContext';
 import {
   useGetProfileQuery,
   useResetProgressMutation,
@@ -38,14 +38,26 @@ import {
 
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 
+import { useColors } from '@/hooks/useColors';
+
+const THEME_OPTIONS: {
+  value: ThemePreference;
+  labelKey: string;
+  icon: typeof Sun;
+}[] = [
+  { value: 'system', labelKey: 'System', icon: Monitor },
+  { value: 'light', labelKey: 'Light', icon: Sun },
+  { value: 'dark', labelKey: 'Dark', icon: Moon },
+];
+
 export default function SettingsScreen() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabOverflow();
   const router = useRouter();
   const { user, signOut } = useAuth();
-  const { theme, setTheme } = useTheme();
-  const isDark = theme === 'dark';
+  const { preference, isDark, setPreference } = useTheme();
+  const colors = useColors();
 
   const { data: profile, isLoading: loadingProfile } = useGetProfileQuery();
   const [resetProgress, { isLoading: resetting }] = useResetProgressMutation();
@@ -150,7 +162,7 @@ export default function SettingsScreen() {
             <View className="flex-row gap-4 mt-4 pt-3 border-t border-border">
               {profile.native_language && (
                 <View className="flex-row items-center gap-1.5">
-                  <Globe size={14} color={isDark ? '#52525B' : '#A1A1AA'} />
+                  <Globe size={14} color={colors.muted} />
                   <Text className="text-xs text-muted-foreground">
                     Native: {profile.native_language.toUpperCase()}
                   </Text>
@@ -158,7 +170,7 @@ export default function SettingsScreen() {
               )}
               {profile.learning_language && (
                 <View className="flex-row items-center gap-1.5">
-                  <Globe size={14} color={isDark ? '#52525B' : '#A1A1AA'} />
+                  <Globe size={14} color={colors.muted} />
                   <Text className="text-xs text-muted-foreground">
                     Learning: {profile.learning_language.toUpperCase()}
                   </Text>
@@ -186,7 +198,7 @@ export default function SettingsScreen() {
               View your learning statistics
             </Text>
           </View>
-          <ChevronRight size={16} color={isDark ? '#52525B' : '#A1A1AA'} />
+          <ChevronRight size={16} color={colors.muted} />
         </Pressable>
 
         <Pressable
@@ -207,35 +219,40 @@ export default function SettingsScreen() {
               View plans and manage subscription
             </Text>
           </View>
-          <ChevronRight size={16} color={isDark ? '#52525B' : '#A1A1AA'} />
+          <ChevronRight size={16} color={colors.muted} />
         </Pressable>
 
         <View className="bg-card rounded-2xl p-4">
           <Text className="text-base font-semibold text-foreground mb-3">
             Appearance
           </Text>
-          <View className="flex-row items-center justify-between">
-            <View className="flex-row items-center gap-3 flex-1">
-              {isDark ? (
-                <Moon size={20} color={isDark ? '#FAFAF9' : '#111827'} />
-              ) : (
-                <Sun size={20} color={isDark ? '#FAFAF9' : '#111827'} />
-              )}
-              <View className="flex-1">
-                <Text className="text-base font-medium text-foreground">
-                  Dark Mode
-                </Text>
-                <Text className="text-xs text-muted-foreground">
-                  {isDark ? 'Dark theme enabled' : 'Light theme enabled'}
-                </Text>
-              </View>
-            </View>
-            <Switch
-              value={isDark}
-              onValueChange={v => setTheme(v ? 'dark' : 'light')}
-              trackColor={{ false: '#E5E7EB', true: '#10B981' }}
-              thumbColor="#FFFFFF"
-            />
+          <View className="flex-row gap-2">
+            {THEME_OPTIONS.map(({ value, labelKey, icon: Icon }) => {
+              const isActive = preference === value;
+              return (
+                <Pressable
+                  key={value}
+                  className={`flex-1 flex-row items-center justify-center gap-2 py-3 rounded-xl ${
+                    isActive ? 'bg-primary' : 'bg-secondary'
+                  }`}
+                  onPress={() => setPreference(value)}
+                >
+                  <Icon
+                    size={16}
+                    color={
+                      isActive ? (isDark ? '#0A0A0F' : '#FFFFFF') : colors.text
+                    }
+                  />
+                  <Text
+                    className={`text-sm font-medium ${
+                      isActive ? 'text-primary-foreground' : 'text-foreground'
+                    }`}
+                  >
+                    {labelKey}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
         </View>
 
@@ -244,49 +261,41 @@ export default function SettingsScreen() {
             Legal
           </Text>
           <Pressable
-            className="flex-row items-center gap-3 py-3 active:opacity-70"
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: isDark ? '#27272A' : '#F3F4F6',
-            }}
+            className="flex-row items-center gap-3 py-3 border-b border-border active:opacity-70"
             onPress={() => router.push('/privacy')}
           >
-            <ShieldCheck size={18} color={isDark ? '#A1A1AA' : '#71717A'} />
+            <ShieldCheck size={18} color={colors.muted} />
             <Text className="text-sm font-medium text-foreground flex-1">
               Privacy Policy
             </Text>
-            <ChevronRight size={16} color={isDark ? '#52525B' : '#A1A1AA'} />
+            <ChevronRight size={16} color={colors.muted} />
           </Pressable>
           <Pressable
             className="flex-row items-center gap-3 py-3 active:opacity-70"
             onPress={() => router.push('/terms')}
           >
-            <FileText size={18} color={isDark ? '#A1A1AA' : '#71717A'} />
+            <FileText size={18} color={colors.muted} />
             <Text className="text-sm font-medium text-foreground flex-1">
               Terms of Service
             </Text>
-            <ChevronRight size={16} color={isDark ? '#52525B' : '#A1A1AA'} />
+            <ChevronRight size={16} color={colors.muted} />
           </Pressable>
         </View>
 
         <View className="bg-card rounded-2xl p-4">
           <View className="flex-row items-center gap-2 mb-3">
-            <Shield size={16} color={isDark ? '#EF4444' : '#DC2626'} />
+            <Shield size={16} color={colors.destructive} />
             <Text className="text-base font-semibold text-foreground">
               Danger Zone
             </Text>
           </View>
 
           <Pressable
-            className="flex-row items-center gap-3 py-3 active:opacity-70"
-            style={{
-              borderBottomWidth: 1,
-              borderBottomColor: isDark ? '#27272A' : '#F3F4F6',
-            }}
+            className="flex-row items-center gap-3 py-3 border-b border-border active:opacity-70"
             onPress={handleResetProgress}
             disabled={resetting}
           >
-            <RotateCcw size={18} color={isDark ? '#F59E0B' : '#D97706'} />
+            <RotateCcw size={18} color="#F59E0B" />
             <View className="flex-1">
               <Text className="text-sm font-medium text-foreground">
                 Reset Progress

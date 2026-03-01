@@ -1,4 +1,5 @@
 export { default as TrainingScreen } from './components/TrainingScreen';
+export { default as TrainingHubScreen } from './components/TrainingHubScreen';
 export { default as ContextFillCard } from './components/ContextFillCard';
 export { default as ErrorCorrectionCard } from './components/ErrorCorrectionCard';
 export { default as FlashcardCard } from './components/FlashcardCard';

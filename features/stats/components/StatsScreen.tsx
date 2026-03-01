@@ -101,6 +101,48 @@ export default function StatsScreen() {
         </Text>
       </View>
 
+      {/* Streak Banner */}
+      {streak && (streak.currentStreak > 0 || streak.longestStreak > 0) && (
+        <View
+          className="rounded-2xl p-4 mb-5"
+          style={{
+            backgroundColor: isDark
+              ? 'rgba(129,140,248,0.06)'
+              : 'rgba(129,140,248,0.04)',
+            borderWidth: 1,
+            borderColor: isDark
+              ? 'rgba(129,140,248,0.15)'
+              : 'rgba(129,140,248,0.1)',
+          }}
+        >
+          <View className="flex-row items-center justify-around">
+            <View className="items-center">
+              <Text className="text-3xl font-bold" style={{ color: '#818CF8' }}>
+                {streak.currentStreak}
+              </Text>
+              <Text className="text-xs text-muted-foreground mt-0.5">
+                Current Streak
+              </Text>
+            </View>
+            <View
+              style={{
+                width: 1,
+                height: 36,
+                backgroundColor: isDark ? '#27272A' : '#E7E5E4',
+              }}
+            />
+            <View className="items-center">
+              <Text className="text-3xl font-bold" style={{ color: '#F59E0B' }}>
+                {streak.longestStreak}
+              </Text>
+              <Text className="text-xs text-muted-foreground mt-0.5">
+                Longest Streak
+              </Text>
+            </View>
+          </View>
+        </View>
+      )}
+
       <View className="flex-row flex-wrap gap-3 mb-5">
         <StatCard
           icon={<BookOpen size={16} color="#F59E0B" />}
