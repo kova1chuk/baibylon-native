@@ -13,16 +13,34 @@ import {
   useSubmitLearningResultMutation,
 } from '@/entities/dictionary/api/dictionaryApi';
 import {
-  useStartExerciseSessionMutation,
-  useSubmitExerciseAnswerMutation,
+  isContextFillContent,
+  isErrorCorrectionContent,
+  isMultipleChoiceContent,
+  isOddOneOutContent,
+  isPhraseBuilderContent,
+  isRuleQuizContent,
+  isTranslateSentenceContent,
+  isTypeTheWordContent,
 } from '@/entities/exercise/api/exerciseApi';
 
 import { useSmartSession } from '../hooks/useSmartSession';
 
+import ContextFillCard from './ContextFillCard';
+import ErrorCorrectionCard from './ErrorCorrectionCard';
 import MultipleChoiceCard from './MultipleChoiceCard';
+import OddOneOutCard from './OddOneOutCard';
+import PhraseBuilderCard from './PhraseBuilderCard';
+import RuleQuizCard from './RuleQuizCard';
 import SmartSessionSummary from './SmartSessionSummary';
+import TranslateSentenceCard from './TranslateSentenceCard';
+import TypeWordCard from './TypeWordCard';
 
-import type { MultipleChoiceContent } from '@/entities/exercise/api/exerciseApi';
+import type { UnifiedQueueItem } from '@/entities/dictionary/api/types';
+import type {
+  ExerciseContent,
+  MultipleChoiceContent,
+  TypeTheWordContent,
+} from '@/entities/exercise/api/exerciseApi';
 
 export default function TrainingScreen() {
   const { t } = useTranslation();
@@ -35,8 +53,6 @@ export default function TrainingScreen() {
     { size: 20 }
   );
   const [submitLearningResult] = useSubmitLearningResultMutation();
-  const [startExerciseSession] = useStartExerciseSessionMutation();
-  const [submitExerciseAnswer] = useSubmitExerciseAnswerMutation();
 
   const items = useMemo(() => queueItems || [], [queueItems]);
 
@@ -223,56 +239,250 @@ export default function TrainingScreen() {
       {session.currentItem && (
         <ExerciseRouter
           item={session.currentItem}
+          index={session.currentIndex}
           isLocked={session.isLocked}
           onAnswer={session.submitAnswer}
           onNext={session.nextItem}
-          startExerciseSession={startExerciseSession}
-          submitExerciseAnswer={submitExerciseAnswer}
         />
       )}
     </View>
   );
 }
 
-function ExerciseRouter({
-  item,
-  isLocked,
-  onAnswer,
-  onNext,
-}: {
-  item: { itemType: string; title: string; metadataId: string };
-  isLocked: boolean;
-  onAnswer: (correct: boolean, quality: number, answer?: string) => void;
-  onNext: () => void;
-  startExerciseSession: ReturnType<typeof useStartExerciseSessionMutation>[0];
-  submitExerciseAnswer: ReturnType<typeof useSubmitExerciseAnswerMutation>[0];
-}) {
-  const { t } = useTranslation();
+function buildContentForItem(
+  item: UnifiedQueueItem,
+  index: number,
+  t: (key: string) => string
+): { type: string; content: ExerciseContent } {
+  const data = item.typeSpecificData || {};
+  const translation = (data.translation as string) || '';
+  const definition = (data.definition as string) || '';
+  const ipa = (data.ipa as string) || (data.phonetic as string) || '';
+  const audioUrl = (data.audioUrl as string) || '';
+  const partOfSpeech = (data.partOfSpeech as string[]) || [];
+  const estimatedLevel = (data.estimatedLevel as string) || null;
+  const currentMastery = (data.currentMastery as number) || 0;
 
-  const placeholderContent: MultipleChoiceContent = {
+  const wordMeta = {
     wordId: item.metadataId,
-    direction: 'word_to_translation',
-    prompt: t('learningFeed.chooseTranslation'),
-    options: [item.title, '...', '...', '...'],
-    correctIndex: 0,
     word: item.title,
-    translation: '',
-    definition: '',
-    ipa: '',
-    audioUrl: '',
-    partOfSpeech: [],
-    estimatedLevel: null,
-    currentMastery: 0,
+    translation,
+    definition,
+    ipa,
+    audioUrl,
+    partOfSpeech,
+    estimatedLevel,
+    currentMastery,
     skill: 0,
     seenCount: 0,
     lastSeenAt: null,
     nextDueAt: null,
-    mcOptionId: null,
   };
 
+  // Rotate exercise type based on index for variety
+  if (item.itemType === 'word' || item.itemType === 'phrase') {
+    const variant = index % 3;
+
+    if (variant === 0) {
+      const mc: MultipleChoiceContent = {
+        ...wordMeta,
+        direction: 'word_to_translation',
+        prompt: t('learningFeed.chooseTranslation'),
+        options: translation
+          ? [translation, '...', '...', '...']
+          : [item.title, '...', '...', '...'],
+        correctIndex: 0,
+        mcOptionId: null,
+      };
+      return { type: 'multiple_choice', content: mc };
+    }
+
+    if (variant === 1 && translation) {
+      const tw: TypeTheWordContent = {
+        ...wordMeta,
+        prompt: t('learningFeed.typeWord'),
+        correctAnswer: item.title,
+        hint:
+          item.title.length > 2
+            ? `${item.title[0]}...${item.title[item.title.length - 1]}`
+            : '',
+      };
+      return { type: 'type_the_word', content: tw };
+    }
+
+    // Default to multiple choice
+    const mc: MultipleChoiceContent = {
+      ...wordMeta,
+      direction: translation ? 'translation_to_word' : 'word_to_translation',
+      prompt: translation
+        ? t('learningFeed.chooseTranslation')
+        : t('learningFeed.chooseTranslation'),
+      options: translation
+        ? [item.title, '...', '...', '...']
+        : [item.title, '...', '...', '...'],
+      correctIndex: 0,
+      mcOptionId: null,
+    };
+    return { type: 'multiple_choice', content: mc };
+  }
+
+  if (
+    item.itemType === 'grammar_rule' ||
+    item.itemType === 'grammar_vocabulary'
+  ) {
+    const mc: MultipleChoiceContent = {
+      ...wordMeta,
+      direction: 'word_to_translation',
+      prompt: item.title,
+      options: [translation || item.title, '...', '...', '...'],
+      correctIndex: 0,
+      mcOptionId: null,
+    };
+    return { type: 'multiple_choice', content: mc };
+  }
+
+  // Fallback: multiple choice
+  const mc: MultipleChoiceContent = {
+    ...wordMeta,
+    direction: 'word_to_translation',
+    prompt: t('learningFeed.chooseTranslation'),
+    options: [translation || item.title, '...', '...', '...'],
+    correctIndex: 0,
+    mcOptionId: null,
+  };
+  return { type: 'multiple_choice', content: mc };
+}
+
+function ExerciseRouter({
+  item,
+  index,
+  isLocked,
+  onAnswer,
+  onNext,
+}: {
+  item: UnifiedQueueItem;
+  index: number;
+  isLocked: boolean;
+  onAnswer: (correct: boolean, quality: number, answer?: string) => void;
+  onNext: () => void;
+}) {
+  const { t } = useTranslation();
+
+  const { content } = useMemo(
+    () => buildContentForItem(item, index, t),
+    [item, index, t]
+  );
+
+  // Route using type guards for real exercise content
+  if (isContextFillContent(content)) {
+    return (
+      <ContextFillCard
+        content={content}
+        onAnswer={(correct, selectedOption) => {
+          onAnswer(correct, correct ? 5 : 1, selectedOption);
+        }}
+        onNext={onNext}
+        isLocked={isLocked}
+      />
+    );
+  }
+
+  if (isTypeTheWordContent(content)) {
+    return (
+      <TypeWordCard
+        content={content}
+        onAnswer={(correct, typedWord) => {
+          onAnswer(correct, correct ? 5 : 1, typedWord);
+        }}
+        onNext={onNext}
+        isLocked={isLocked}
+      />
+    );
+  }
+
+  if (isOddOneOutContent(content)) {
+    return (
+      <OddOneOutCard
+        content={content}
+        onAnswer={(correct, _selectedIndex) => {
+          onAnswer(correct, correct ? 5 : 1);
+        }}
+        onNext={onNext}
+        isLocked={isLocked}
+      />
+    );
+  }
+
+  if (isRuleQuizContent(content)) {
+    return (
+      <RuleQuizCard
+        content={content}
+        onAnswer={(correct, _selectedIndex) => {
+          onAnswer(correct, correct ? 5 : 1);
+        }}
+        onNext={onNext}
+        isLocked={isLocked}
+      />
+    );
+  }
+
+  if (isErrorCorrectionContent(content)) {
+    return (
+      <ErrorCorrectionCard
+        content={content}
+        onAnswer={(correct, userCorrection) => {
+          onAnswer(correct, correct ? 5 : 1, userCorrection);
+        }}
+        onNext={onNext}
+        isLocked={isLocked}
+      />
+    );
+  }
+
+  if (isTranslateSentenceContent(content)) {
+    return (
+      <TranslateSentenceCard
+        content={content}
+        onAnswer={(correct, userTranslation) => {
+          onAnswer(correct, correct ? 5 : 1, userTranslation);
+        }}
+        onNext={onNext}
+        isLocked={isLocked}
+      />
+    );
+  }
+
+  if (isPhraseBuilderContent(content)) {
+    return (
+      <PhraseBuilderCard
+        content={content}
+        onAnswer={(correct, _arrangedWords) => {
+          onAnswer(correct, correct ? 5 : 1);
+        }}
+        onNext={onNext}
+        isLocked={isLocked}
+      />
+    );
+  }
+
+  // Default: MultipleChoiceCard
+  if (isMultipleChoiceContent(content)) {
+    return (
+      <MultipleChoiceCard
+        content={content}
+        onAnswer={(correct, _selectedIndex) => {
+          onAnswer(correct, correct ? 5 : 1);
+        }}
+        onNext={onNext}
+        isLocked={isLocked}
+      />
+    );
+  }
+
+  // Ultimate fallback — cast to MultipleChoiceContent
   return (
     <MultipleChoiceCard
-      content={placeholderContent}
+      content={content as unknown as MultipleChoiceContent}
       onAnswer={(correct, _selectedIndex) => {
         onAnswer(correct, correct ? 5 : 1);
       }}

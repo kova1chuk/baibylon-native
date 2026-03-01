@@ -5,52 +5,52 @@ import { useTranslation } from 'react-i18next';
 
 import { View, Text, Pressable } from 'react-native';
 
-import type { MultipleChoiceContent } from '@/entities/exercise/api/exerciseApi';
+import type { ContextFillContent } from '@/entities/exercise/api/exerciseApi';
 
-interface MultipleChoiceCardProps {
-  content: MultipleChoiceContent;
-  onAnswer: (correct: boolean, selectedIndex: number) => void;
+interface ContextFillCardProps {
+  content: ContextFillContent;
+  onAnswer: (correct: boolean, selectedOption: string) => void;
   onNext: () => void;
   isLocked: boolean;
 }
 
-type OptionState = 'idle' | 'correct' | 'wrong' | 'dimmed';
-
-export default function MultipleChoiceCard({
+export default function ContextFillCard({
   content,
   onAnswer,
   onNext,
   isLocked,
-}: MultipleChoiceCardProps) {
+}: ContextFillCardProps) {
   const { t } = useTranslation();
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [answered, setAnswered] = useState(false);
 
   const handleSelect = useCallback(
-    (index: number) => {
+    (option: string) => {
       if (answered || isLocked) return;
-      setSelectedIndex(index);
+      setSelectedOption(option);
       setAnswered(true);
-      const isCorrect = index === content.correctIndex;
-      onAnswer(isCorrect, index);
+      const isCorrect =
+        option.trim().toLowerCase() === content.answer.trim().toLowerCase();
+      onAnswer(isCorrect, option);
     },
-    [answered, isLocked, content.correctIndex, onAnswer]
+    [answered, isLocked, content.answer, onAnswer]
   );
 
   const handleNext = useCallback(() => {
-    setSelectedIndex(null);
+    setSelectedOption(null);
     setAnswered(false);
     onNext();
   }, [onNext]);
 
-  const getOptionState = (index: number): OptionState => {
+  const getOptionState = (option: string) => {
     if (!answered) return 'idle';
-    if (index === content.correctIndex) return 'correct';
-    if (index === selectedIndex) return 'wrong';
+    if (option.trim().toLowerCase() === content.answer.trim().toLowerCase())
+      return 'correct';
+    if (option === selectedOption) return 'wrong';
     return 'dimmed';
   };
 
-  const getOptionStyles = (state: OptionState) => {
+  const getOptionStyles = (state: string) => {
     switch (state) {
       case 'correct':
         return {
@@ -76,38 +76,33 @@ export default function MultipleChoiceCard({
     }
   };
 
-  const isWordToTranslation = content.direction === 'word_to_translation';
-  const promptText = isWordToTranslation ? content.word : content.translation;
+  const parts = content.sentence.split('___');
 
   return (
-    <View className="flex-1 px-4">
-      <View className="items-center mb-8 mt-4">
+    <View className="flex-1 px-4 pt-4">
+      <View className="items-center mb-6">
         <Text className="text-sm text-muted-foreground mb-2">
-          {content.prompt}
+          {t('learningFeed.contextFill')}
         </Text>
-        <Text className="text-3xl font-bold text-foreground">{promptText}</Text>
-        {content.ipa && (
-          <Text className="text-sm text-muted-foreground mt-1">
-            {content.ipa}
-          </Text>
-        )}
+        <Text className="text-lg font-semibold text-foreground text-center leading-relaxed">
+          {parts[0]}
+          <Text className="text-primary font-bold"> ______ </Text>
+          {parts[1] || ''}
+        </Text>
       </View>
 
       <View className="gap-3">
         {content.options.map((option, index) => {
-          const state = getOptionState(index);
+          const state = getOptionState(option);
           const styles = getOptionStyles(state);
 
           return (
             <Pressable
               key={index}
-              onPress={() => handleSelect(index)}
+              onPress={() => handleSelect(option)}
               disabled={answered}
               className="rounded-xl p-4 active:opacity-80"
-              style={{
-                borderWidth: 2,
-                ...styles,
-              }}
+              style={{ borderWidth: 2, ...styles }}
             >
               <View className="flex-row items-center justify-between">
                 <Text

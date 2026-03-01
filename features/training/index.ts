@@ -1,7 +1,18 @@
 export { default as TrainingScreen } from './components/TrainingScreen';
-export { default as MultipleChoiceCard } from './components/MultipleChoiceCard';
+export { default as ContextFillCard } from './components/ContextFillCard';
+export { default as ErrorCorrectionCard } from './components/ErrorCorrectionCard';
 export { default as FlashcardCard } from './components/FlashcardCard';
-export { default as TypeWordCard } from './components/TypeWordCard';
+export { default as MultipleChoiceCard } from './components/MultipleChoiceCard';
+export { default as OddOneOutCard } from './components/OddOneOutCard';
+export { default as PhraseBuilderCard } from './components/PhraseBuilderCard';
+export { default as RuleQuizCard } from './components/RuleQuizCard';
 export { default as SmartSessionSummary } from './components/SmartSessionSummary';
+export { default as TranslateSentenceCard } from './components/TranslateSentenceCard';
+export { default as TypeWordCard } from './components/TypeWordCard';
+export { useExerciseSession } from './hooks/useExerciseSession';
 export { useSmartSession } from './hooks/useSmartSession';
+export type {
+  ExerciseSessionPhase,
+  ExerciseSessionStats,
+} from './hooks/useExerciseSession';
 export type { SmartSessionPhase, ItemResult } from './hooks/useSmartSession';

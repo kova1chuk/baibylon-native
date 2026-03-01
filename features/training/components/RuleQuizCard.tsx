@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { View, Text, Pressable } from 'react-native';
 
-import type { MultipleChoiceContent } from '@/entities/exercise/api/exerciseApi';
+import type { RuleQuizContent } from '@/entities/exercise/api/exerciseApi';
 
-interface MultipleChoiceCardProps {
-  content: MultipleChoiceContent;
+interface RuleQuizCardProps {
+  content: RuleQuizContent;
   onAnswer: (correct: boolean, selectedIndex: number) => void;
   onNext: () => void;
   isLocked: boolean;
@@ -16,12 +16,12 @@ interface MultipleChoiceCardProps {
 
 type OptionState = 'idle' | 'correct' | 'wrong' | 'dimmed';
 
-export default function MultipleChoiceCard({
+export default function RuleQuizCard({
   content,
   onAnswer,
   onNext,
   isLocked,
-}: MultipleChoiceCardProps) {
+}: RuleQuizCardProps) {
   const { t } = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -76,21 +76,18 @@ export default function MultipleChoiceCard({
     }
   };
 
-  const isWordToTranslation = content.direction === 'word_to_translation';
-  const promptText = isWordToTranslation ? content.word : content.translation;
-
   return (
-    <View className="flex-1 px-4">
-      <View className="items-center mb-8 mt-4">
-        <Text className="text-sm text-muted-foreground mb-2">
-          {content.prompt}
+    <View className="flex-1 px-4 pt-4">
+      <View className="items-center mb-2">
+        <Text className="text-xs text-muted-foreground uppercase tracking-wider">
+          {content.topic} · {content.category}
         </Text>
-        <Text className="text-3xl font-bold text-foreground">{promptText}</Text>
-        {content.ipa && (
-          <Text className="text-sm text-muted-foreground mt-1">
-            {content.ipa}
-          </Text>
-        )}
+      </View>
+
+      <View className="items-center mb-6">
+        <Text className="text-lg font-semibold text-foreground text-center">
+          {content.question}
+        </Text>
       </View>
 
       <View className="gap-3">
@@ -104,10 +101,7 @@ export default function MultipleChoiceCard({
               onPress={() => handleSelect(index)}
               disabled={answered}
               className="rounded-xl p-4 active:opacity-80"
-              style={{
-                borderWidth: 2,
-                ...styles,
-              }}
+              style={{ borderWidth: 2, ...styles }}
             >
               <View className="flex-row items-center justify-between">
                 <Text
@@ -131,10 +125,10 @@ export default function MultipleChoiceCard({
         })}
       </View>
 
-      {answered && content.definition && (
+      {answered && content.explanation && (
         <View className="mt-4 p-3 bg-card rounded-xl">
           <Text className="text-sm text-muted-foreground">
-            {content.definition}
+            {content.explanation}
           </Text>
         </View>
       )}

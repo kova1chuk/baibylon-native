@@ -5,23 +5,21 @@ import { useTranslation } from 'react-i18next';
 
 import { View, Text, Pressable } from 'react-native';
 
-import type { MultipleChoiceContent } from '@/entities/exercise/api/exerciseApi';
+import type { OddOneOutContent } from '@/entities/exercise/api/exerciseApi';
 
-interface MultipleChoiceCardProps {
-  content: MultipleChoiceContent;
+interface OddOneOutCardProps {
+  content: OddOneOutContent;
   onAnswer: (correct: boolean, selectedIndex: number) => void;
   onNext: () => void;
   isLocked: boolean;
 }
 
-type OptionState = 'idle' | 'correct' | 'wrong' | 'dimmed';
-
-export default function MultipleChoiceCard({
+export default function OddOneOutCard({
   content,
   onAnswer,
   onNext,
   isLocked,
-}: MultipleChoiceCardProps) {
+}: OddOneOutCardProps) {
   const { t } = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -31,10 +29,10 @@ export default function MultipleChoiceCard({
       if (answered || isLocked) return;
       setSelectedIndex(index);
       setAnswered(true);
-      const isCorrect = index === content.correctIndex;
+      const isCorrect = index === content.oddIndex;
       onAnswer(isCorrect, index);
     },
-    [answered, isLocked, content.correctIndex, onAnswer]
+    [answered, isLocked, content.oddIndex, onAnswer]
   );
 
   const handleNext = useCallback(() => {
@@ -43,14 +41,14 @@ export default function MultipleChoiceCard({
     onNext();
   }, [onNext]);
 
-  const getOptionState = (index: number): OptionState => {
+  const getOptionState = (index: number) => {
     if (!answered) return 'idle';
-    if (index === content.correctIndex) return 'correct';
+    if (index === content.oddIndex) return 'correct';
     if (index === selectedIndex) return 'wrong';
     return 'dimmed';
   };
 
-  const getOptionStyles = (state: OptionState) => {
+  const getOptionStyles = (state: string) => {
     switch (state) {
       case 'correct':
         return {
@@ -76,25 +74,19 @@ export default function MultipleChoiceCard({
     }
   };
 
-  const isWordToTranslation = content.direction === 'word_to_translation';
-  const promptText = isWordToTranslation ? content.word : content.translation;
-
   return (
-    <View className="flex-1 px-4">
-      <View className="items-center mb-8 mt-4">
+    <View className="flex-1 px-4 pt-4">
+      <View className="items-center mb-6">
         <Text className="text-sm text-muted-foreground mb-2">
-          {content.prompt}
+          {t('exercises.oddOneOut')}
         </Text>
-        <Text className="text-3xl font-bold text-foreground">{promptText}</Text>
-        {content.ipa && (
-          <Text className="text-sm text-muted-foreground mt-1">
-            {content.ipa}
-          </Text>
-        )}
+        <Text className="text-base text-muted-foreground text-center">
+          {content.category}
+        </Text>
       </View>
 
       <View className="gap-3">
-        {content.options.map((option, index) => {
+        {content.words.map((word, index) => {
           const state = getOptionState(index);
           const styles = getOptionStyles(state);
 
@@ -104,10 +96,7 @@ export default function MultipleChoiceCard({
               onPress={() => handleSelect(index)}
               disabled={answered}
               className="rounded-xl p-4 active:opacity-80"
-              style={{
-                borderWidth: 2,
-                ...styles,
-              }}
+              style={{ borderWidth: 2, ...styles }}
             >
               <View className="flex-row items-center justify-between">
                 <Text
@@ -121,7 +110,7 @@ export default function MultipleChoiceCard({
                           : undefined,
                   }}
                 >
-                  {option}
+                  {word}
                 </Text>
                 {state === 'correct' && <Check size={20} color="#10B981" />}
                 {state === 'wrong' && <X size={20} color="#EF4444" />}
@@ -131,7 +120,7 @@ export default function MultipleChoiceCard({
         })}
       </View>
 
-      {answered && content.definition && (
+      {answered && (
         <View className="mt-4 p-3 bg-card rounded-xl">
           <Text className="text-sm text-muted-foreground">
             {content.definition}
