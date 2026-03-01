@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 
+import { useTranslation } from 'react-i18next';
 import Svg, { Path } from 'react-native-svg';
 
-import { View, Pressable } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { cn } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -25,6 +26,7 @@ interface AuthFormProps {
   onSubmit: (email: string, password: string) => void;
   onGoogleAuth: () => void;
   onSwitchMode: () => void;
+  onForgotPassword?: () => void;
   loading: boolean;
   error: string | null;
   onClearError: () => void;
@@ -41,37 +43,37 @@ export function AuthForm({
   onSubmit,
   onGoogleAuth,
   onSwitchMode,
+  onForgotPassword,
   loading,
   error,
   onClearError,
   isGoogleLoading = false,
 }: AuthFormProps) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
 
   const isSignIn = mode === 'signin';
-  const title = isSignIn ? 'Sign In' : 'Sign Up';
-  const description = isSignIn ? 'Welcome back' : 'Create your account';
-  const submitText = isSignIn ? 'Sign In' : 'Sign Up';
+  const title = isSignIn ? t('auth.signInTitle') : t('auth.signUpTitle');
+  const description = isSignIn
+    ? t('auth.welcomeBack')
+    : t('auth.createAccount');
+  const submitText = isSignIn ? t('auth.signInTitle') : t('auth.signUpTitle');
   const switchText = isSignIn
-    ? "Don't have an account?"
-    : 'Already have an account?';
-  const switchLinkText = isSignIn ? 'Sign up' : 'Sign in';
+    ? t('auth.dontHaveAccount')
+    : t('auth.alreadyHaveAccount');
+  const switchLinkText = isSignIn ? t('auth.signUpLink') : t('auth.signInLink');
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!email) {
-      newErrors.email = 'Please enter a valid email address';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'Please enter a valid email address';
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = t('auth.emailValidation');
     }
 
-    if (!password) {
-      newErrors.password = 'Password must be at least 6 characters';
-    } else if (password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+    if (!password || password.length < 6) {
+      newErrors.password = t('auth.passwordValidation');
     }
 
     setErrors(newErrors);
@@ -115,11 +117,10 @@ export function AuthForm({
       </CardHeader>
 
       <CardContent className="gap-4">
-        {/* Email field */}
         <View className="gap-2">
-          <Label nativeID="email">Email</Label>
+          <Label nativeID="email">{t('auth.emailLabel')}</Label>
           <Input
-            placeholder="name@example.com"
+            placeholder={t('auth.emailPlaceholder')}
             value={email}
             onChangeText={handleEmailChange}
             keyboardType="email-address"
@@ -133,11 +134,19 @@ export function AuthForm({
           )}
         </View>
 
-        {/* Password field */}
         <View className="gap-2">
-          <Label nativeID="password">Password</Label>
+          <View className="flex-row items-center justify-between">
+            <Label nativeID="password">{t('auth.passwordLabel')}</Label>
+            {isSignIn && onForgotPassword && (
+              <Pressable onPress={onForgotPassword}>
+                <Text className="text-sm font-medium text-primary">
+                  {t('auth.forgotPassword')}
+                </Text>
+              </Pressable>
+            )}
+          </View>
           <Input
-            placeholder="Enter your password"
+            placeholder={t('auth.passwordPlaceholder')}
             value={password}
             onChangeText={handlePasswordChange}
             secureTextEntry
@@ -150,7 +159,6 @@ export function AuthForm({
           )}
         </View>
 
-        {/* Server error */}
         {error && (
           <View className="rounded-xl bg-destructive/10 p-3">
             <Text className="text-sm text-destructive text-center">
@@ -159,27 +167,24 @@ export function AuthForm({
           </View>
         )}
 
-        {/* Submit button */}
         <Button
           onPress={handleSubmit}
           disabled={loading}
-          className="mt-2 bg-[#10B981] active:bg-[#059669]"
+          className="mt-2 bg-primary active:bg-primary/80"
         >
           <Text className="text-white font-semibold text-base">
-            {loading ? 'Loading...' : submitText}
+            {loading ? t('common.loading') : submitText}
           </Text>
         </Button>
 
-        {/* Separator */}
         <View className="flex-row items-center gap-3 my-2">
           <Separator className="flex-1" />
           <Text className="text-xs text-muted-foreground uppercase">
-            or continue with
+            {t('auth.orContinueWith')}
           </Text>
           <Separator className="flex-1" />
         </View>
 
-        {/* Google OAuth */}
         <Button
           variant="outline"
           onPress={onGoogleAuth}
@@ -205,7 +210,9 @@ export function AuthForm({
               />
             </Svg>
             <Text className="font-medium text-foreground">
-              {isGoogleLoading ? 'Loading...' : 'Continue with Google'}
+              {isGoogleLoading
+                ? t('common.loading')
+                : t('auth.continueWithGoogle')}
             </Text>
           </View>
         </Button>
@@ -215,7 +222,7 @@ export function AuthForm({
         <View className="flex-row items-center gap-1">
           <Text className="text-sm text-muted-foreground">{switchText}</Text>
           <Pressable onPress={onSwitchMode}>
-            <Text className="text-sm font-semibold text-[#10B981]">
+            <Text className="text-sm font-semibold text-primary">
               {switchLinkText}
             </Text>
           </Pressable>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
-import { View, ScrollView, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, ScrollView, View } from 'react-native';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -12,6 +13,7 @@ import { useGoogleAuth } from '@/hooks/useGoogleAuth';
 import { AuthForm } from './AuthForm';
 
 export default function SignUpPage() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { session, loading: authLoading } = useAuth();
   const { promptAsync, isLoading: googleLoading } = useGoogleAuth();
@@ -33,12 +35,15 @@ export default function SignUpPage() {
         password,
       });
       if (authError) {
-        setError(
-          authError.message || 'Failed to create account. Please try again.'
-        );
+        setError(authError.message || t('auth.signUpError'));
+      } else {
+        router.push({
+          pathname: '/auth/verify-email',
+          params: { email },
+        });
       }
     } catch {
-      setError('Failed to create account. Please try again.');
+      setError(t('auth.signUpError'));
     } finally {
       setLoading(false);
     }
@@ -48,7 +53,7 @@ export default function SignUpPage() {
     try {
       await promptAsync();
     } catch {
-      setError('Failed to sign up with Google. Please try again.');
+      setError(t('auth.googleSignInError'));
     }
   };
 

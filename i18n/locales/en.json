@@ -120,7 +120,10 @@
     "verifyStep2": "Click the verification link",
     "verifyStep3": "You'll be signed in automatically",
     "verifyEmailResent": "Verification email resent!",
-    "resendVerification": "Resend verification email"
+    "resendVerification": "Resend verification email",
+    "signInError": "Failed to sign in. Please try again.",
+    "signUpError": "Failed to create account. Please try again.",
+    "googleSignInError": "Failed to sign in with Google. Please try again."
   },
   "landing": {
     "aiPoweredBadge": "AI-powered adaptive learning",
