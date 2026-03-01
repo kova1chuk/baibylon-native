@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { Platform } from 'react-native';
 
+import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 
 import { HapticTab } from '@/components/HapticTab';
@@ -15,6 +16,10 @@ export default function TabLayout() {
   const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+  if (!user) return <Redirect href="/auth/signin" />;
 
   return (
     <Tabs
