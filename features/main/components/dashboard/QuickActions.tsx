@@ -49,7 +49,7 @@ export default function QuickActions() {
     {
       labelKey: 'nav.aiTutor',
       icon: <Bot size={20} color="#8B5CF6" />,
-      route: '',
+      route: '/ai-tutor',
       color: '#8B5CF6',
     },
   ];

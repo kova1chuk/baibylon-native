@@ -76,6 +76,7 @@ function AppContent() {
             name="training"
             options={{ headerShown: false, gestureEnabled: false }}
           />
+          <Stack.Screen name="ai-tutor" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
