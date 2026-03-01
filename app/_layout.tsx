@@ -80,6 +80,8 @@ function AppContent() {
           <Stack.Screen name="grammar" options={{ headerShown: false }} />
           <Stack.Screen name="reviews" />
           <Stack.Screen name="pricing" />
+          <Stack.Screen name="privacy" />
+          <Stack.Screen name="terms" />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />

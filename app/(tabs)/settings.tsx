@@ -5,10 +5,12 @@ import {
   BarChart3,
   ChevronRight,
   Crown,
+  FileText,
   Globe,
   LogOut,
   Moon,
   Shield,
+  ShieldCheck,
   Sun,
   Trash2,
   RotateCcw,
@@ -235,6 +237,36 @@ export default function SettingsScreen() {
               thumbColor="#FFFFFF"
             />
           </View>
+        </View>
+
+        <View className="bg-card rounded-2xl p-4">
+          <Text className="text-base font-semibold text-foreground mb-3">
+            Legal
+          </Text>
+          <Pressable
+            className="flex-row items-center gap-3 py-3 active:opacity-70"
+            style={{
+              borderBottomWidth: 1,
+              borderBottomColor: isDark ? '#27272A' : '#F3F4F6',
+            }}
+            onPress={() => router.push('/privacy')}
+          >
+            <ShieldCheck size={18} color={isDark ? '#A1A1AA' : '#71717A'} />
+            <Text className="text-sm font-medium text-foreground flex-1">
+              Privacy Policy
+            </Text>
+            <ChevronRight size={16} color={isDark ? '#52525B' : '#A1A1AA'} />
+          </Pressable>
+          <Pressable
+            className="flex-row items-center gap-3 py-3 active:opacity-70"
+            onPress={() => router.push('/terms')}
+          >
+            <FileText size={18} color={isDark ? '#A1A1AA' : '#71717A'} />
+            <Text className="text-sm font-medium text-foreground flex-1">
+              Terms of Service
+            </Text>
+            <ChevronRight size={16} color={isDark ? '#52525B' : '#A1A1AA'} />
+          </Pressable>
         </View>
 
         <View className="bg-card rounded-2xl p-4">
