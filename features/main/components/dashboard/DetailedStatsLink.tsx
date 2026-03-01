@@ -15,7 +15,7 @@ export default function DetailedStatsLink() {
   const router = useRouter();
 
   const textColor = isDark ? 'rgba(250,250,250,0.7)' : 'rgba(0,0,0,0.6)';
-  const iconColor = isDark ? '#52525b' : '#a1a1aa';
+  const iconColor = isDark ? 'rgba(250,250,250,0.3)' : '#a1a1aa';
 
   return (
     <GlassCard

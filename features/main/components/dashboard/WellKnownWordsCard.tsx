@@ -26,7 +26,7 @@ export default function WellKnownWordsCard({
 
   const barBg = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
   const labelColor = isDark ? 'rgba(250,250,250,0.3)' : 'rgba(0,0,0,0.3)';
-  const pctColor = isDark ? '#52525b' : '#a1a1aa';
+  const pctColor = isDark ? 'rgba(250,250,250,0.3)' : '#a1a1aa';
 
   return (
     <GlassCard accentColors={['#6ee7b7', '#10b981']}>
@@ -47,7 +47,7 @@ export default function WellKnownWordsCard({
               fontFamily: 'monospace',
               fontSize: 16,
               fontWeight: '300',
-              color: '#52525b',
+              color: isDark ? 'rgba(250,250,250,0.25)' : '#52525b',
               marginHorizontal: 2,
             }}
           >
@@ -58,7 +58,7 @@ export default function WellKnownWordsCard({
               fontFamily: 'monospace',
               fontSize: 13,
               fontWeight: '500',
-              color: '#71717a',
+              color: isDark ? 'rgba(250,250,250,0.35)' : '#71717a',
             }}
           >
             {total.toLocaleString()}

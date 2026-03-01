@@ -43,8 +43,8 @@ function formatTime(ms: number): string {
 }
 
 const CHART_WIDTH = 300;
-const CHART_HEIGHT = 100;
-const PAD = { l: 4, r: 10, t: 8, b: 18 };
+const CHART_HEIGHT = 120;
+const PAD = { l: 4, r: 10, t: 10, b: 20 };
 const SAMPLES = 80;
 
 export default function TodayProgressChart({
@@ -57,10 +57,10 @@ export default function TodayProgressChart({
   const isDark = theme === 'dark';
   const clamped = Math.min(points, MAX_POINTS);
 
-  const labelColor = isDark ? '#52525b' : '#a1a1aa';
+  const labelColor = isDark ? 'rgba(250,250,250,0.4)' : '#a1a1aa';
   const sublabelColor = isDark ? 'rgba(250,250,250,0.3)' : 'rgba(0,0,0,0.3)';
-  const textColor = isDark ? '#fafafa' : '#111827';
-  const separatorColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.06)';
+  const textColor = isDark ? 'rgba(250,250,250,0.9)' : '#111827';
+  const separatorColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
 
   const plotW = CHART_WIDTH - PAD.l - PAD.r;
   const plotH = CHART_HEIGHT - PAD.t - PAD.b;
@@ -237,26 +237,29 @@ export default function TodayProgressChart({
             {clamped > 0 && <Circle cx={curX} cy={curY} r={3} fill="#6ee7b7" />}
           </Svg>
 
-          {/* Milestone labels below chart */}
-          <View className="flex-row justify-between mt-1.5">
+          {/* Milestone labels below chart — positioned at actual X */}
+          <View style={{ position: 'relative', height: 14, marginTop: 4 }}>
             {MILESTONES.map(ms => {
               const reached = clamped >= ms.value;
+              const xPct = (ms.value / MAX_POINTS) * 100;
               return (
-                <View key={ms.label} className="items-center">
-                  <Text
-                    style={{
-                      fontFamily: 'monospace',
-                      fontSize: 8,
-                      color: reached
-                        ? '#6ee7b7'
-                        : isDark
-                          ? 'rgba(250,250,250,0.2)'
-                          : 'rgba(0,0,0,0.2)',
-                    }}
-                  >
-                    {ms.label}
-                  </Text>
-                </View>
+                <Text
+                  key={ms.label}
+                  style={{
+                    position: 'absolute',
+                    left: `${xPct}%`,
+                    transform: [{ translateX: -16 }],
+                    fontFamily: 'monospace',
+                    fontSize: 8,
+                    color: reached
+                      ? '#6ee7b7'
+                      : isDark
+                        ? 'rgba(250,250,250,0.18)'
+                        : 'rgba(0,0,0,0.2)',
+                  }}
+                >
+                  {ms.label}
+                </Text>
               );
             })}
           </View>

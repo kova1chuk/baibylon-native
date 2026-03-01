@@ -43,6 +43,7 @@ export default function DashboardScreen() {
           paddingBottom: 100,
           paddingTop: insets.top + 8,
           flexGrow: 1,
+          justifyContent: 'center',
         }}
       >
         <View

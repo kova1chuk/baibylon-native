@@ -56,7 +56,7 @@ export default function CefrLevelCard(props: CefrLevelCardProps) {
   const nameColor = isDark ? 'rgba(250,250,250,0.5)' : 'rgba(0,0,0,0.45)';
   const barBg = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
   const separatorColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
-  const skillLabelColor = isDark ? '#52525b' : '#a1a1aa';
+  const skillLabelColor = isDark ? 'rgba(250,250,250,0.3)' : '#a1a1aa';
 
   return (
     <GlassCard accentColors={['#818cf8', '#6366f1']}>

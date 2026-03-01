@@ -41,11 +41,14 @@
         {
           "android": {
             "compileSdkVersion": 36,
-            "targetSdkVersion": 35
+            "targetSdkVersion": 35,
+            "enableProguardInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
           }
         }
       ],
       "./plugins/withAndroidCoreFix",
+      "./plugins/withArm64Only",
       "expo-localization"
     ],
     "experiments": {

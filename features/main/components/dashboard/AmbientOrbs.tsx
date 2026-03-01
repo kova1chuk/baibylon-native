@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 
-import { LinearGradient } from 'expo-linear-gradient';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,10 +8,44 @@ import Animated, {
   withSequence,
   Easing,
 } from 'react-native-reanimated';
+import Svg, {
+  Defs,
+  RadialGradient,
+  Stop,
+  Circle as SvgCircle,
+} from 'react-native-svg';
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+const AnimatedView = Animated.createAnimatedComponent(View);
+
+function RadialOrb({
+  size,
+  color,
+  opacity,
+}: {
+  size: number;
+  color: string;
+  opacity: number;
+}) {
+  return (
+    <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <Defs>
+        <RadialGradient id={`grad-${color}`} cx="50%" cy="50%" r="50%">
+          <Stop offset="0" stopColor={color} stopOpacity={opacity} />
+          <Stop offset="0.7" stopColor={color} stopOpacity={opacity * 0.3} />
+          <Stop offset="1" stopColor={color} stopOpacity={0} />
+        </RadialGradient>
+      </Defs>
+      <SvgCircle
+        cx={size / 2}
+        cy={size / 2}
+        r={size / 2}
+        fill={`url(#grad-${color})`}
+      />
+    </Svg>
+  );
+}
 
 export default function AmbientOrbs() {
   const orb1X = useSharedValue(0);
@@ -64,18 +97,12 @@ export default function AmbientOrbs() {
 
   return (
     <>
-      <AnimatedLinearGradient
-        colors={['rgba(110,231,183,0.07)', 'transparent']}
-        style={[styles.orb1, orb1Style]}
-        start={{ x: 0.5, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      />
-      <AnimatedLinearGradient
-        colors={['rgba(129,140,248,0.06)', 'transparent']}
-        style={[styles.orb2, orb2Style]}
-        start={{ x: 0.5, y: 0.5 }}
-        end={{ x: 1, y: 1 }}
-      />
+      <AnimatedView style={[styles.orb1, orb1Style]}>
+        <RadialOrb size={288} color="#6ee7b7" opacity={0.12} />
+      </AnimatedView>
+      <AnimatedView style={[styles.orb2, orb2Style]}>
+        <RadialOrb size={256} color="#818cf8" opacity={0.1} />
+      </AnimatedView>
     </>
   );
 }
@@ -87,7 +114,6 @@ const styles = StyleSheet.create({
     left: -60,
     width: 288,
     height: 288,
-    borderRadius: 144,
     zIndex: 0,
     pointerEvents: 'none',
   },
@@ -97,7 +123,6 @@ const styles = StyleSheet.create({
     right: -40,
     width: 256,
     height: 256,
-    borderRadius: 128,
     zIndex: 0,
     pointerEvents: 'none',
   },
