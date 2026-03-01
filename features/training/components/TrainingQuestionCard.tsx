@@ -2,10 +2,33 @@ import React, { useState, useEffect } from 'react';
 
 import { View, Text, Pressable, Alert } from 'react-native';
 
-import { TrainingQuestion } from '../../../shared/types';
+interface DemoWord {
+  id: string;
+  text: string;
+  translation: string;
+  difficulty: string;
+  status: string;
+  context: string;
+  examples: string[];
+  createdAt: string;
+  updatedAt: string;
+  lastReviewed?: string;
+  reviewCount: number;
+  correctAnswers: number;
+  totalAnswers: number;
+}
+
+interface DemoTrainingQuestion {
+  id: string;
+  type: 'translation' | 'context' | 'multipleChoice';
+  word: DemoWord;
+  question?: string;
+  options: string[];
+  correctAnswer: string;
+}
 
 interface TrainingQuestionCardProps {
-  question: TrainingQuestion;
+  question: DemoTrainingQuestion;
   onAnswer: (isCorrect: boolean) => void;
   onNext: () => void;
 }

@@ -2,15 +2,38 @@ import React, { useState } from 'react';
 
 import { View, ScrollView, Text, Pressable, Alert } from 'react-native';
 
-import { TrainingQuestion } from '../../../shared/types';
-
 import TrainingQuestionCard from './TrainingQuestionCard';
+
+interface DemoWord {
+  id: string;
+  text: string;
+  translation: string;
+  difficulty: string;
+  status: string;
+  context: string;
+  examples: string[];
+  createdAt: string;
+  updatedAt: string;
+  lastReviewed?: string;
+  reviewCount: number;
+  correctAnswers: number;
+  totalAnswers: number;
+}
+
+interface DemoTrainingQuestion {
+  id: string;
+  type: 'translation' | 'context' | 'multipleChoice';
+  word: DemoWord;
+  question?: string;
+  options: string[];
+  correctAnswer: string;
+}
 
 export default function TrainingScreen() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [isTrainingComplete, setIsTrainingComplete] = useState(false);
-  const [trainingSession] = useState<TrainingQuestion[]>([
+  const [trainingSession] = useState<DemoTrainingQuestion[]>([
     {
       id: '1',
       word: {
