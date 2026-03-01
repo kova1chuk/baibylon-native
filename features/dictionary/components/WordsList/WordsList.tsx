@@ -1,26 +1,29 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
-import { View, Text, Pressable, FlatList } from 'react-native';
+import { Volume2 } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 
-import type { Word, WordStatus } from '@/lib/api/types';
+import {
+  View,
+  Text,
+  Pressable,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
+
+import type { Word } from '@/entities/word/types';
+import type { WordStatus } from '@/shared/types';
 
 interface WordsListProps {
   words: Word[];
-  onWordPress?: (word: Word) => void;
+  totalWords: number;
+  hasMore: boolean;
+  isFetching: boolean;
   onStatusFilterChange?: (status: WordStatus | 'all') => void;
   selectedStatus?: WordStatus | 'all';
+  onLoadMore?: () => void;
+  contentPaddingBottom?: number;
 }
-
-const STATUS_LABELS: Record<WordStatus | 'all', string> = {
-  '1': 'Not Learned',
-  '2': 'Beginner',
-  '3': 'Basic',
-  '4': 'Intermediate',
-  '5': 'Advanced',
-  '6': 'Well Known',
-  '7': 'Mastered',
-  all: 'All',
-};
 
 const STATUS_COLORS: Record<WordStatus | 'all', string> = {
   '1': '#6B7280',
@@ -33,127 +36,157 @@ const STATUS_COLORS: Record<WordStatus | 'all', string> = {
   all: '#6B7280',
 };
 
+const STATUS_I18N_KEYS: Record<WordStatus, string> = {
+  1: 'wordStatus.notStarted',
+  2: 'wordStatus.introduced',
+  3: 'wordStatus.encountered',
+  4: 'wordStatus.learning',
+  5: 'wordStatus.familiar',
+  6: 'wordStatus.confident',
+  7: 'wordStatus.mastered',
+};
+
 export default function WordsList({
   words,
-  onWordPress,
+  hasMore,
+  isFetching,
   onStatusFilterChange,
   selectedStatus = 'all',
+  onLoadMore,
+  contentPaddingBottom = 0,
 }: WordsListProps) {
-  const statusFilters: { key: WordStatus | 'all'; label: string }[] = [
-    { key: 'all', label: 'All' },
-    { key: '1', label: 'Not Learned' },
-    { key: '2', label: 'Beginner' },
-    { key: '3', label: 'Basic' },
-    { key: '4', label: 'Intermediate' },
-    { key: '5', label: 'Advanced' },
-    { key: '6', label: 'Well Known' },
-    { key: '7', label: 'Mastered' },
+  const { t } = useTranslation();
+
+  const statusFilters: { key: WordStatus | 'all'; labelKey: string }[] = [
+    { key: 'all', labelKey: 'feed.all' },
+    { key: 1, labelKey: 'wordStatus.notStarted' },
+    { key: 2, labelKey: 'wordStatus.introduced' },
+    { key: 3, labelKey: 'wordStatus.encountered' },
+    { key: 4, labelKey: 'wordStatus.learning' },
+    { key: 5, labelKey: 'wordStatus.familiar' },
+    { key: 6, labelKey: 'wordStatus.confident' },
+    { key: 7, labelKey: 'wordStatus.mastered' },
   ];
 
-  const renderStatusFilter = ({
-    item,
-  }: {
-    item: { key: WordStatus | 'all'; label: string };
-  }) => {
-    const isSelected = selectedStatus === item.key;
-    const color = STATUS_COLORS[item.key];
+  const renderStatusFilter = useCallback(
+    ({ item }: { item: { key: WordStatus | 'all'; labelKey: string } }) => {
+      const isSelected = selectedStatus === item.key;
+      const color = STATUS_COLORS[item.key];
 
-    return (
-      <Pressable
-        className="rounded-lg px-4 py-2 min-w-[80px] items-center active:opacity-70"
-        style={{
-          borderWidth: 1,
-          borderColor: isSelected ? color : '#D1D5DB',
-          backgroundColor: isSelected ? color : 'transparent',
-        }}
-        onPress={() => onStatusFilterChange?.(item.key)}
-      >
-        <Text
-          className="font-medium text-sm"
-          style={{ color: isSelected ? '#FFFFFF' : '#6B7280' }}
+      return (
+        <Pressable
+          className="rounded-lg px-4 py-2 min-w-[80px] items-center active:opacity-70"
+          style={{
+            borderWidth: 1,
+            borderColor: isSelected ? color : '#D1D5DB',
+            backgroundColor: isSelected ? color : 'transparent',
+          }}
+          onPress={() => onStatusFilterChange?.(item.key)}
         >
-          {item.label}
-        </Text>
-      </Pressable>
-    );
-  };
-
-  const renderWordItem = ({ item }: { item: Word }) => {
-    const color = STATUS_COLORS[item.status];
-    const label = STATUS_LABELS[item.status];
-
-    return (
-      <Pressable
-        className="mb-3 active:opacity-80"
-        onPress={() => onWordPress?.(item)}
-      >
-        <View
-          className="p-4 rounded-xl bg-card shadow-sm"
-          style={{ borderLeftWidth: 4, borderLeftColor: color }}
-        >
-          <View className="flex-row justify-between items-center mb-2">
-            <Text className="text-xl font-semibold text-foreground flex-1">
-              {item.word}
-            </Text>
-            <View
-              className="px-2 py-1 rounded-lg"
-              style={{ backgroundColor: color }}
-            >
-              <Text className="text-xs font-medium text-white">{label}</Text>
-            </View>
-          </View>
-
-          <Text className="text-base mb-2 text-foreground opacity-80">
-            {item.translation}
+          <Text
+            className="font-medium text-sm"
+            style={{ color: isSelected ? '#FFFFFF' : '#6B7280' }}
+          >
+            {t(item.labelKey)}
           </Text>
+        </Pressable>
+      );
+    },
+    [selectedStatus, onStatusFilterChange, t]
+  );
 
-          {item.definition && (
-            <Text
-              className="text-sm mb-3 text-muted-foreground italic"
-              numberOfLines={2}
-            >
-              {item.definition}
-            </Text>
-          )}
+  const renderWordItem = useCallback(
+    ({ item }: { item: Word }) => {
+      const color = STATUS_COLORS[item.status];
+      const label = t(STATUS_I18N_KEYS[item.status]);
 
-          <View className="flex-row justify-between">
-            <View className="items-center">
-              <Text className="text-xs text-muted-foreground">Usage</Text>
-              <Text className="text-base font-semibold text-foreground">
-                {item.usageCount}
-              </Text>
+      return (
+        <View className="mb-3">
+          <View
+            className="p-4 rounded-xl bg-card shadow-sm"
+            style={{ borderLeftWidth: 4, borderLeftColor: color }}
+          >
+            <View className="flex-row justify-between items-center mb-2">
+              <View className="flex-row items-center gap-2 flex-1">
+                <Text className="text-xl font-semibold text-foreground">
+                  {item.word}
+                </Text>
+                {item.phonetic?.text && (
+                  <View className="flex-row items-center gap-1">
+                    <Volume2 size={12} color="#999" />
+                    <Text className="text-xs text-muted-foreground">
+                      {item.phonetic.text}
+                    </Text>
+                  </View>
+                )}
+              </View>
+              <View
+                className="px-2 py-1 rounded-lg"
+                style={{ backgroundColor: color }}
+              >
+                <Text className="text-xs font-medium text-white">{label}</Text>
+              </View>
             </View>
+
+            {item.translation && (
+              <Text className="text-base mb-1 text-foreground opacity-80">
+                {item.translation}
+              </Text>
+            )}
+
+            {item.definition && (
+              <Text
+                className="text-sm text-muted-foreground italic"
+                numberOfLines={2}
+              >
+                {item.definition}
+              </Text>
+            )}
           </View>
         </View>
-      </Pressable>
+      );
+    },
+    [t]
+  );
+
+  const renderFooter = useCallback(() => {
+    if (!isFetching || !hasMore) return null;
+    return (
+      <View className="items-center py-4">
+        <ActivityIndicator size="small" />
+      </View>
     );
-  };
+  }, [isFetching, hasMore]);
 
   return (
     <View className="flex-1">
-      {/* Status filters */}
-      <View className="py-4 border-b border-border">
+      <View className="py-3 border-b border-border">
         <FlatList
           data={statusFilters}
           renderItem={renderStatusFilter}
-          keyExtractor={item => item.key}
+          keyExtractor={item => String(item.key)}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}
         />
       </View>
 
-      {/* Word list */}
       <FlatList
         data={words}
         renderItem={renderWordItem}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ padding: 16 }}
+        contentContainerStyle={{
+          padding: 16,
+          paddingBottom: contentPaddingBottom,
+        }}
+        onEndReached={onLoadMore}
+        onEndReachedThreshold={0.3}
+        ListFooterComponent={renderFooter}
         ListEmptyComponent={
           <View className="items-center py-10">
             <Text className="text-base text-muted-foreground">
-              No words found for the selected filter.
+              {t('dictionary.noItemsFound')}
             </Text>
           </View>
         }
