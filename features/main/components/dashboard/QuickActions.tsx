@@ -7,6 +7,7 @@ import {
   GraduationCap,
   RotateCcw,
   Bot,
+  Type,
 } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -45,6 +46,12 @@ export default function QuickActions() {
       icon: <RotateCcw size={20} color="#F59E0B" />,
       route: '/reviews',
       color: '#F59E0B',
+    },
+    {
+      labelKey: 'nav.grammar',
+      icon: <Type size={20} color="#A855F7" />,
+      route: '/grammar',
+      color: '#A855F7',
     },
     {
       labelKey: 'nav.aiTutor',
