@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import {
   BarChart3,
   ChevronRight,
+  Crown,
   Globe,
   LogOut,
   Moon,
@@ -181,6 +182,27 @@ export default function SettingsScreen() {
             </Text>
             <Text className="text-xs text-muted-foreground">
               View your learning statistics
+            </Text>
+          </View>
+          <ChevronRight size={16} color={isDark ? '#52525B' : '#A1A1AA'} />
+        </Pressable>
+
+        <Pressable
+          className="bg-card rounded-2xl p-4 flex-row items-center gap-3 active:opacity-80"
+          onPress={() => router.push('/pricing')}
+        >
+          <View
+            className="w-9 h-9 rounded-lg items-center justify-center"
+            style={{ backgroundColor: '#F59E0B15' }}
+          >
+            <Crown size={18} color="#F59E0B" />
+          </View>
+          <View className="flex-1">
+            <Text className="text-base font-medium text-foreground">
+              {t('nav.pricing')}
+            </Text>
+            <Text className="text-xs text-muted-foreground">
+              View plans and manage subscription
             </Text>
           </View>
           <ChevronRight size={16} color={isDark ? '#52525B' : '#A1A1AA'} />

@@ -14,6 +14,7 @@ import {
 } from '@/entities/learning-queue';
 import { multiSessionApi } from '@/entities/learning-queue/api/multiSessionApi';
 import { sessionApi } from '@/entities/learning-queue/api/sessionApi';
+import { subscriptionApi } from '@/entities/payments/api/subscriptionApi';
 import { phraseApi } from '@/entities/phrase/api/phraseApi';
 import { reviewApi } from '@/entities/review/api/reviewApi';
 import authSlice from '@/entities/user/model/authSlice';
@@ -59,6 +60,7 @@ export const store = configureStore({
     [onboardingApi.reducerPath]: onboardingApi.reducer,
     [writingApi.reducerPath]: writingApi.reducer,
     [accountApi.reducerPath]: accountApi.reducer,
+    [subscriptionApi.reducerPath]: subscriptionApi.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
@@ -99,7 +101,8 @@ export const store = configureStore({
       sessionApi.middleware,
       onboardingApi.middleware,
       writingApi.middleware,
-      accountApi.middleware
+      accountApi.middleware,
+      subscriptionApi.middleware
     ),
 });
 
