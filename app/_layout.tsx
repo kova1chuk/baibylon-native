@@ -4,7 +4,6 @@ import '@/i18n';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Provider } from 'react-redux';
 
 import { ThemeProvider } from '@react-navigation/native';
@@ -65,32 +64,30 @@ function AppContent() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <AuthProvider>
-        <ThemeProvider value={theme === 'dark' ? DarkNavTheme : LightNavTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="auth" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="onboarding"
-              options={{ headerShown: false, gestureEnabled: false }}
-            />
-            <Stack.Screen
-              name="training"
-              options={{ headerShown: false, gestureEnabled: false }}
-            />
-            <Stack.Screen name="ai-tutor" options={{ headerShown: false }} />
-            <Stack.Screen name="grammar" options={{ headerShown: false }} />
-            <Stack.Screen name="reviews" />
-            <Stack.Screen name="pricing" />
-            <Stack.Screen name="privacy" />
-            <Stack.Screen name="terms" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
-        </ThemeProvider>
-      </AuthProvider>
-    </GestureHandlerRootView>
+    <AuthProvider>
+      <ThemeProvider value={theme === 'dark' ? DarkNavTheme : LightNavTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="auth" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="onboarding"
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
+          <Stack.Screen
+            name="training"
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
+          <Stack.Screen name="ai-tutor" options={{ headerShown: false }} />
+          <Stack.Screen name="grammar" options={{ headerShown: false }} />
+          <Stack.Screen name="reviews" />
+          <Stack.Screen name="pricing" />
+          <Stack.Screen name="privacy" />
+          <Stack.Screen name="terms" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+        <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

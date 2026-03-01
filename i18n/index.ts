@@ -1,4 +1,3 @@
-import { getLocales } from 'expo-localization';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
@@ -35,12 +34,17 @@ const SUPPORTED_LANGUAGES = [
 ];
 
 function getDeviceLanguage(): string {
-  const locales = getLocales();
-  if (locales.length > 0) {
-    const lang = locales[0].languageCode;
-    if (lang && SUPPORTED_LANGUAGES.includes(lang)) {
-      return lang;
+  try {
+    const { getLocales } = require('expo-localization');
+    const locales = getLocales();
+    if (locales.length > 0) {
+      const lang = locales[0].languageCode;
+      if (lang && SUPPORTED_LANGUAGES.includes(lang)) {
+        return lang;
+      }
     }
+  } catch {
+    // expo-localization native module not available (e.g. Expo Go)
   }
   return 'en';
 }
