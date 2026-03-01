@@ -45,7 +45,12 @@ export default function GrammarLevelsScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
 
-  const { data: levels = [], isLoading, error } = useGetGrammarLevelsQuery();
+  const {
+    data: levels = [],
+    isLoading,
+    error,
+    refetch,
+  } = useGetGrammarLevelsQuery();
 
   const foreground = isDark ? 'rgba(250,250,250,0.95)' : '#111827';
   const muted = isDark ? 'rgba(250,250,250,0.4)' : 'rgba(0,0,0,0.4)';
@@ -69,12 +74,7 @@ export default function GrammarLevelsScreen() {
 
   if (isLoading) {
     return (
-      <View
-        style={[
-          styles.center,
-          { backgroundColor: colors.background, paddingTop: insets.top },
-        ]}
-      >
+      <View style={[styles.center, { backgroundColor: colors.background }]}>
         <ActivityIndicator
           size="large"
           color={isDark ? '#6ee7b7' : '#10B981'}
@@ -88,13 +88,8 @@ export default function GrammarLevelsScreen() {
 
   if (error) {
     return (
-      <View
-        style={[
-          styles.center,
-          { backgroundColor: colors.background, paddingTop: insets.top },
-        ]}
-      >
-        <BookOpen size={48} color={muted} />
+      <View style={[styles.center, { backgroundColor: colors.background }]}>
+        <BookOpen size={48} color={muted} style={{ opacity: 0.4 }} />
         <Text
           style={{
             color: foreground,
@@ -103,7 +98,7 @@ export default function GrammarLevelsScreen() {
             marginTop: 16,
           }}
         >
-          {t('grammarPage.noLevelsTitle')}
+          {t('common.error')}
         </Text>
         <Text
           style={{
@@ -114,8 +109,30 @@ export default function GrammarLevelsScreen() {
             paddingHorizontal: 32,
           }}
         >
-          {t('grammarPage.noLevelsDesc')}
+          {t('common.tryAgain')}
         </Text>
+        <Pressable
+          onPress={refetch}
+          style={{
+            marginTop: 16,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            borderRadius: 10,
+            backgroundColor: isDark
+              ? 'rgba(129,140,248,0.15)'
+              : 'rgba(99,102,241,0.1)',
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: '600',
+              color: '#818cf8',
+            }}
+          >
+            {t('common.retry') || 'Retry'}
+          </Text>
+        </Pressable>
       </View>
     );
   }
@@ -125,7 +142,7 @@ export default function GrammarLevelsScreen() {
       style={{ flex: 1, backgroundColor: colors.background }}
       contentContainerStyle={{
         padding: 20,
-        paddingTop: insets.top + 16,
+        paddingTop: 8,
         paddingBottom: insets.bottom + 100,
       }}
     >

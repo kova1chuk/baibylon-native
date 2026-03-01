@@ -59,7 +59,7 @@ export default function CefrLevelCard(props: CefrLevelCardProps) {
   const skillLabelColor = isDark ? 'rgba(250,250,250,0.3)' : '#a1a1aa';
 
   return (
-    <GlassCard accentColors={['#818cf8', '#6366f1']}>
+    <GlassCard accentColors={['#818cf8', '#6366f1']} style={{ flex: 1 }}>
       <View className="items-center justify-center p-4">
         <View className="flex-row items-baseline">
           <Text

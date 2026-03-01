@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { useRouter } from 'expo-router';
-import { ArrowRight } from 'lucide-react-native';
+import { ArrowRight, BarChart3 } from 'lucide-react-native';
 
-import { Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -14,8 +14,10 @@ export default function DetailedStatsLink() {
   const isDark = theme === 'dark';
   const router = useRouter();
 
-  const textColor = isDark ? 'rgba(250,250,250,0.7)' : 'rgba(0,0,0,0.6)';
+  const foreground = isDark ? 'rgba(250,250,250,0.95)' : '#111827';
+  const textColor = isDark ? 'rgba(250,250,250,0.55)' : 'rgba(0,0,0,0.5)';
   const iconColor = isDark ? 'rgba(250,250,250,0.3)' : '#a1a1aa';
+  const iconBg = isDark ? 'rgba(110,231,183,0.08)' : 'rgba(110,231,183,0.06)';
 
   return (
     <GlassCard
@@ -27,18 +29,48 @@ export default function DetailedStatsLink() {
     >
       <Pressable
         onPress={() => router.push('/stats')}
-        className="flex-row items-center justify-between px-4 py-3 active:opacity-70"
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingHorizontal: 16,
+          paddingVertical: 16,
+          gap: 12,
+        }}
+        accessibilityLabel="View detailed learning statistics"
       >
-        <Text
+        <View
           style={{
-            fontSize: 13,
-            fontWeight: '500',
-            color: textColor,
+            width: 36,
+            height: 36,
+            borderRadius: 10,
+            backgroundColor: iconBg,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          Detailed Learning Stats
-        </Text>
-        <ArrowRight size={18} color={iconColor} />
+          <BarChart3 size={18} color="#6ee7b7" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: '600',
+              color: foreground,
+            }}
+          >
+            Detailed Learning Stats
+          </Text>
+          <Text
+            style={{
+              fontSize: 11,
+              color: textColor,
+              marginTop: 2,
+            }}
+          >
+            Activity, streaks, progress over time
+          </Text>
+        </View>
+        <ArrowRight size={16} color={iconColor} />
       </Pressable>
     </GlassCard>
   );

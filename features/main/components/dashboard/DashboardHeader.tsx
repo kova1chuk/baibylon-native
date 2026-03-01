@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
   },
   menu: {
     position: 'absolute',
-    right: 16,
+    right: 20,
     minWidth: 200,
     borderRadius: 12,
     borderWidth: 1,

@@ -29,7 +29,7 @@ export default function WellKnownWordsCard({
   const pctColor = isDark ? 'rgba(250,250,250,0.3)' : '#a1a1aa';
 
   return (
-    <GlassCard accentColors={['#6ee7b7', '#10b981']}>
+    <GlassCard accentColors={['#6ee7b7', '#10b981']} style={{ flex: 1 }}>
       <View className="items-center justify-center p-4">
         <View className="flex-row items-baseline">
           <Text

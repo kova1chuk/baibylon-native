@@ -11,12 +11,14 @@ interface GlassCardProps {
   children: React.ReactNode;
   accentColors?: [string, string, ...string[]];
   className?: string;
+  style?: import('react-native').ViewStyle;
 }
 
 export default function GlassCard({
   children,
   accentColors = ['rgba(110,231,183,0.5)', 'rgba(110,231,183,0.2)'],
   className,
+  style,
 }: GlassCardProps) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
@@ -25,7 +27,7 @@ export default function GlassCard({
   const borderColor = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
 
   return (
-    <View style={[styles.wrapper, { borderColor }]}>
+    <View style={[styles.wrapper, { borderColor }, style]}>
       <LinearGradient
         colors={accentColors}
         start={{ x: 0, y: 0 }}
