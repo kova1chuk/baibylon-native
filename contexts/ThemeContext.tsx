@@ -13,6 +13,8 @@ interface ThemeContextType {
   preference: ThemePreference;
   /** The actual resolved theme: 'light' or 'dark' */
   resolvedTheme: ResolvedTheme;
+  /** Alias for resolvedTheme */
+  theme: ResolvedTheme;
   /** Whether the resolved theme is dark */
   isDark: boolean;
   /** Set the theme preference */
@@ -87,7 +89,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeContext.Provider
-      value={{ preference, resolvedTheme, isDark, setPreference }}
+      value={{
+        preference,
+        resolvedTheme,
+        theme: resolvedTheme,
+        isDark,
+        setPreference,
+      }}
     >
       {children}
     </ThemeContext.Provider>
