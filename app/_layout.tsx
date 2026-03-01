@@ -72,6 +72,10 @@ function AppContent() {
             name="onboarding"
             options={{ headerShown: false, gestureEnabled: false }}
           />
+          <Stack.Screen
+            name="training"
+            options={{ headerShown: false, gestureEnabled: false }}
+          />
           <Stack.Screen name="+not-found" />
         </Stack>
         <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
