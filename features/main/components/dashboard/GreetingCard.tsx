@@ -18,6 +18,7 @@ export default function GreetingCard({ firstName }: GreetingCardProps) {
   const isDark = theme === 'dark';
   const { quote, tip } = getDailyContent();
 
+  const foreground = isDark ? 'rgba(250,250,250,0.95)' : '#111827';
   const subtleText = isDark ? 'rgba(250,250,250,0.55)' : 'rgba(0,0,0,0.5)';
   const quoteColor = isDark ? 'rgba(250,250,250,0.4)' : 'rgba(0,0,0,0.35)';
   const tipBg = isDark ? 'rgba(110,231,183,0.04)' : 'rgba(110,231,183,0.06)';
@@ -35,17 +36,20 @@ export default function GreetingCard({ firstName }: GreetingCardProps) {
     >
       <View className="p-4">
         <Text style={{ color: subtleText, fontSize: 14, fontWeight: '300' }}>
-          Hi, <Text className="font-semibold text-foreground">{firstName}</Text>
+          Hi,{' '}
+          <Text style={{ fontWeight: '600', color: foreground }}>
+            {firstName}
+          </Text>
         </Text>
 
         <Text
-          className="text-foreground"
           style={{
             fontSize: 20,
             fontWeight: '400',
             fontStyle: 'italic',
             lineHeight: 26,
             marginTop: 2,
+            color: foreground,
           }}
         >
           Keep building your English

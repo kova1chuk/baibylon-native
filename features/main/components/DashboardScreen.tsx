@@ -1,19 +1,17 @@
 import React from 'react';
 
-import { useRouter } from 'expo-router';
-import { Settings } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { View, ScrollView, Pressable } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
 import { useGetDashboardHomeQuery } from '@/features/hub/api/dashboardApi';
 
 import { useColors } from '@/hooks/useColors';
 
 import AmbientOrbs from './dashboard/AmbientOrbs';
 import CefrLevelCard from './dashboard/CefrLevelCard';
+import DashboardHeader from './dashboard/DashboardHeader';
 import DetailedStatsLink from './dashboard/DetailedStatsLink';
 import GreetingCard from './dashboard/GreetingCard';
 import TodayProgressChart from './dashboard/TodayProgressChart';
@@ -21,10 +19,7 @@ import WellKnownWordsCard from './dashboard/WellKnownWordsCard';
 
 export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
   const colors = useColors();
-  const router = useRouter();
   const { user } = useAuth();
 
   const { data: dashboardHome } = useGetDashboardHomeQuery();
@@ -37,11 +32,12 @@ export default function DashboardScreen() {
 
   return (
     <View className="flex-1" style={{ backgroundColor: colors.background }}>
+      <DashboardHeader insetTop={insets.top} />
+
       <ScrollView
         className="flex-1"
         contentContainerStyle={{
           paddingBottom: 100,
-          paddingTop: insets.top + 8,
           flexGrow: 1,
           justifyContent: 'center',
         }}
@@ -53,16 +49,6 @@ export default function DashboardScreen() {
           <AmbientOrbs />
 
           <View className="relative z-[1] px-5" style={{ gap: 8 }}>
-            <View className="flex-row items-center justify-end mb-1">
-              <Pressable
-                onPress={() => router.push('/(tabs)/settings' as never)}
-                className="p-2 active:opacity-50"
-                accessibilityLabel="Settings"
-              >
-                <Settings size={20} color={isDark ? '#A1A1AA' : '#78716C'} />
-              </Pressable>
-            </View>
-
             <GreetingCard firstName={firstName} />
 
             <TodayProgressChart
