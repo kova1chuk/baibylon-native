@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { View, Text, ActivityIndicator } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
-import { useActivityHeatmap } from '@/lib/api';
+import { useGetActivityHeatmapQuery } from '@/features/hub/api/dashboardApi';
 
 const CELL_SIZE = 14;
 const CELL_GAP = 3;
@@ -30,22 +32,25 @@ function getIntensityColor(count: number, isDark: boolean): string {
   return isDark ? '#39D353' : '#216E39';
 }
 
+const WEEKS = 12;
+
 export default function ActivityHeatmap() {
+  const { t } = useTranslation();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-  const { data: activityData, isLoading } = useActivityHeatmap(12);
+  const { data: activityData, isLoading } = useGetActivityHeatmapQuery({
+    weeks: WEEKS,
+  });
 
   const { grid, monthHeaders } = useMemo(() => {
     const dateMap = new Map<string, number>();
-    (activityData || []).forEach(
-      (day: { activity_date: string; session_count: number }) => {
-        dateMap.set(day.activity_date, day.session_count);
-      }
-    );
+    (activityData || []).forEach(day => {
+      dateMap.set(day.activity_date, day.session_count);
+    });
 
     const today = new Date();
     const weeks: { date: Date; count: number }[][] = [];
-    const totalDays = 12 * 7;
+    const totalDays = WEEKS * 7;
     const startDate = new Date(today);
     startDate.setDate(startDate.getDate() - totalDays + 1);
 
@@ -95,10 +100,9 @@ export default function ActivityHeatmap() {
   return (
     <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
       <Text className="text-lg font-semibold text-foreground mb-3">
-        Activity
+        {t('dashboard.activityLabel', { weeks: WEEKS })}
       </Text>
 
-      {/* Month headers */}
       <View className="mb-1 h-4 relative">
         {monthHeaders.map((header, idx) => (
           <Text
@@ -111,7 +115,6 @@ export default function ActivityHeatmap() {
         ))}
       </View>
 
-      {/* Grid */}
       <View className="flex-row mt-[18px]" style={{ gap: CELL_GAP }}>
         {grid.map((week, weekIdx) => (
           <View key={weekIdx} style={{ gap: CELL_GAP }}>
@@ -130,12 +133,13 @@ export default function ActivityHeatmap() {
         ))}
       </View>
 
-      {/* Legend */}
       <View
         className="flex-row items-center justify-end mt-2"
         style={{ gap: 4 }}
       >
-        <Text className="text-[10px] text-muted-foreground">Less</Text>
+        <Text className="text-[10px] text-muted-foreground">
+          {t('dashboard.less')}
+        </Text>
         {[0, 1, 2, 4, 6].map(count => (
           <View
             key={count}
@@ -147,7 +151,9 @@ export default function ActivityHeatmap() {
             }}
           />
         ))}
-        <Text className="text-[10px] text-muted-foreground">More</Text>
+        <Text className="text-[10px] text-muted-foreground">
+          {t('dashboard.more')}
+        </Text>
       </View>
     </View>
   );

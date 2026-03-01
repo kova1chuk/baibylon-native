@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { RefreshCw } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { View, Text, ScrollView, Pressable } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
+import { dictionaryApi } from '@/entities/dictionary/api/dictionaryApi';
+import { dashboardApi } from '@/features/hub/api/dashboardApi';
+import { useAppDispatch } from '@/shared/model/store';
 
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 
@@ -14,23 +18,23 @@ import {
   DashboardMetrics,
   DashboardDonutChart,
   QuickActions,
-  StreakTracker,
   WordOfTheMoment,
   ActivityHeatmap,
   EnglishSkillsChart,
 } from './dashboard';
 
 export default function DashboardScreen() {
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const tabBarHeight = useBottomTabOverflow();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
-  const [refreshing, setRefreshing] = React.useState(false);
+  const dispatch = useAppDispatch();
 
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 500);
-  };
+  const handleRefresh = useCallback(() => {
+    dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
+    dispatch(dictionaryApi.util.invalidateTags(['DictionaryStats']));
+  }, [dispatch]);
 
   return (
     <ScrollView
@@ -40,20 +44,14 @@ export default function DashboardScreen() {
         flexGrow: 1,
       }}
     >
-      {/* Header */}
       <View
         className="flex-row items-center justify-between px-4 pb-2"
         style={{ paddingTop: insets.top + 16 }}
       >
         <Text className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-          Dashboard
+          {t('dashboard.title')}
         </Text>
-        <Pressable
-          onPress={handleRefresh}
-          disabled={refreshing}
-          className="p-2 active:opacity-50"
-          style={{ opacity: refreshing ? 0.5 : 1 }}
-        >
+        <Pressable onPress={handleRefresh} className="p-2 active:opacity-50">
           <RefreshCw size={20} color={isDark ? '#FAFAF9' : '#111827'} />
         </Pressable>
       </View>
@@ -63,7 +61,6 @@ export default function DashboardScreen() {
         <DashboardMetrics />
         <DashboardDonutChart />
         <QuickActions />
-        <StreakTracker />
         <WordOfTheMoment />
         <ActivityHeatmap />
         <EnglishSkillsChart />

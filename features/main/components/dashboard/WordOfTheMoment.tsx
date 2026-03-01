@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Volume2 } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 
 import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 
-import { useRandomWord } from '@/lib/api';
+import { useGetRandomWordQuery } from '@/entities/dictionary/api/dictionaryApi';
 
 const STATUS_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
   '1': { bg: '#6B728015', text: '#6B7280' },
@@ -16,18 +17,18 @@ const STATUS_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
   '7': { bg: '#8B5CF615', text: '#8B5CF6' },
 };
 
-const STATUS_NAMES: Record<string, string> = {
-  '1': 'Not Learned',
-  '2': 'Beginner',
-  '3': 'Basic',
-  '4': 'Intermediate',
-  '5': 'Advanced',
-  '6': 'Well Known',
-  '7': 'Mastered',
-};
-
 export default function WordOfTheMoment() {
-  const { data: word, isLoading, refetch } = useRandomWord('en', 'uk');
+  const { t } = useTranslation();
+  const [timestamp, setTimestamp] = useState(() => Date.now());
+  const { data: word, isLoading } = useGetRandomWordQuery({
+    langCode: 'en',
+    translationLang: 'uk',
+    _timestamp: timestamp,
+  });
+
+  const handleRefresh = useCallback(() => {
+    setTimestamp(Date.now());
+  }, []);
 
   if (isLoading) {
     return (
@@ -43,15 +44,15 @@ export default function WordOfTheMoment() {
 
   const statusKey = String(word.status);
   const badge = STATUS_BADGE_COLORS[statusKey] || STATUS_BADGE_COLORS['1'];
-  const statusName = STATUS_NAMES[statusKey] || 'Unknown';
+  const statusName = t(`wordStatus.${getStatusKey(statusKey)}`);
 
   return (
     <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
       <View className="flex-row items-center justify-between mb-3">
         <Text className="text-lg font-semibold text-foreground">
-          Word of the Moment
+          {t('dashboard.wordOfTheMoment')}
         </Text>
-        <Pressable className="p-2 active:opacity-50" onPress={() => refetch()}>
+        <Pressable className="p-2 active:opacity-50" onPress={handleRefresh}>
           <Text style={{ fontSize: 14 }}>🔄</Text>
         </Pressable>
       </View>
@@ -94,4 +95,17 @@ export default function WordOfTheMoment() {
       </View>
     </View>
   );
+}
+
+function getStatusKey(status: string): string {
+  const map: Record<string, string> = {
+    '1': 'notStarted',
+    '2': 'introduced',
+    '3': 'encountered',
+    '4': 'learning',
+    '5': 'familiar',
+    '6': 'confident',
+    '7': 'mastered',
+  };
+  return map[status] || 'notStarted';
 }

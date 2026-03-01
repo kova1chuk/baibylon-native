@@ -1,11 +1,12 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
 import Svg, { Circle, G, Path } from 'react-native-svg';
 
 import { View, Text, ActivityIndicator } from 'react-native';
 
 import { useTheme } from '@/contexts/ThemeContext';
-import { useDictionaryStats } from '@/lib/api';
+import { useGetDictStatsQuery } from '@/entities/dictionary/api/dictionaryApi';
 
 interface WordStats {
   notLearned: number;
@@ -28,19 +29,22 @@ const STATUS_COLORS: Record<keyof Omit<WordStats, 'total'>, string> = {
   mastered: '#8B5CF6',
 };
 
-const STATUS_LABELS: Record<keyof Omit<WordStats, 'total'>, string> = {
-  notLearned: 'Not Learned',
-  beginner: 'Beginner',
-  basic: 'Basic',
-  intermediate: 'Intermediate',
-  advanced: 'Advanced',
-  wellKnown: 'Well Known',
-  mastered: 'Mastered',
+const STATUS_LABEL_KEYS: Record<keyof Omit<WordStats, 'total'>, string> = {
+  notLearned: 'wordStatus.notStarted',
+  beginner: 'wordStatus.introduced',
+  basic: 'wordStatus.encountered',
+  intermediate: 'wordStatus.learning',
+  advanced: 'wordStatus.familiar',
+  wellKnown: 'wordStatus.confident',
+  mastered: 'wordStatus.mastered',
 };
 
 export default function DashboardDonutChart() {
+  const { t } = useTranslation();
   const { theme } = useTheme();
-  const { data: statsData, isLoading } = useDictionaryStats('en');
+  const { data: statsData, isLoading } = useGetDictStatsQuery({
+    langCode: 'en',
+  });
 
   if (isLoading) {
     return (
@@ -111,11 +115,10 @@ export default function DashboardDonutChart() {
   return (
     <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
       <Text className="text-lg font-semibold text-foreground mb-3">
-        Word Status
+        {t('dashboard.wordStatusDistribution')}
       </Text>
 
       <View className="flex-row items-center gap-4">
-        {/* Donut chart */}
         <View className="relative items-center justify-center">
           <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
             <G>
@@ -135,15 +138,18 @@ export default function DashboardDonutChart() {
             <Text className="text-2xl font-bold text-foreground">
               {stats.total}
             </Text>
-            <Text className="text-xs text-muted-foreground">total</Text>
+            <Text className="text-xs text-muted-foreground">
+              {t('dashboard.totalWords').toLowerCase()}
+            </Text>
           </View>
         </View>
 
-        {/* Legend */}
         <View className="flex-1 gap-2">
-          {Object.entries(STATUS_LABELS).map(([key, label]) => {
-            const count = stats[key as keyof Omit<WordStats, 'total'>];
-            const color = STATUS_COLORS[key as keyof Omit<WordStats, 'total'>];
+          {(
+            Object.keys(STATUS_LABEL_KEYS) as (keyof Omit<WordStats, 'total'>)[]
+          ).map(key => {
+            const count = stats[key];
+            const color = STATUS_COLORS[key];
             return (
               <View key={key} className="flex-row items-center gap-2">
                 <View
@@ -151,7 +157,7 @@ export default function DashboardDonutChart() {
                   style={{ backgroundColor: color }}
                 />
                 <Text className="text-xs flex-1 text-muted-foreground">
-                  {label}
+                  {t(STATUS_LABEL_KEYS[key])}
                 </Text>
                 <Text className="text-xs font-semibold text-foreground">
                   {count}

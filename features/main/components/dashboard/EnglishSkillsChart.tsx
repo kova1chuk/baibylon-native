@@ -1,35 +1,71 @@
 import React from 'react';
 
-import { View, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
+
+import { View, Text, ActivityIndicator } from 'react-native';
+
+import { useGetDashboardHomeQuery } from '@/features/hub/api/dashboardApi';
 
 interface Skill {
-  name: string;
+  labelKey: string;
   value: number;
   color: string;
 }
 
-const SKILLS: Skill[] = [
-  { name: 'Vocabulary', value: 72, color: '#10B981' },
-  { name: 'Grammar', value: 58, color: '#3B82F6' },
-  { name: 'Reading', value: 85, color: '#8B5CF6' },
-  { name: 'Listening', value: 45, color: '#F59E0B' },
-  { name: 'Writing', value: 62, color: '#EF4444' },
-  { name: 'Speaking', value: 38, color: '#F97316' },
-];
-
 export default function EnglishSkillsChart() {
+  const { t } = useTranslation();
+  const { data, isLoading } = useGetDashboardHomeQuery();
+
+  if (isLoading) {
+    return (
+      <View className="items-center justify-center h-[200px]">
+        <ActivityIndicator size="small" />
+      </View>
+    );
+  }
+
+  const skills: Skill[] = [
+    {
+      labelKey: 'hub.words',
+      value: data?.skillVocabulary ?? 0,
+      color: '#10B981',
+    },
+    {
+      labelKey: 'hub.grammar',
+      value: data?.skillGrammar ?? 0,
+      color: '#3B82F6',
+    },
+    {
+      labelKey: 'learningFeed.vocabulary',
+      value: data?.skillReading ?? 0,
+      color: '#8B5CF6',
+    },
+    {
+      labelKey: 'hub.timeSpent',
+      value: data?.skillListening ?? 0,
+      color: '#F59E0B',
+    },
+  ];
+
   return (
     <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
-      <Text className="text-lg font-semibold text-foreground mb-3">
-        English Skills
-      </Text>
+      <View className="flex-row items-center justify-between mb-3">
+        <Text className="text-lg font-semibold text-foreground">
+          {t('hub.currentLevel')}
+        </Text>
+        {data?.cefrLevel && (
+          <Text className="text-sm font-semibold text-primary">
+            {data.cefrLevel}
+          </Text>
+        )}
+      </View>
 
       <View className="gap-3">
-        {SKILLS.map(skill => (
-          <View key={skill.name} className="gap-1">
+        {skills.map(skill => (
+          <View key={skill.labelKey} className="gap-1">
             <View className="flex-row justify-between items-center">
               <Text className="text-sm text-muted-foreground">
-                {skill.name}
+                {t(skill.labelKey)}
               </Text>
               <Text className="text-sm font-semibold text-foreground">
                 {skill.value}%

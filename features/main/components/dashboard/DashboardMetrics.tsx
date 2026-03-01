@@ -1,8 +1,10 @@
 import React from 'react';
 
+import { useTranslation } from 'react-i18next';
+
 import { View, Text, ActivityIndicator } from 'react-native';
 
-import { useDashboardSummary } from '@/lib/api';
+import { useGetDashboardSummaryQuery } from '@/features/hub/api/dashboardApi';
 
 interface MetricCardProps {
   label: string;
@@ -27,7 +29,8 @@ function MetricCard({ label, value, subtitle, borderColor }: MetricCardProps) {
 }
 
 export default function DashboardMetrics() {
-  const { data, isLoading } = useDashboardSummary();
+  const { t } = useTranslation();
+  const { data, isLoading } = useGetDashboardSummaryQuery();
 
   if (isLoading) {
     return (
@@ -41,32 +44,26 @@ export default function DashboardMetrics() {
   const learned = data?.words_learned ?? 0;
   const learnedPct =
     totalWords > 0 ? Math.round((learned / totalWords) * 100) : 0;
-  const streak = data?.current_streak ?? 0;
   const grammar = data?.grammar_level ?? 'A1';
 
   return (
     <View className="gap-3 px-4">
       <View className="flex-row gap-3">
         <MetricCard
-          label="Total Words"
+          label={t('dashboard.totalWords')}
           value={String(totalWords)}
           borderColor="#10B981"
         />
         <MetricCard
-          label="Learned"
+          label={t('dashboard.learned')}
           value={String(learned)}
-          subtitle={`${learnedPct}% of total`}
+          subtitle={t('dashboard.ofTotal', { percent: learnedPct })}
           borderColor="#3B82F6"
         />
       </View>
       <View className="flex-row gap-3">
         <MetricCard
-          label="Streak"
-          value={`${streak} days`}
-          borderColor="#F59E0B"
-        />
-        <MetricCard
-          label="Grammar Level"
+          label={t('dashboard.grammarLabel')}
           value={grammar}
           borderColor="#8B5CF6"
         />
