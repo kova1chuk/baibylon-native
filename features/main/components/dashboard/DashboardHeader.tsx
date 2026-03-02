@@ -32,7 +32,9 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
   const { user, signOut } = useAuth();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuTop, setMenuTop] = useState(0);
   const fadeAnim = useRef(new RNAnimated.Value(0)).current;
+  const avatarRef = useRef<View>(null);
 
   const textColor = isDark ? 'rgba(250,250,250,0.9)' : '#111827';
   const mutedColor = isDark ? 'rgba(250,250,250,0.45)' : 'rgba(0,0,0,0.45)';
@@ -51,12 +53,15 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
     .slice(0, 2);
 
   const openMenu = useCallback(() => {
-    setMenuOpen(true);
-    RNAnimated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 150,
-      useNativeDriver: true,
-    }).start();
+    avatarRef.current?.measureInWindow((x, y, width, height) => {
+      setMenuTop(y + height + 6);
+      setMenuOpen(true);
+      RNAnimated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }).start();
+    });
   }, [fadeAnim]);
 
   const closeMenu = useCallback(() => {
@@ -123,6 +128,7 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
           </Pressable>
 
           <Pressable
+            ref={avatarRef}
             onPress={openMenu}
             style={styles.avatarRow}
             accessibilityLabel="Open user menu"
@@ -176,7 +182,7 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
                   ],
                   backgroundColor: menuBg,
                   borderColor: menuBorder,
-                  top: insetTop + 52,
+                  top: menuTop,
                 },
               ]}
             >

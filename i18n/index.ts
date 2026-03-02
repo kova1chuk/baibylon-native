@@ -1,20 +1,10 @@
 import i18n from 'i18next';
+import HttpBackend from 'i18next-http-backend';
 import { initReactI18next } from 'react-i18next';
 
-import ar from './locales/ar.json';
-import de from './locales/de.json';
+import { API_BASE_URL } from '@/shared/config/api';
+
 import en from './locales/en.json';
-import es from './locales/es.json';
-import fr from './locales/fr.json';
-import hi from './locales/hi.json';
-import it from './locales/it.json';
-import ja from './locales/ja.json';
-import ko from './locales/ko.json';
-import pl from './locales/pl.json';
-import pt from './locales/pt.json';
-import tr from './locales/tr.json';
-import uk from './locales/uk.json';
-import zh from './locales/zh.json';
 
 const SUPPORTED_LANGUAGES = [
   'en',
@@ -49,27 +39,19 @@ function getDeviceLanguage(): string {
   return 'en';
 }
 
-i18n.use(initReactI18next).init({
-  resources: {
-    en: { translation: en },
-    uk: { translation: uk },
-    ar: { translation: ar },
-    zh: { translation: zh },
-    es: { translation: es },
-    fr: { translation: fr },
-    de: { translation: de },
-    pt: { translation: pt },
-    ja: { translation: ja },
-    ko: { translation: ko },
-    hi: { translation: hi },
-    tr: { translation: tr },
-    pl: { translation: pl },
-    it: { translation: it },
-  },
-  lng: getDeviceLanguage(),
-  fallbackLng: 'en',
-  interpolation: { escapeValue: false },
-  react: { useSuspense: false },
-});
+i18n
+  .use(HttpBackend)
+  .use(initReactI18next)
+  .init({
+    resources: { en: { translation: en } },
+    partialBundledLanguages: true,
+    lng: getDeviceLanguage(),
+    fallbackLng: 'en',
+    interpolation: { escapeValue: false },
+    react: { useSuspense: false },
+    backend: {
+      loadPath: `${API_BASE_URL}/locales/{{lng}}.json`,
+    },
+  });
 
 export default i18n;

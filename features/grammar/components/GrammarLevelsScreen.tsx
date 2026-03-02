@@ -109,7 +109,9 @@ export default function GrammarLevelsScreen() {
             paddingHorizontal: 32,
           }}
         >
-          {t('common.tryAgain')}
+          {'status' in (error as object)
+            ? `Server returned ${(error as { status: number }).status}`
+            : (error as { message?: string })?.message || t('common.tryAgain')}
         </Text>
         <Pressable
           onPress={refetch}
@@ -251,7 +253,7 @@ export default function GrammarLevelsScreen() {
             gradient: ['#6B7280', '#4B5563'] as [string, string],
             primary: '#6B7280',
           };
-          const pct = Math.round(level.progress_percentage);
+          const pct = Math.min(100, Math.round(level.progress_percentage ?? 0));
           const current = isCurrentLevel(level);
 
           return (
@@ -468,7 +470,7 @@ const styles = StyleSheet.create({
   },
   levelRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     gap: 10,
   },
   levelBadge: {
