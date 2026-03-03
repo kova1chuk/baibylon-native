@@ -1,6 +1,6 @@
-import { useColorScheme } from 'nativewind';
+import { useColorScheme } from "nativewind";
 
-import { Colors } from '@/constants/Colors';
+import { Colors } from "@/constants/Colors";
 
 /**
  * Returns the full set of theme-aware hex colors from Colors.ts.
@@ -12,5 +12,5 @@ import { Colors } from '@/constants/Colors';
  */
 export function useColors() {
   const { colorScheme } = useColorScheme();
-  return Colors[colorScheme ?? 'light'];
+  return Colors[colorScheme ?? "light"];
 }

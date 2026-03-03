@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { View } from 'react-native';
+import { View } from "react-native";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import { Text } from './text';
+import { Text } from "./text";
 
 interface LabelProps {
   className?: string;
@@ -18,8 +18,8 @@ const Label = React.forwardRef<React.ComponentRef<typeof View>, LabelProps>(
       <View ref={ref} {...props}>
         <Text
           className={cn(
-            'text-sm native:text-base font-medium leading-none text-foreground',
-            className
+            "text-sm native:text-base font-medium leading-none text-foreground",
+            className,
           )}
           nativeID={nativeID}
         >
@@ -27,8 +27,8 @@ const Label = React.forwardRef<React.ComponentRef<typeof View>, LabelProps>(
         </Text>
       </View>
     );
-  }
+  },
 );
-Label.displayName = 'Label';
+Label.displayName = "Label";
 
 export { Label };

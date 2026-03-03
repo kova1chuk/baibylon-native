@@ -1,22 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { AlertCircle, Check, RotateCcw } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
+import { AlertCircle, Check, RotateCcw } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/contexts/ThemeContext";
 
-import {
-  useGetAssessmentQuestionsQuery,
-  useSubmitAssessmentMutation,
-} from '../api/onboardingApi';
-import type { AssessmentResult } from '../api/onboardingApi';
+import { useGetAssessmentQuestionsQuery, useSubmitAssessmentMutation } from "../api/onboardingApi";
+import type { AssessmentResult } from "../api/onboardingApi";
 
-const ACCENT = '#818cf8';
-const CORRECT = '#6ee7b7';
-const WRONG = '#f87171';
-const OPTION_LABELS = ['A', 'B', 'C', 'D'];
+const ACCENT = "#818cf8";
+const CORRECT = "#6ee7b7";
+const WRONG = "#f87171";
+const OPTION_LABELS = ["A", "B", "C", "D"];
 
 interface AssessmentStepProps {
   onComplete: (result: AssessmentResult) => void;
@@ -25,12 +22,10 @@ interface AssessmentStepProps {
 export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
 
-  const { data: questions, isLoading: questionsLoading } =
-    useGetAssessmentQuestionsQuery();
-  const [submitAssessment, { isLoading: submitting }] =
-    useSubmitAssessmentMutation();
+  const { data: questions, isLoading: questionsLoading } = useGetAssessmentQuestionsQuery();
+  const [submitAssessment, { isLoading: submitting }] = useSubmitAssessmentMutation();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
@@ -38,11 +33,7 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
   const [result, setResult] = useState<AssessmentResult | null>(null);
   const [submitError, setSubmitError] = useState(false);
 
-  const handleSelect = (
-    questionId: string,
-    optionIndex: number,
-    correctIndex: number
-  ) => {
+  const handleSelect = (questionId: string, optionIndex: number, correctIndex: number) => {
     if (selectedIndex !== null) return;
 
     setSelectedIndex(optionIndex);
@@ -53,12 +44,13 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
       if (!questions) return;
 
       if (currentIndex < questions.length - 1) {
-        setCurrentIndex(prev => prev + 1);
+        setCurrentIndex((prev) => prev + 1);
         setSelectedIndex(null);
       } else {
-        const payload = Object.entries(updatedAnswers).map(
-          ([questionId, selectedIndex]) => ({ questionId, selectedIndex })
-        );
+        const payload = Object.entries(updatedAnswers).map(([questionId, selectedIndex]) => ({
+          questionId,
+          selectedIndex,
+        }));
         try {
           setSubmitError(false);
           const res = await submitAssessment({ answers: payload }).unwrap();
@@ -72,9 +64,10 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
 
   const handleRetry = async () => {
     if (!questions) return;
-    const payload = Object.entries(answers).map(
-      ([questionId, selectedIndex]) => ({ questionId, selectedIndex })
-    );
+    const payload = Object.entries(answers).map(([questionId, selectedIndex]) => ({
+      questionId,
+      selectedIndex,
+    }));
     try {
       setSubmitError(false);
       const res = await submitAssessment({ answers: payload }).unwrap();
@@ -84,22 +77,19 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
     }
   };
 
-  const bgColor = isDark ? '#0f0f1a' : '#f8f8ff';
-  const cardBg = isDark ? '#1a1a2e' : '#ffffff';
-  const textPrimary = isDark ? '#f1f1f5' : '#1a1a2e';
-  const textMuted = isDark ? '#8888aa' : '#6b6b8a';
-  const optionBg = isDark ? '#16213e' : '#f0f0fa';
-  const borderDefault = isDark ? '#2a2a4a' : '#e0e0f0';
+  const bgColor = isDark ? "#0f0f1a" : "#f8f8ff";
+  const cardBg = isDark ? "#1a1a2e" : "#ffffff";
+  const textPrimary = isDark ? "#f1f1f5" : "#1a1a2e";
+  const textMuted = isDark ? "#8888aa" : "#6b6b8a";
+  const optionBg = isDark ? "#16213e" : "#f0f0fa";
+  const borderDefault = isDark ? "#2a2a4a" : "#e0e0f0";
 
   if (questionsLoading) {
     return (
-      <View
-        className="flex-1 items-center justify-center"
-        style={{ backgroundColor: bgColor }}
-      >
+      <View className="flex-1 items-center justify-center" style={{ backgroundColor: bgColor }}>
         <ActivityIndicator size="large" color={ACCENT} />
         <Text className="mt-4 text-base" style={{ color: textMuted }}>
-          {t('onboarding.loadingQuestions')}
+          {t("onboarding.loadingQuestions")}
         </Text>
       </View>
     );
@@ -107,13 +97,10 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
 
   if (submitting) {
     return (
-      <View
-        className="flex-1 items-center justify-center"
-        style={{ backgroundColor: bgColor }}
-      >
+      <View className="flex-1 items-center justify-center" style={{ backgroundColor: bgColor }}>
         <ActivityIndicator size="large" color={ACCENT} />
         <Text className="mt-4 text-base" style={{ color: textMuted }}>
-          {t('onboarding.calculatingLevel')}
+          {t("onboarding.calculatingLevel")}
         </Text>
       </View>
     );
@@ -121,38 +108,26 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
 
   if (result) {
     const levelKey = `onboarding.level${result.level}` as const;
-    const levelLabel = t(levelKey, { defaultValue: t('onboarding.greatWork') });
+    const levelLabel = t(levelKey, { defaultValue: t("onboarding.greatWork") });
 
     return (
-      <View
-        className="flex-1 px-6 pt-12 pb-8"
-        style={{ backgroundColor: bgColor }}
-      >
+      <View className="flex-1 px-6 pt-12 pb-8" style={{ backgroundColor: bgColor }}>
         <View
           className="flex-1 rounded-3xl p-6 items-center justify-center"
           style={{ backgroundColor: cardBg }}
         >
-          <View
-            className="rounded-2xl px-6 py-3 mb-4"
-            style={{ backgroundColor: `${ACCENT}22` }}
-          >
+          <View className="rounded-2xl px-6 py-3 mb-4" style={{ backgroundColor: `${ACCENT}22` }}>
             <Text className="text-3xl font-bold" style={{ color: ACCENT }}>
               {result.level}
             </Text>
           </View>
 
-          <Text
-            className="text-2xl font-bold mb-2 text-center"
-            style={{ color: textPrimary }}
-          >
-            {t('onboarding.yourLevel', { level: levelLabel })}
+          <Text className="text-2xl font-bold mb-2 text-center" style={{ color: textPrimary }}>
+            {t("onboarding.yourLevel", { level: levelLabel })}
           </Text>
 
-          <Text
-            className="text-base text-center mb-8"
-            style={{ color: textMuted }}
-          >
-            {t('onboarding.correctOf', {
+          <Text className="text-base text-center mb-8" style={{ color: textMuted }}>
+            {t("onboarding.correctOf", {
               correct: result.correctCount,
               total: result.totalCount,
             })}
@@ -171,9 +146,7 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
           style={{ backgroundColor: ACCENT }}
           onPress={() => onComplete(result)}
         >
-          <Text className="text-base font-semibold text-white">
-            {t('onboarding.continue')}
-          </Text>
+          <Text className="text-base font-semibold text-white">{t("onboarding.continue")}</Text>
         </Pressable>
       </View>
     );
@@ -190,7 +163,7 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
           className="text-lg font-semibold mt-4 mb-2 text-center"
           style={{ color: textPrimary }}
         >
-          {t('onboarding.somethingWentWrong')}
+          {t("onboarding.somethingWentWrong")}
         </Text>
         <Pressable
           className="flex-row items-center gap-2 rounded-xl px-6 py-3 mt-4"
@@ -198,9 +171,7 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
           onPress={handleRetry}
         >
           <RotateCcw color="#ffffff" size={18} />
-          <Text className="text-base font-semibold text-white">
-            {t('onboarding.retry')}
-          </Text>
+          <Text className="text-base font-semibold text-white">{t("onboarding.retry")}</Text>
         </Pressable>
       </View>
     );
@@ -213,14 +184,11 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
   const progress = (currentIndex + 1) / total;
 
   return (
-    <View
-      className="flex-1 px-6 pt-10 pb-8"
-      style={{ backgroundColor: bgColor }}
-    >
+    <View className="flex-1 px-6 pt-10 pb-8" style={{ backgroundColor: bgColor }}>
       <View className="mb-6">
         <View className="flex-row justify-between mb-2">
           <Text className="text-sm font-medium" style={{ color: textMuted }}>
-            {t('onboarding.questionOf', {
+            {t("onboarding.questionOf", {
               current: currentIndex + 1,
               total,
             })}
@@ -245,7 +213,7 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
         className="text-xs font-semibold uppercase tracking-widest mb-3"
         style={{ color: textMuted }}
       >
-        {t('onboarding.chooseCorrectOption')}
+        {t("onboarding.chooseCorrectOption")}
       </Text>
 
       <View
@@ -256,10 +224,7 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
           borderColor: borderDefault,
         }}
       >
-        <Text
-          className="text-lg font-medium leading-7"
-          style={{ color: textPrimary }}
-        >
+        <Text className="text-lg font-medium leading-7" style={{ color: textPrimary }}>
           {question.sentence}
         </Text>
       </View>
@@ -268,7 +233,7 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
         {question.options.map((option, index) => {
           let borderColor = borderDefault;
           let bg = optionBg;
-          let labelBg = isDark ? '#2a2a4a' : '#e8e8f8';
+          let labelBg = isDark ? "#2a2a4a" : "#e8e8f8";
           let labelColor = textMuted;
           let optionTextColor = textPrimary;
 
@@ -279,10 +244,7 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
               labelBg = `${CORRECT}30`;
               labelColor = CORRECT;
               optionTextColor = CORRECT;
-            } else if (
-              index === selectedIndex &&
-              selectedIndex !== question.correctIndex
-            ) {
+            } else if (index === selectedIndex && selectedIndex !== question.correctIndex) {
               borderColor = WRONG;
               bg = `${WRONG}18`;
               labelBg = `${WRONG}30`;
@@ -300,37 +262,28 @@ export default function AssessmentStep({ onComplete }: AssessmentStepProps) {
                 borderWidth: 1.5,
                 borderColor,
               }}
-              onPress={() =>
-                handleSelect(question.id, index, question.correctIndex)
-              }
+              onPress={() => handleSelect(question.id, index, question.correctIndex)}
               disabled={selectedIndex !== null}
             >
               <View
                 className="w-8 h-8 rounded-lg items-center justify-center mr-4"
                 style={{ backgroundColor: labelBg }}
               >
-                <Text
-                  className="text-sm font-bold"
-                  style={{ color: labelColor }}
-                >
+                <Text className="text-sm font-bold" style={{ color: labelColor }}>
                   {OPTION_LABELS[index]}
                 </Text>
               </View>
 
-              <Text
-                className="flex-1 text-base"
-                style={{ color: optionTextColor }}
-              >
+              <Text className="flex-1 text-base" style={{ color: optionTextColor }}>
                 {option}
               </Text>
 
               {selectedIndex !== null && index === question.correctIndex && (
                 <Check color={CORRECT} size={18} />
               )}
-              {selectedIndex === index &&
-                selectedIndex !== question.correctIndex && (
-                  <AlertCircle color={WRONG} size={18} />
-                )}
+              {selectedIndex === index && selectedIndex !== question.correctIndex && (
+                <AlertCircle color={WRONG} size={18} />
+              )}
             </Pressable>
           );
         })}

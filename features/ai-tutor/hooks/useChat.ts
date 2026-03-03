@@ -1,9 +1,9 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from "react";
 
-import { useAuth } from '@/contexts/AuthContext';
-import { API_BASE_URL } from '@/shared/config/api';
+import { useAuth } from "@/contexts/AuthContext";
+import { API_BASE_URL } from "@/shared/config/api";
 
-import { useSocket } from './useSocket';
+import { useSocket } from "./useSocket";
 
 export interface ChatMessageWidget {
   type: string;
@@ -18,7 +18,7 @@ export interface CorrectionItem {
 
 export interface ChatMessage {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
   widget?: ChatMessageWidget;
@@ -27,7 +27,7 @@ export interface ChatMessage {
 
 interface MessageResponse {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: string;
   widget?: ChatMessageWidget;
@@ -54,19 +54,14 @@ interface UseChatOptions {
 }
 
 const WELCOME_MESSAGE: ChatMessage = {
-  id: 'welcome',
-  role: 'assistant',
-  content:
-    "Hello! I'm your AI language tutor. How can I help you learn English today?",
+  id: "welcome",
+  role: "assistant",
+  content: "Hello! I'm your AI language tutor. How can I help you learn English today?",
   timestamp: new Date(),
 };
 
 export function useChat(options: UseChatOptions = {}) {
-  const {
-    onResponse,
-    onError,
-    enableSuggestions: enableSuggestionsOption = true,
-  } = options;
+  const { onResponse, onError, enableSuggestions: enableSuggestionsOption = true } = options;
   const { session } = useAuth();
   const { isConnected, emit, on } = useSocket();
 
@@ -101,7 +96,7 @@ export function useChat(options: UseChatOptions = {}) {
         return null;
       }
     },
-    [session?.access_token]
+    [session?.access_token],
   );
 
   useEffect(() => {
@@ -115,7 +110,7 @@ export function useChat(options: UseChatOptions = {}) {
 
       if (data && data.messages.length > 0) {
         const loadedMessages = data.messages
-          .map(msg => ({
+          .map((msg) => ({
             id: msg.id,
             role: msg.role,
             content: msg.content,
@@ -149,7 +144,7 @@ export function useChat(options: UseChatOptions = {}) {
 
     if (data && data.messages.length > 0) {
       const olderMessages = data.messages
-        .map(msg => ({
+        .map((msg) => ({
           id: msg.id,
           role: msg.role,
           content: msg.content,
@@ -158,7 +153,7 @@ export function useChat(options: UseChatOptions = {}) {
         }))
         .reverse();
 
-      setMessages(prev => [...olderMessages, ...prev]);
+      setMessages((prev) => [...olderMessages, ...prev]);
       setNextCursor(data.nextCursor);
       setHasMore(data.hasMore);
     } else {
@@ -175,10 +170,10 @@ export function useChat(options: UseChatOptions = {}) {
       if (data.mistakes && data.mistakes.length > 0) {
         newMessages.push({
           id: `correction-${Date.now()}`,
-          role: 'assistant',
-          content: data.correction || '',
+          role: "assistant",
+          content: data.correction || "",
           timestamp: new Date(),
-          corrections: data.mistakes.map(m => ({
+          corrections: data.mistakes.map((m) => ({
             original: m.word,
             corrected: m.mistake,
           })),
@@ -187,12 +182,12 @@ export function useChat(options: UseChatOptions = {}) {
 
       newMessages.push({
         id: Date.now().toString(),
-        role: 'assistant',
+        role: "assistant",
         content: data.message,
         timestamp: new Date(),
       });
 
-      setMessages(prev => [...prev, ...newMessages]);
+      setMessages((prev) => [...prev, ...newMessages]);
       setIsLoading(false);
       pendingMessageRef.current = null;
 
@@ -213,11 +208,11 @@ export function useChat(options: UseChatOptions = {}) {
       if (pendingMessageRef.current) {
         const errorMessage: ChatMessage = {
           id: Date.now().toString(),
-          role: 'assistant',
+          role: "assistant",
           content: `Sorry, I encountered an error: ${errorMsg}`,
           timestamp: new Date(),
         };
-        setMessages(prev => [...prev, errorMessage]);
+        setMessages((prev) => [...prev, errorMessage]);
         pendingMessageRef.current = null;
       }
 
@@ -229,22 +224,16 @@ export function useChat(options: UseChatOptions = {}) {
       pendingMessageRef.current = null;
       const rateLimitMessage: ChatMessage = {
         id: `rate-limit-${Date.now()}`,
-        role: 'assistant',
+        role: "assistant",
         content: data.message,
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, rateLimitMessage]);
+      setMessages((prev) => [...prev, rateLimitMessage]);
     };
 
-    const unsubResponse = on<TutorResponse>('response', handleResponse);
-    const unsubError = on<{ message: string; error?: string }>(
-      'error',
-      handleError
-    );
-    const unsubRateLimit = on<{ message: string }>(
-      'rate_limit',
-      handleRateLimit
-    );
+    const unsubResponse = on<TutorResponse>("response", handleResponse);
+    const unsubError = on<{ message: string; error?: string }>("error", handleError);
+    const unsubRateLimit = on<{ message: string }>("rate_limit", handleRateLimit);
 
     return () => {
       unsubResponse();
@@ -259,22 +248,21 @@ export function useChat(options: UseChatOptions = {}) {
 
       const userMessage: ChatMessage = {
         id: Date.now().toString(),
-        role: 'user',
+        role: "user",
         content: content.trim(),
         timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, userMessage]);
+      setMessages((prev) => [...prev, userMessage]);
 
       if (!isConnected) {
         const errorMessage: ChatMessage = {
           id: `err-${Date.now()}`,
-          role: 'assistant',
-          content:
-            'Unable to send message — connection lost. Please try again.',
+          role: "assistant",
+          content: "Unable to send message — connection lost. Please try again.",
           timestamp: new Date(),
         };
-        setMessages(prev => [...prev, errorMessage]);
+        setMessages((prev) => [...prev, errorMessage]);
         return;
       }
 
@@ -283,26 +271,21 @@ export function useChat(options: UseChatOptions = {}) {
       setError(null);
       pendingMessageRef.current = content;
 
-      emit('message', {
+      emit("message", {
         message: content.trim(),
         enableSuggestions: enableSuggestionsOption,
       });
     },
-    [emit, isLoading, isConnected, enableSuggestionsOption]
+    [emit, isLoading, isConnected, enableSuggestionsOption],
   );
 
   const addMessage = useCallback((message: ChatMessage) => {
-    setMessages(prev => [...prev, message]);
+    setMessages((prev) => [...prev, message]);
   }, []);
 
-  const updateMessage = useCallback(
-    (id: string, updates: Partial<ChatMessage>) => {
-      setMessages(prev =>
-        prev.map(msg => (msg.id === id ? { ...msg, ...updates } : msg))
-      );
-    },
-    []
-  );
+  const updateMessage = useCallback((id: string, updates: Partial<ChatMessage>) => {
+    setMessages((prev) => prev.map((msg) => (msg.id === id ? { ...msg, ...updates } : msg)));
+  }, []);
 
   return {
     messages,

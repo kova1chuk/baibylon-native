@@ -1,19 +1,12 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
-import Svg, {
-  Path,
-  Circle,
-  Line,
-  Defs,
-  LinearGradient,
-  Stop,
-} from 'react-native-svg';
+import Svg, { Path, Circle, Line, Defs, LinearGradient, Stop } from "react-native-svg";
 
-import { View, Text } from 'react-native';
+import { View, Text } from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/contexts/ThemeContext";
 
-import GlassCard from './GlassCard';
+import GlassCard from "./GlassCard";
 
 interface TodayProgressChartProps {
   points: number;
@@ -26,9 +19,9 @@ const MAX_POINTS = 200;
 const K = 2.8;
 
 const MILESTONES = [
-  { value: 130, label: 'Daily' },
-  { value: 160, label: 'Great' },
-  { value: 185, label: 'Excellent' },
+  { value: 130, label: "Daily" },
+  { value: 160, label: "Great" },
+  { value: 185, label: "Excellent" },
 ] as const;
 
 function curveY(v: number): number {
@@ -54,13 +47,13 @@ export default function TodayProgressChart({
   wordsReviewed,
 }: TodayProgressChartProps) {
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
   const clamped = Math.min(points, MAX_POINTS);
 
-  const labelColor = isDark ? 'rgba(250,250,250,0.4)' : '#a1a1aa';
-  const sublabelColor = isDark ? 'rgba(250,250,250,0.3)' : 'rgba(0,0,0,0.3)';
-  const textColor = isDark ? 'rgba(250,250,250,0.9)' : '#111827';
-  const separatorColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+  const labelColor = isDark ? "rgba(250,250,250,0.4)" : "#a1a1aa";
+  const sublabelColor = isDark ? "rgba(250,250,250,0.3)" : "rgba(0,0,0,0.3)";
+  const textColor = isDark ? "rgba(250,250,250,0.9)" : "#111827";
+  const separatorColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
 
   const plotW = CHART_WIDTH - PAD.l - PAD.r;
   const plotH = CHART_HEIGHT - PAD.t - PAD.b;
@@ -77,12 +70,12 @@ export default function TodayProgressChart({
       const y = toY(curveY(v));
       parts.push(i === 0 ? `M${x},${y}` : `L${x},${y}`);
     }
-    return parts.join(' ');
+    return parts.join(" ");
   }, []);
 
   // Build the filled progress path (area under curve up to current points)
   const progressPath = useMemo(() => {
-    if (clamped <= 0) return '';
+    if (clamped <= 0) return "";
     const parts: string[] = [];
     const steps = Math.max(2, Math.round((clamped / MAX_POINTS) * SAMPLES));
     for (let i = 0; i <= steps; i++) {
@@ -97,8 +90,8 @@ export default function TodayProgressChart({
     const baseY = toY(0);
     parts.push(`L${endX},${baseY}`);
     parts.push(`L${startX},${baseY}`);
-    parts.push('Z');
-    return parts.join(' ');
+    parts.push("Z");
+    return parts.join(" ");
   }, [clamped]);
 
   // Current point position
@@ -106,22 +99,16 @@ export default function TodayProgressChart({
   const curY = toY(curveY(clamped));
 
   return (
-    <GlassCard
-      accentColors={[
-        'rgba(110,231,183,0.4)',
-        'rgba(245,158,11,0.3)',
-        'transparent',
-      ]}
-    >
+    <GlassCard accentColors={["rgba(110,231,183,0.4)", "rgba(245,158,11,0.3)", "transparent"]}>
       <View className="p-4">
         {/* Header */}
         <View className="flex-row items-baseline justify-between mb-3">
           <Text
             style={{
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontSize: 9,
               letterSpacing: 0.8,
-              textTransform: 'uppercase',
+              textTransform: "uppercase",
               color: labelColor,
             }}
           >
@@ -130,9 +117,9 @@ export default function TodayProgressChart({
           <View className="flex-row items-baseline gap-1">
             <Text
               style={{
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
                 fontSize: 22,
-                fontWeight: '700',
+                fontWeight: "700",
                 color: textColor,
               }}
             >
@@ -140,7 +127,7 @@ export default function TodayProgressChart({
             </Text>
             <Text
               style={{
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
                 fontSize: 10,
                 color: labelColor,
               }}
@@ -169,12 +156,12 @@ export default function TodayProgressChart({
             <Path
               d={baselinePath}
               fill="none"
-              stroke={isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}
+              stroke={isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}
               strokeWidth={1.5}
             />
 
             {/* Milestone vertical lines and dots */}
-            {MILESTONES.map(ms => {
+            {MILESTONES.map((ms) => {
               const mx = toX(ms.value);
               const my = toY(curveY(ms.value));
               const reached = clamped >= ms.value;
@@ -185,9 +172,7 @@ export default function TodayProgressChart({
                     y1={toY(0)}
                     x2={mx}
                     y2={my}
-                    stroke={
-                      isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)'
-                    }
+                    stroke={isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)"}
                     strokeWidth={1}
                     strokeDasharray="4,4"
                   />
@@ -196,11 +181,7 @@ export default function TodayProgressChart({
                     cy={my}
                     r={2.5}
                     fill={
-                      reached
-                        ? '#6ee7b7'
-                        : isDark
-                          ? 'rgba(255,255,255,0.12)'
-                          : 'rgba(0,0,0,0.08)'
+                      reached ? "#6ee7b7" : isDark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.08)"
                     }
                   />
                 </React.Fragment>
@@ -215,17 +196,14 @@ export default function TodayProgressChart({
               <Path
                 d={(() => {
                   const parts: string[] = [];
-                  const steps = Math.max(
-                    2,
-                    Math.round((clamped / MAX_POINTS) * SAMPLES)
-                  );
+                  const steps = Math.max(2, Math.round((clamped / MAX_POINTS) * SAMPLES));
                   for (let i = 0; i <= steps; i++) {
                     const v = (i / steps) * clamped;
                     const x = toX(v);
                     const y = toY(curveY(v));
                     parts.push(i === 0 ? `M${x},${y}` : `L${x},${y}`);
                   }
-                  return parts.join(' ');
+                  return parts.join(" ");
                 })()}
                 fill="none"
                 stroke="#6ee7b7"
@@ -238,24 +216,24 @@ export default function TodayProgressChart({
           </Svg>
 
           {/* Milestone labels below chart — positioned at actual X */}
-          <View style={{ position: 'relative', height: 14, marginTop: 4 }}>
-            {MILESTONES.map(ms => {
+          <View style={{ position: "relative", height: 14, marginTop: 4 }}>
+            {MILESTONES.map((ms) => {
               const reached = clamped >= ms.value;
               const xPct = (ms.value / MAX_POINTS) * 100;
               return (
                 <Text
                   key={ms.label}
                   style={{
-                    position: 'absolute',
+                    position: "absolute",
                     left: `${xPct}%`,
                     transform: [{ translateX: -16 }],
-                    fontFamily: 'monospace',
+                    fontFamily: "monospace",
                     fontSize: 8,
                     color: reached
-                      ? '#6ee7b7'
+                      ? "#6ee7b7"
                       : isDark
-                        ? 'rgba(250,250,250,0.18)'
-                        : 'rgba(0,0,0,0.2)',
+                        ? "rgba(250,250,250,0.18)"
+                        : "rgba(0,0,0,0.2)",
                   }}
                 >
                   {ms.label}
@@ -320,17 +298,13 @@ function StatCell({
   return (
     <View
       className="flex-1 items-center"
-      style={
-        border
-          ? { borderLeftWidth: 1, borderLeftColor: separatorColor }
-          : undefined
-      }
+      style={border ? { borderLeftWidth: 1, borderLeftColor: separatorColor } : undefined}
     >
       <Text
         style={{
-          fontFamily: 'monospace',
+          fontFamily: "monospace",
           fontSize: 16,
-          fontWeight: '700',
+          fontWeight: "700",
           color,
           lineHeight: 20,
         }}
@@ -339,10 +313,10 @@ function StatCell({
       </Text>
       <Text
         style={{
-          fontFamily: 'monospace',
+          fontFamily: "monospace",
           fontSize: 7,
           letterSpacing: 0.5,
-          textTransform: 'uppercase',
+          textTransform: "uppercase",
           color: labelColor,
           marginTop: 1,
         }}

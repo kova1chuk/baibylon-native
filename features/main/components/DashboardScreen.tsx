@@ -1,34 +1,39 @@
-import React from 'react';
+import React from "react";
 
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, RefreshControl } from "react-native";
 
-import { useAuth } from '@/contexts/AuthContext';
-import { useGetDashboardHomeQuery } from '@/features/hub/api/dashboardApi';
+import { useAuth } from "@/contexts/AuthContext";
+import { useGetDashboardHomeQuery } from "@/features/hub/api/dashboardApi";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
+import { useRefetchOnFocus } from "@/hooks/useRefetchOnFocus";
+import { useRefreshControl } from "@/hooks/useRefreshControl";
 
-import AmbientOrbs from './dashboard/AmbientOrbs';
-import CefrLevelCard from './dashboard/CefrLevelCard';
-import DashboardHeader from './dashboard/DashboardHeader';
-import DetailedStatsLink from './dashboard/DetailedStatsLink';
-import GreetingCard from './dashboard/GreetingCard';
-import TodayProgressChart from './dashboard/TodayProgressChart';
-import WellKnownWordsCard from './dashboard/WellKnownWordsCard';
+import AmbientOrbs from "./dashboard/AmbientOrbs";
+import CefrLevelCard from "./dashboard/CefrLevelCard";
+import DashboardHeader from "./dashboard/DashboardHeader";
+import DetailedStatsLink from "./dashboard/DetailedStatsLink";
+import GreetingCard from "./dashboard/GreetingCard";
+import TodayProgressChart from "./dashboard/TodayProgressChart";
+import WellKnownWordsCard from "./dashboard/WellKnownWordsCard";
 
 export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const colors = useColors();
   const { user } = useAuth();
 
-  const { data: dashboardHome } = useGetDashboardHomeQuery();
+  const { data: dashboardHome, refetch } = useGetDashboardHomeQuery();
+
+  useRefetchOnFocus([refetch]);
+  const { refreshing, onRefresh } = useRefreshControl([refetch]);
 
   const firstName =
-    user?.user_metadata?.full_name?.split(' ')[0] ||
-    user?.user_metadata?.name?.split(' ')[0] ||
-    user?.email?.split('@')[0] ||
-    '';
+    user?.user_metadata?.full_name?.split(" ")[0] ||
+    user?.user_metadata?.name?.split(" ")[0] ||
+    user?.email?.split("@")[0] ||
+    "";
 
   return (
     <View className="flex-1" style={{ backgroundColor: colors.background }}>
@@ -39,13 +44,11 @@ export default function DashboardScreen() {
         contentContainerStyle={{
           paddingBottom: 100,
           flexGrow: 1,
-          justifyContent: 'center',
+          justifyContent: "center",
         }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
-        <View
-          className="relative"
-          style={{ maxWidth: 540, alignSelf: 'center', width: '100%' }}
-        >
+        <View className="relative" style={{ maxWidth: 540, alignSelf: "center", width: "100%" }}>
           <AmbientOrbs />
 
           <View className="relative z-[1] px-5" style={{ gap: 8 }}>
@@ -67,7 +70,7 @@ export default function DashboardScreen() {
               </View>
               <View className="flex-1">
                 <CefrLevelCard
-                  level={dashboardHome?.cefrLevel ?? 'A1'}
+                  level={dashboardHome?.cefrLevel ?? "A1"}
                   skillVocabulary={dashboardHome?.skillVocabulary ?? 0}
                   skillGrammar={dashboardHome?.skillGrammar ?? 0}
                   skillReading={dashboardHome?.skillReading ?? 0}

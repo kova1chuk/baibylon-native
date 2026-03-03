@@ -1,8 +1,8 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect } from "react";
 
-import type { UnifiedQueueItem } from '@/entities/dictionary/api/types';
+import type { UnifiedQueueItem } from "@/entities/dictionary/api/types";
 
-export type SmartSessionPhase = 'idle' | 'active' | 'summary';
+export type SmartSessionPhase = "idle" | "active" | "summary";
 
 export interface ItemResult {
   correct: boolean;
@@ -12,20 +12,12 @@ export interface ItemResult {
 
 interface UseSmartSessionInput {
   items: UnifiedQueueItem[];
-  onSubmitResult?: (
-    item: UnifiedQueueItem,
-    correct: boolean,
-    quality: number
-  ) => void;
+  onSubmitResult?: (item: UnifiedQueueItem, correct: boolean, quality: number) => void;
   onNeedMoreItems?: () => void;
 }
 
-export function useSmartSession({
-  items,
-  onSubmitResult,
-  onNeedMoreItems,
-}: UseSmartSessionInput) {
-  const [phase, setPhase] = useState<SmartSessionPhase>('idle');
+export function useSmartSession({ items, onSubmitResult, onNeedMoreItems }: UseSmartSessionInput) {
+  const [phase, setPhase] = useState<SmartSessionPhase>("idle");
   const [sessionItems, setSessionItems] = useState<UnifiedQueueItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [results, setResults] = useState<Map<string, ItemResult>>(new Map());
@@ -47,7 +39,7 @@ export function useSmartSession({
     stopTimer();
     setElapsedSeconds(0);
     timerRef.current = setInterval(() => {
-      setElapsedSeconds(prev => prev + 1);
+      setElapsedSeconds((prev) => prev + 1);
     }, 1000);
   }, [stopTimer]);
 
@@ -65,38 +57,38 @@ export function useSmartSession({
       setIsLocked(false);
       setStreakCurrent(0);
       setStreakBest(0);
-      setPhase('active');
+      setPhase("active");
       startTimer();
     },
-    [items, startTimer]
+    [items, startTimer],
   );
 
   const addItems = useCallback((newItems: UnifiedQueueItem[]) => {
-    setSessionItems(prev => {
-      const existingIds = new Set(prev.map(i => i.metadataId));
-      const unique = newItems.filter(i => !existingIds.has(i.metadataId));
+    setSessionItems((prev) => {
+      const existingIds = new Set(prev.map((i) => i.metadataId));
+      const unique = newItems.filter((i) => !existingIds.has(i.metadataId));
       return [...prev, ...unique];
     });
   }, []);
 
   const submitAnswer = useCallback(
     (correct: boolean, quality: number, answer?: string) => {
-      if (phase !== 'active' || isLocked) return;
+      if (phase !== "active" || isLocked) return;
       const item = sessionItems[currentIndex];
       if (!item) return;
 
       setIsLocked(true);
 
-      setResults(prev => {
+      setResults((prev) => {
         const next = new Map(prev);
         next.set(item.metadataId, { correct, quality, answer });
         return next;
       });
 
       if (correct) {
-        setStreakCurrent(prev => {
+        setStreakCurrent((prev) => {
           const next = prev + 1;
-          setStreakBest(best => Math.max(best, next));
+          setStreakBest((best) => Math.max(best, next));
           return next;
         });
       } else {
@@ -105,15 +97,15 @@ export function useSmartSession({
 
       onSubmitResult?.(item, correct, quality);
     },
-    [phase, isLocked, sessionItems, currentIndex, onSubmitResult]
+    [phase, isLocked, sessionItems, currentIndex, onSubmitResult],
   );
 
   const nextItem = useCallback(() => {
-    if (phase !== 'active') return;
+    if (phase !== "active") return;
     setIsLocked(false);
 
     if (currentIndex < sessionItems.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
 
       const remaining = sessionItems.length - 1 - currentIndex;
       if (remaining <= 5 && onNeedMoreItems) {
@@ -123,19 +115,19 @@ export function useSmartSession({
       onNeedMoreItems();
     } else {
       stopTimer();
-      setPhase('summary');
+      setPhase("summary");
     }
   }, [phase, currentIndex, sessionItems.length, stopTimer, onNeedMoreItems]);
 
   const endSession = useCallback(() => {
-    if (phase !== 'active') return;
+    if (phase !== "active") return;
     stopTimer();
-    setPhase('summary');
+    setPhase("summary");
   }, [phase, stopTimer]);
 
   const reset = useCallback(() => {
     stopTimer();
-    setPhase('idle');
+    setPhase("idle");
     setSessionItems([]);
     setCurrentIndex(0);
     setResults(new Map());
@@ -146,7 +138,7 @@ export function useSmartSession({
   }, [stopTimer]);
 
   const retryMistakes = useCallback(() => {
-    const mistakes = sessionItems.filter(item => {
+    const mistakes = sessionItems.filter((item) => {
       const result = results.get(item.metadataId);
       return result && !result.correct;
     });
@@ -157,19 +149,17 @@ export function useSmartSession({
   const currentItem = sessionItems[currentIndex] ?? null;
 
   const resultValues = Array.from(results.values());
-  const correctCount = resultValues.filter(r => r.correct).length;
-  const wrongCount = resultValues.filter(r => !r.correct).length;
+  const correctCount = resultValues.filter((r) => r.correct).length;
+  const wrongCount = resultValues.filter((r) => !r.correct).length;
   const accuracy =
-    resultValues.length > 0
-      ? Math.round((correctCount / resultValues.length) * 100)
-      : 0;
+    resultValues.length > 0 ? Math.round((correctCount / resultValues.length) * 100) : 0;
 
   const typeCounts = sessionItems.reduce(
     (acc, item) => {
       acc[item.itemType] = (acc[item.itemType] || 0) + 1;
       return acc;
     },
-    {} as Record<string, number>
+    {} as Record<string, number>,
   );
 
   const completedCount = results.size;

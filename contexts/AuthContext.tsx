@@ -1,10 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { Session, User } from '@supabase/supabase-js';
+import { Session, User } from "@supabase/supabase-js";
 
-import { logout, setSupabaseUser } from '@/entities/user/model/authSlice';
-import { supabase } from '@/lib/supabase';
-import { useAppDispatch } from '@/shared/model/store';
+import { logout, setSupabaseUser } from "@/entities/user/model/authSlice";
+import { supabase } from "@/lib/supabase";
+import { useAppDispatch } from "@/shared/model/store";
 
 interface AuthContextType {
   session: Session | null;
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

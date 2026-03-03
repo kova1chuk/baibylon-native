@@ -1,9 +1,9 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
-import { WordStatus } from '@/shared/types';
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
+import { WordStatus } from "@/shared/types";
 
-import type { WordNlpDataDto } from '@/shared/types/openapi';
+import type { WordNlpDataDto } from "@/shared/types/openapi";
 
 export type WordNlpData = WordNlpDataDto;
 
@@ -49,20 +49,20 @@ export interface WordTrainingStats {
 }
 
 export const wordApi = createApi({
-  reducerPath: 'wordApi',
+  reducerPath: "wordApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['Word'],
-  endpoints: builder => ({
+  tagTypes: ["Word"],
+  endpoints: (builder) => ({
     reloadWord: builder.mutation<
       { definition: string; translatedText: string },
       { langCode: string; id: string }
     >({
       query: ({ langCode, id }) => ({
         url: `/dictionary/words/${id}/reload`,
-        method: 'POST',
+        method: "POST",
         body: { langCode },
       }),
-      invalidatesTags: ['Word'],
+      invalidatesTags: ["Word"],
     }),
 
     updateWordStatus: builder.mutation<
@@ -75,10 +75,10 @@ export const wordApi = createApi({
     >({
       query: ({ langCode, id, newStatus }) => ({
         url: `/dictionary/words/${id}/status`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { langCode, newStatus },
       }),
-      invalidatesTags: ['Word'],
+      invalidatesTags: ["Word"],
     }),
 
     removeWordFromDictionary: builder.mutation<
@@ -90,10 +90,10 @@ export const wordApi = createApi({
     >({
       query: ({ langCode, id }) => ({
         url: `/dictionary/words/${id}`,
-        method: 'DELETE',
+        method: "DELETE",
         params: { langCode },
       }),
-      invalidatesTags: ['Word'],
+      invalidatesTags: ["Word"],
     }),
 
     getWordNlpData: builder.query<WordNlpData | null, { wordText: string }>({
@@ -106,9 +106,9 @@ export const wordApi = createApi({
     }),
 
     startTrainingSession: builder.mutation<string, { exerciseType?: string }>({
-      query: ({ exerciseType = 'flashcard' }) => ({
-        url: '/dictionary/training/sessions',
-        method: 'POST',
+      query: ({ exerciseType = "flashcard" }) => ({
+        url: "/dictionary/training/sessions",
+        method: "POST",
         body: { exerciseType },
       }),
     }),
@@ -135,17 +135,9 @@ export const wordApi = createApi({
         correctAnswer?: string;
       }
     >({
-      query: ({
-        wordId,
-        trainingType,
-        result,
-        quality,
-        sessionId,
-        userAnswer,
-        correctAnswer,
-      }) => ({
-        url: '/dictionary/training/result',
-        method: 'POST',
+      query: ({ wordId, trainingType, result, quality, sessionId, userAnswer, correctAnswer }) => ({
+        url: "/dictionary/training/result",
+        method: "POST",
         body: {
           wordId,
           trainingType,
@@ -156,13 +148,13 @@ export const wordApi = createApi({
           ...(correctAnswer != null ? { correctAnswer } : {}),
         },
       }),
-      invalidatesTags: ['Word'],
+      invalidatesTags: ["Word"],
     }),
 
     completeTrainingSession: builder.mutation<void, { sessionId: string }>({
       query: ({ sessionId }) => ({
         url: `/dictionary/training/sessions/${sessionId}/complete`,
-        method: 'POST',
+        method: "POST",
       }),
     }),
 
@@ -170,7 +162,7 @@ export const wordApi = createApi({
       query: ({ wordId }) => ({
         url: `/dictionary/words/${wordId}/training-stats`,
       }),
-      providesTags: ['Word'],
+      providesTags: ["Word"],
     }),
 
     getWordTrainingHistory: builder.query<
@@ -181,7 +173,7 @@ export const wordApi = createApi({
         url: `/dictionary/words/${wordId}/training-history`,
         params: { limit, offset },
       }),
-      providesTags: ['Word'],
+      providesTags: ["Word"],
     }),
 
     getGlobalTrainingHistory: builder.query<
@@ -192,7 +184,7 @@ export const wordApi = createApi({
         url: `/dictionary/training/history`,
         params: { limit, offset },
       }),
-      providesTags: ['Word'],
+      providesTags: ["Word"],
     }),
   }),
 });

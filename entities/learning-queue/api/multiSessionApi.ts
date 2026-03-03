@@ -1,17 +1,12 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { dictionaryApi } from '@/entities/dictionary/api/dictionaryApi';
-import { dashboardApi } from '@/features/hub/api/dashboardApi';
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { dictionaryApi } from "@/entities/dictionary/api/dictionaryApi";
+import { dashboardApi } from "@/features/hub/api/dashboardApi";
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
-import type { ExerciseType, FocusFilter } from '../model/learningQueueSlice';
+import type { ExerciseType, FocusFilter } from "../model/learningQueueSlice";
 
-import type {
-  LearningItemType,
-  LearningStage,
-  CEFRLevel,
-  DailyPlanData,
-} from './types';
+import type { LearningItemType, LearningStage, CEFRLevel, DailyPlanData } from "./types";
 
 interface StartSessionResponse {
   success: boolean;
@@ -127,7 +122,7 @@ interface LearningStatisticsResponse {
   data: LearningStatisticsData;
 }
 
-export type GoalIntensity = 'casual' | 'regular' | 'intensive';
+export type GoalIntensity = "casual" | "regular" | "intensive";
 
 export interface DailyProgressData {
   todayScore: number;
@@ -201,12 +196,12 @@ export interface GrammarMistakeSummaryItem {
 }
 
 export const multiSessionApi = createApi({
-  reducerPath: 'multiSessionApi',
+  reducerPath: "multiSessionApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['MultiSession', 'DailyPlan', 'SessionAnalytics'],
-  endpoints: builder => ({
+  tagTypes: ["MultiSession", "DailyPlan", "SessionAnalytics"],
+  endpoints: (builder) => ({
     startMultiSession: builder.mutation<
-      StartSessionResponse['data'],
+      StartSessionResponse["data"],
       {
         focusFilter?: FocusFilter;
         topicId?: string;
@@ -215,15 +210,9 @@ export const multiSessionApi = createApi({
         preferredExerciseType?: ExerciseType;
       }
     >({
-      query: ({
-        focusFilter = 'all',
-        topicId,
-        ruleId,
-        level,
-        preferredExerciseType,
-      }) => ({
-        url: '/learning-queue/session/start',
-        method: 'POST',
+      query: ({ focusFilter = "all", topicId, ruleId, level, preferredExerciseType }) => ({
+        url: "/learning-queue/session/start",
+        method: "POST",
         body: {
           focusFilter,
           ...(topicId ? { topicId } : {}),
@@ -235,28 +224,21 @@ export const multiSessionApi = createApi({
       transformResponse: (response: StartSessionResponse) => response.data,
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['DictionaryStats', 'Words'])
-        );
+        dispatch(dictionaryApi.util.invalidateTags(["DictionaryStats", "Words"]));
       },
     }),
 
-    getNextExercise: builder.query<
-      NextExerciseData | null,
-      { sessionId: string }
-    >({
+    getNextExercise: builder.query<NextExerciseData | null, { sessionId: string }>({
       query: ({ sessionId }) => ({
         url: `/learning-queue/session/${sessionId}/next-exercise`,
-        method: 'GET',
+        method: "GET",
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: NextExerciseData | null;
-      }) => response.data,
+      transformResponse: (response: { success: boolean; data: NextExerciseData | null }) =>
+        response.data,
     }),
 
     submitExerciseResult: builder.mutation<
-      SubmitResultResponse['data'],
+      SubmitResultResponse["data"],
       {
         sessionId: string;
         metadataId: string;
@@ -269,142 +251,124 @@ export const multiSessionApi = createApi({
         generatedExerciseId?: string;
       }
     >({
-      query: body => ({
-        url: '/learning-queue/session/exercise-result',
-        method: 'POST',
+      query: (body) => ({
+        url: "/learning-queue/session/exercise-result",
+        method: "POST",
         body,
       }),
       transformResponse: (response: SubmitResultResponse) => response.data,
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['DictionaryStats', 'Words'])
-        );
-        dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
-        dispatch(multiSessionApi.util.invalidateTags(['DailyPlan']));
+        dispatch(dictionaryApi.util.invalidateTags(["DictionaryStats", "Words"]));
+        dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
+        dispatch(multiSessionApi.util.invalidateTags(["DailyPlan"]));
       },
     }),
 
-    endMultiSession: builder.mutation<
-      EndSessionResponse['data'],
-      { sessionId: string }
-    >({
+    endMultiSession: builder.mutation<EndSessionResponse["data"], { sessionId: string }>({
       query: ({ sessionId }) => ({
         url: `/learning-queue/session/${sessionId}/end`,
-        method: 'POST',
+        method: "POST",
       }),
       transformResponse: (response: EndSessionResponse) => response.data,
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['DictionaryStats', 'Words'])
-        );
-        dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
-        dispatch(
-          multiSessionApi.util.invalidateTags(['DailyPlan', 'SessionAnalytics'])
-        );
+        dispatch(dictionaryApi.util.invalidateTags(["DictionaryStats", "Words"]));
+        dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
+        dispatch(multiSessionApi.util.invalidateTags(["DailyPlan", "SessionAnalytics"]));
       },
     }),
 
     getDailySummary: builder.query<DailySummaryData, void>({
       query: () => ({
-        url: '/learning-queue/daily-summary',
-        method: 'GET',
+        url: "/learning-queue/daily-summary",
+        method: "GET",
       }),
       transformResponse: (response: DailySummaryResponse) => response.data,
     }),
 
     getDailyPlan: builder.query<DailyPlanData, void>({
       query: () => ({
-        url: '/learning-queue/daily-plan',
-        method: 'GET',
+        url: "/learning-queue/daily-plan",
+        method: "GET",
       }),
       transformResponse: (response: DailyPlanResponse) => response.data,
-      providesTags: ['DailyPlan'],
+      providesTags: ["DailyPlan"],
     }),
 
     getDailyProgress: builder.query<DailyProgressData, void>({
       query: () => ({
-        url: '/learning-queue/daily-progress',
-        method: 'GET',
+        url: "/learning-queue/daily-progress",
+        method: "GET",
       }),
       transformResponse: (response: DailyProgressResponse) => response.data,
-      providesTags: ['SessionAnalytics'],
+      providesTags: ["SessionAnalytics"],
     }),
 
     updateGoalIntensity: builder.mutation<void, { intensity: GoalIntensity }>({
       query: ({ intensity }) => ({
-        url: '/learning-queue/goal-intensity',
-        method: 'PUT',
+        url: "/learning-queue/goal-intensity",
+        method: "PUT",
         body: { intensity },
       }),
-      invalidatesTags: ['SessionAnalytics'],
+      invalidatesTags: ["SessionAnalytics"],
     }),
 
     getSessionHistory: builder.query<
       SessionHistoryItem[],
       { days?: number; limit?: number } | void
     >({
-      query: args => ({
+      query: (args) => ({
         url: `/learning-queue/session-history?days=${args?.days ?? 30}&limit=${args?.limit ?? 20}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response: SessionHistoryResponse) => response.data,
-      providesTags: ['SessionAnalytics'],
+      providesTags: ["SessionAnalytics"],
     }),
 
     getStreakInfo: builder.query<StreakInfoData, void>({
       query: () => ({
-        url: '/learning-queue/streak-info',
-        method: 'GET',
+        url: "/learning-queue/streak-info",
+        method: "GET",
       }),
       transformResponse: (response: StreakInfoResponse) => response.data,
-      providesTags: ['SessionAnalytics'],
+      providesTags: ["SessionAnalytics"],
     }),
 
     getLearningStatistics: builder.query<LearningStatisticsData, void>({
       query: () => ({
-        url: '/learning-queue/statistics',
-        method: 'GET',
+        url: "/learning-queue/statistics",
+        method: "GET",
       }),
-      transformResponse: (response: LearningStatisticsResponse) =>
-        response.data,
-      providesTags: ['SessionAnalytics'],
+      transformResponse: (response: LearningStatisticsResponse) => response.data,
+      providesTags: ["SessionAnalytics"],
     }),
 
     getErrorHistory: builder.query<ErrorHistoryItem[], { limit?: number }>({
       query: ({ limit = 50 }) => ({
         url: `/learning-queue/error-history?limit=${limit}`,
-        method: 'GET',
+        method: "GET",
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: ErrorHistoryItem[];
-      }) => response.data,
+      transformResponse: (response: { success: boolean; data: ErrorHistoryItem[] }) =>
+        response.data,
     }),
 
-    getGrammarMistakes: builder.query<GrammarMistakeItem[], { limit?: number }>(
-      {
-        query: ({ limit = 50 }) => ({
-          url: `/grammar/mistakes?limit=${limit}`,
-          method: 'GET',
-        }),
-        transformResponse: (response: {
-          success: boolean;
-          data: GrammarMistakeItem[];
-        }) => response.data,
-      }
-    ),
+    getGrammarMistakes: builder.query<GrammarMistakeItem[], { limit?: number }>({
+      query: ({ limit = 50 }) => ({
+        url: `/grammar/mistakes?limit=${limit}`,
+        method: "GET",
+      }),
+      transformResponse: (response: { success: boolean; data: GrammarMistakeItem[] }) =>
+        response.data,
+    }),
 
     getGrammarMistakeSummary: builder.query<GrammarMistakeSummaryItem[], void>({
       query: () => ({
-        url: '/grammar/mistake-summary',
-        method: 'GET',
+        url: "/grammar/mistake-summary",
+        method: "GET",
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: GrammarMistakeSummaryItem[];
-      }) => response.data,
+      transformResponse: (response: { success: boolean; data: GrammarMistakeSummaryItem[] }) =>
+        response.data,
     }),
   }),
 });

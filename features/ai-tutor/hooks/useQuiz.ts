@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from "react";
 
 import type {
   QuizAnswerPayload,
@@ -9,9 +9,9 @@ import type {
   QuizQuestionEvent,
   QuizResult,
   QuizResultEvent,
-} from '../types/quiz';
+} from "../types/quiz";
 
-import { useSocket } from './useSocket';
+import { useSocket } from "./useSocket";
 
 interface UseQuizOptions {
   onQuestion?: (quiz: QuizQuestion, message: string) => void;
@@ -55,12 +55,9 @@ export function useQuiz(options: UseQuizOptions = {}) {
       onError?.(errorMsg);
     };
 
-    const unsubQuestion = on<QuizQuestionEvent>(
-      'quiz:question',
-      handleQuestion
-    );
-    const unsubResult = on<QuizResultEvent>('quiz:result', handleResult);
-    const unsubError = on<QuizErrorEvent>('quiz:error', handleError);
+    const unsubQuestion = on<QuizQuestionEvent>("quiz:question", handleQuestion);
+    const unsubResult = on<QuizResultEvent>("quiz:result", handleResult);
+    const unsubError = on<QuizErrorEvent>("quiz:error", handleError);
 
     return () => {
       unsubQuestion();
@@ -75,24 +72,22 @@ export function useQuiz(options: UseQuizOptions = {}) {
       setError(null);
       setQuizResult(null);
 
-      emit('quiz:generate', { direction, difficulty });
+      emit("quiz:generate", { direction, difficulty });
     },
-    [emit]
+    [emit],
   );
 
   const submitAnswer = useCallback(
     (selectedOption: string) => {
       if (!currentQuiz) {
-        setError('No active quiz');
+        setError("No active quiz");
         return;
       }
 
       setIsLoading(true);
       setError(null);
 
-      const timeSpentMs = quizStartTimeRef.current
-        ? Date.now() - quizStartTimeRef.current
-        : 0;
+      const timeSpentMs = quizStartTimeRef.current ? Date.now() - quizStartTimeRef.current : 0;
 
       const payload: QuizAnswerPayload = {
         quizId: currentQuiz.id,
@@ -100,9 +95,9 @@ export function useQuiz(options: UseQuizOptions = {}) {
         timeSpentMs,
       };
 
-      emit('quiz:answer', payload);
+      emit("quiz:answer", payload);
     },
-    [currentQuiz, emit]
+    [currentQuiz, emit],
   );
 
   const resetQuiz = useCallback(() => {

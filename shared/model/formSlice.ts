@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface FormState {
   auth: {
@@ -31,7 +31,7 @@ interface FormState {
 
   training: {
     selectedStatuses: string[];
-    trainingMode: 'word' | 'sentence';
+    trainingMode: "word" | "sentence";
   };
 
   filters: {
@@ -43,47 +43,47 @@ interface FormState {
 
 const initialState: FormState = {
   auth: {
-    email: '',
-    password: '',
-    confirmPassword: '',
-    error: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    error: "",
     loading: false,
   },
 
   word: {
-    newWord: '',
-    newDefinition: '',
-    newExample: '',
+    newWord: "",
+    newDefinition: "",
+    newExample: "",
     submitting: false,
-    error: '',
+    error: "",
     selectedStatuses: [1, 2, 3, 4, 5],
-    searchQuery: '',
-    sortBy: 'createdAt',
-    sortOrder: 'desc',
+    searchQuery: "",
+    sortBy: "createdAt",
+    sortOrder: "desc",
     pageSize: 12,
     currentPage: 1,
   },
 
   review: {
-    title: '',
+    title: "",
     isEditingTitle: false,
     isSaved: false,
   },
 
   training: {
-    selectedStatuses: ['to_learn', 'want_repeat', 'unset'],
-    trainingMode: 'word',
+    selectedStatuses: ["to_learn", "want_repeat", "unset"],
+    trainingMode: "word",
   },
 
   filters: {
-    statusFilter: 'all',
+    statusFilter: "all",
     currentPage: 1,
     pageSize: 12,
   },
 };
 
 const formSlice = createSlice({
-  name: 'form',
+  name: "form",
   initialState,
   reducers: {
     setAuthEmail: (state, action: PayloadAction<string>) => {
@@ -101,11 +101,11 @@ const formSlice = createSlice({
     setAuthLoading: (state, action: PayloadAction<boolean>) => {
       state.auth.loading = action.payload;
     },
-    clearAuthForm: state => {
-      state.auth.email = '';
-      state.auth.password = '';
-      state.auth.confirmPassword = '';
-      state.auth.error = '';
+    clearAuthForm: (state) => {
+      state.auth.email = "";
+      state.auth.password = "";
+      state.auth.confirmPassword = "";
+      state.auth.error = "";
       state.auth.loading = false;
     },
 
@@ -124,12 +124,12 @@ const formSlice = createSlice({
     setWordError: (state, action: PayloadAction<string>) => {
       state.word.error = action.payload;
     },
-    clearWordForm: state => {
-      state.word.newWord = '';
-      state.word.newDefinition = '';
-      state.word.newExample = '';
+    clearWordForm: (state) => {
+      state.word.newWord = "";
+      state.word.newDefinition = "";
+      state.word.newExample = "";
       state.word.submitting = false;
-      state.word.error = '';
+      state.word.error = "";
     },
 
     setReviewTitle: (state, action: PayloadAction<string>) => {
@@ -145,7 +145,7 @@ const formSlice = createSlice({
     setSelectedStatuses: (state, action: PayloadAction<string[]>) => {
       state.training.selectedStatuses = action.payload;
     },
-    setTrainingMode: (state, action: PayloadAction<'word' | 'sentence'>) => {
+    setTrainingMode: (state, action: PayloadAction<"word" | "sentence">) => {
       state.training.trainingMode = action.payload;
     },
 

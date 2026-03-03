@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { View } from 'react-native';
+import { View } from "react-native";
 
-import { WelcomeScreen } from '@/features/main';
+import { WelcomeScreen } from "@/features/main";
 
 export default function HomeScreen() {
   return (

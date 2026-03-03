@@ -1,22 +1,20 @@
-import { createClient } from '@supabase/supabase-js';
-import 'react-native-url-polyfill/auto';
+import { createClient } from "@supabase/supabase-js";
+import "react-native-url-polyfill/auto";
 
-import { Platform } from 'react-native';
+import { Platform } from "react-native";
 
-import type { Database } from '@/types/supabase';
+import type { Database } from "@/types/supabase";
 
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Missing Supabase environment variables. Please check your .env file.'
-  );
+  throw new Error("Missing Supabase environment variables. Please check your .env file.");
 }
 
 const MAX_SECURE_STORE_SIZE = 2048;
 
-const isSSR = Platform.OS === 'web' && typeof window === 'undefined';
+const isSSR = Platform.OS === "web" && typeof window === "undefined";
 
 // SSR-safe no-op storage — real storage is only used on the client
 const NoopStorage = {
@@ -27,15 +25,14 @@ const NoopStorage = {
 
 function createHybridStorage() {
   // Lazy-load native modules to avoid SSR crashes
-  const AsyncStorageModule =
-    require('@react-native-async-storage/async-storage') as {
-      default: {
-        getItem: (key: string) => Promise<string | null>;
-        setItem: (key: string, value: string) => Promise<void>;
-        removeItem: (key: string) => Promise<void>;
-      };
+  const AsyncStorageModule = require("@react-native-async-storage/async-storage") as {
+    default: {
+      getItem: (key: string) => Promise<string | null>;
+      setItem: (key: string, value: string) => Promise<void>;
+      removeItem: (key: string) => Promise<void>;
     };
-  const SecureStore = require('expo-secure-store') as {
+  };
+  const SecureStore = require("expo-secure-store") as {
     getItemAsync: (key: string) => Promise<string | null>;
     setItemAsync: (key: string, value: string) => Promise<void>;
     deleteItemAsync: (key: string) => Promise<void>;
@@ -64,10 +61,7 @@ function createHybridStorage() {
           await AsyncStorage.removeItem(key);
           return;
         } catch (error: any) {
-          if (
-            error?.message?.includes('2048') ||
-            estimatedSize > MAX_SECURE_STORE_SIZE
-          ) {
+          if (error?.message?.includes("2048") || estimatedSize > MAX_SECURE_STORE_SIZE) {
           } else {
           }
         }

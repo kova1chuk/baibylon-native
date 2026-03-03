@@ -1,17 +1,13 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { useRouter } from 'expo-router';
-import { X } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from "expo-router";
+import { X } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text, Pressable, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, Alert } from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
-import {
-  useGetUnifiedQueueQuery,
-  useSubmitLearningResultMutation,
-} from '@/entities/dictionary/api/dictionaryApi';
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   isContextFillContent,
   isErrorCorrectionContent,
@@ -21,61 +17,141 @@ import {
   isRuleQuizContent,
   isTranslateSentenceContent,
   isTypeTheWordContent,
-} from '@/entities/exercise/api/exerciseApi';
+} from "@/entities/exercise/api/exerciseApi";
+import {
+  useStartMultiSessionMutation,
+  useSubmitExerciseResultMutation,
+  useEndMultiSessionMutation,
+} from "@/entities/learning-queue/api/multiSessionApi";
+import {
+  startMultiSession as startMultiSessionAction,
+  setCurrentExercise,
+  recordExerciseResult,
+  endMultiSession as endMultiSessionAction,
+  resetMultiSession,
+} from "@/entities/learning-queue/model/learningQueueSlice";
+import { useAppDispatch, useAppSelector } from "@/shared/model/store";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
 
-import { useSmartSession } from '../hooks/useSmartSession';
+import ContextFillCard from "./ContextFillCard";
+import ErrorCorrectionCard from "./ErrorCorrectionCard";
+import FlashcardCard from "./FlashcardCard";
+import MultipleChoiceCard from "./MultipleChoiceCard";
+import OddOneOutCard from "./OddOneOutCard";
+import PhraseBuilderCard from "./PhraseBuilderCard";
+import RuleQuizCard from "./RuleQuizCard";
+import SmartSessionSummary from "./SmartSessionSummary";
+import type { SessionConfig } from "./TrainingHubScreen";
+import TranslateSentenceCard from "./TranslateSentenceCard";
+import TypeWordCard from "./TypeWordCard";
 
-import ContextFillCard from './ContextFillCard';
-import ErrorCorrectionCard from './ErrorCorrectionCard';
-import MultipleChoiceCard from './MultipleChoiceCard';
-import OddOneOutCard from './OddOneOutCard';
-import PhraseBuilderCard from './PhraseBuilderCard';
-import RuleQuizCard from './RuleQuizCard';
-import SmartSessionSummary from './SmartSessionSummary';
-import TranslateSentenceCard from './TranslateSentenceCard';
-import TypeWordCard from './TypeWordCard';
-
-import type { UnifiedQueueItem } from '@/entities/dictionary/api/types';
-import type {
-  ExerciseContent,
-  MultipleChoiceContent,
-  TypeTheWordContent,
-} from '@/entities/exercise/api/exerciseApi';
+import type { ExerciseContent, MultipleChoiceContent } from "@/entities/exercise/api/exerciseApi";
+import type { NextExerciseData } from "@/entities/learning-queue/api/multiSessionApi";
+import type { CurrentExercise } from "@/entities/learning-queue/model/learningQueueSlice";
 
 interface TrainingScreenProps {
+  sessionConfig: SessionConfig;
   onBack?: () => void;
 }
 
-export default function TrainingScreen({ onBack }: TrainingScreenProps = {}) {
+function nextExerciseToCurrentExercise(data: NextExerciseData): CurrentExercise {
+  return {
+    metadataId: data.metadataId,
+    exerciseType: data.exerciseType,
+    itemType: data.itemType,
+    itemId: data.itemId,
+    title: data.title,
+    level: data.level,
+    stage: data.stage,
+    totalScore: data.totalScore,
+    exerciseData: data.exerciseData,
+  };
+}
+
+export default function TrainingScreen({ sessionConfig, onBack }: TrainingScreenProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
   const colors = useColors();
+  const dispatch = useAppDispatch();
 
-  const { data: queueItems, isLoading: queueLoading } = useGetUnifiedQueueQuery(
-    { size: 20 }
+  const { sessionId, sessionPhase, currentExercise, stats, exerciseStartTime } = useAppSelector(
+    (state) => state.learningQueue,
   );
-  const [submitLearningResult] = useSubmitLearningResultMutation();
 
-  const items = useMemo(() => queueItems || [], [queueItems]);
+  const [startMultiSession, { isLoading: isStarting }] = useStartMultiSessionMutation();
+  const [submitExerciseResult] = useSubmitExerciseResultMutation();
+  const [endMultiSessionApi] = useEndMultiSessionMutation();
 
-  const session = useSmartSession({
-    items,
-    onSubmitResult: useCallback(
-      (item: { metadataId: string }, correct: boolean, quality: number) => {
-        submitLearningResult({
-          metadataId: item.metadataId,
-          correct,
-          quality,
-        });
-      },
-      [submitLearningResult]
-    ),
-  });
+  const nextExerciseRef = useRef<NextExerciseData | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLocked, setIsLocked] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const sessionStartRef = useRef<number>(Date.now());
+  const hasStartedRef = useRef(false);
+
+  // Best streak tracking
+  const [streakBest, setStreakBest] = useState(0);
+  const currentStreakRef = useRef(0);
+
+  // Auto-start session on mount
+  useEffect(() => {
+    if (hasStartedRef.current) return;
+    hasStartedRef.current = true;
+
+    const start = async () => {
+      try {
+        const result = await startMultiSession({
+          focusFilter: sessionConfig.focusFilter,
+          preferredExerciseType: sessionConfig.preferredExerciseType,
+        }).unwrap();
+
+        dispatch(
+          startMultiSessionAction({
+            sessionId: result.sessionId,
+            firstExercise: result.firstExercise
+              ? nextExerciseToCurrentExercise(result.firstExercise)
+              : null,
+          }),
+        );
+
+        sessionStartRef.current = Date.now();
+      } catch {
+        // Session start failed — go back
+        Alert.alert(
+          t("common.error"),
+          t("training.sessionStartError") || "Could not start session",
+          [{ text: t("common.ok"), onPress: () => goBack() }],
+        );
+      }
+    };
+
+    start();
+
+    return () => {
+      dispatch(resetMultiSession());
+    };
+  }, []);
+
+  // Timer
+  useEffect(() => {
+    if (sessionPhase === "active") {
+      timerRef.current = setInterval(() => {
+        setElapsedSeconds(Math.floor((Date.now() - sessionStartRef.current) / 1000));
+      }, 1000);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [sessionPhase]);
 
   const goBack = useCallback(() => {
     if (onBack) onBack();
@@ -83,141 +159,216 @@ export default function TrainingScreen({ onBack }: TrainingScreenProps = {}) {
   }, [onBack, router]);
 
   const handleExit = useCallback(() => {
-    Alert.alert(t('training.exit'), t('training.stopAnytime'), [
-      { text: t('common.cancel'), style: 'cancel' },
+    Alert.alert(t("training.exit"), t("training.stopAnytime"), [
+      { text: t("common.cancel"), style: "cancel" },
       {
-        text: t('common.exit'),
-        style: 'destructive',
-        onPress: () => {
-          session.reset();
+        text: t("common.exit"),
+        style: "destructive",
+        onPress: async () => {
+          if (sessionId) {
+            try {
+              await endMultiSessionApi({ sessionId }).unwrap();
+            } catch {
+              // Ignore end session errors on exit
+            }
+          }
+          dispatch(resetMultiSession());
           goBack();
         },
       },
     ]);
-  }, [session, goBack, t]);
+  }, [sessionId, goBack, t, endMultiSessionApi, dispatch]);
+
+  const handleEndSession = useCallback(async () => {
+    if (!sessionId) return;
+    try {
+      await endMultiSessionApi({ sessionId }).unwrap();
+    } catch {
+      // Proceed to summary even if end call fails
+    }
+    dispatch(
+      endMultiSessionAction({
+        durationSeconds: Math.floor((Date.now() - sessionStartRef.current) / 1000),
+      }),
+    );
+  }, [sessionId, endMultiSessionApi, dispatch]);
+
+  const handleAnswer = useCallback(
+    async (correct: boolean, quality: number, answer?: string) => {
+      if (!sessionId || !currentExercise || isSubmitting) return;
+
+      setIsSubmitting(true);
+      setIsLocked(true);
+
+      const durationMs = exerciseStartTime ? Date.now() - exerciseStartTime : 0;
+
+      // Track streaks
+      if (correct) {
+        currentStreakRef.current += 1;
+        if (currentStreakRef.current > streakBest) {
+          setStreakBest(currentStreakRef.current);
+        }
+      } else {
+        currentStreakRef.current = 0;
+      }
+
+      try {
+        const result = await submitExerciseResult({
+          sessionId,
+          metadataId: currentExercise.metadataId,
+          exerciseType: currentExercise.exerciseType,
+          correct,
+          quality,
+          durationMs,
+          userAnswer: answer,
+        }).unwrap();
+
+        const previousStage = currentExercise.stage;
+        const newStage = result.updatedState.stage;
+        const stageProgression =
+          previousStage !== newStage
+            ? {
+                metadataId: currentExercise.metadataId,
+                title: currentExercise.title,
+                fromStage: previousStage,
+                toStage: newStage,
+              }
+            : undefined;
+
+        dispatch(
+          recordExerciseResult({
+            metadataId: currentExercise.metadataId,
+            exerciseType: currentExercise.exerciseType,
+            correct,
+            durationMs,
+            stageProgression,
+            scoring: result.scoring,
+          }),
+        );
+
+        nextExerciseRef.current = result.nextExercise;
+      } catch {
+        // If submit fails, still allow continuing
+        nextExerciseRef.current = null;
+      }
+
+      setIsSubmitting(false);
+    },
+    [
+      sessionId,
+      currentExercise,
+      isSubmitting,
+      exerciseStartTime,
+      streakBest,
+      submitExerciseResult,
+      dispatch,
+    ],
+  );
+
+  const handleNext = useCallback(() => {
+    setIsLocked(false);
+    const next = nextExerciseRef.current;
+    if (next) {
+      dispatch(setCurrentExercise(nextExerciseToCurrentExercise(next)));
+      nextExerciseRef.current = null;
+    } else {
+      // No more exercises — end session
+      handleEndSession();
+    }
+  }, [dispatch, handleEndSession]);
 
   const handleDone = useCallback(() => {
-    session.reset();
+    dispatch(resetMultiSession());
     goBack();
-  }, [session, goBack]);
+  }, [dispatch, goBack]);
 
-  if (queueLoading) {
+  const handleContinue = useCallback(async () => {
+    dispatch(resetMultiSession());
+    setElapsedSeconds(0);
+    setStreakBest(0);
+    currentStreakRef.current = 0;
+    sessionStartRef.current = Date.now();
+    hasStartedRef.current = false;
+
+    try {
+      const result = await startMultiSession({
+        focusFilter: sessionConfig.focusFilter,
+        preferredExerciseType: sessionConfig.preferredExerciseType,
+      }).unwrap();
+
+      dispatch(
+        startMultiSessionAction({
+          sessionId: result.sessionId,
+          firstExercise: result.firstExercise
+            ? nextExerciseToCurrentExercise(result.firstExercise)
+            : null,
+        }),
+      );
+    } catch {
+      goBack();
+    }
+  }, [dispatch, startMultiSession, sessionConfig, goBack]);
+
+  // Loading state
+  if (isStarting || sessionPhase === "setup") {
     return (
       <View
         className="flex-1 items-center justify-center"
         style={{ backgroundColor: colors.background }}
       >
         <ActivityIndicator size="large" />
-        <Text className="text-muted-foreground mt-4">
-          {t('learningFeed.loadingQueue')}
-        </Text>
+        <Text className="text-muted-foreground mt-4">{t("learningFeed.loadingQueue")}</Text>
       </View>
     );
   }
 
-  if (session.phase === 'summary') {
+  // Summary screen
+  if (sessionPhase === "summary") {
+    const accuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+
     return (
       <SmartSessionSummary
-        stats={session.stats}
-        elapsedSeconds={session.elapsedSeconds}
-        streakBest={session.streakBest}
-        onContinue={() => session.start()}
-        onRetryMistakes={() => session.retryMistakes()}
+        stats={{
+          total: stats.total,
+          correct: stats.correct,
+          wrong: stats.incorrect,
+          accuracy,
+          typeCounts: stats.itemsByType,
+        }}
+        elapsedSeconds={stats.durationSeconds || elapsedSeconds}
+        streakBest={streakBest}
+        onContinue={handleContinue}
+        onRetryMistakes={handleContinue}
         onDone={handleDone}
-        hasWrongAnswers={session.stats.wrong > 0}
+        hasWrongAnswers={stats.incorrect > 0}
       />
     );
   }
 
-  if (session.phase === 'idle') {
-    const typeCounts = items.reduce(
-      (acc, item) => {
-        acc[item.itemType] = (acc[item.itemType] || 0) + 1;
-        return acc;
-      },
-      {} as Record<string, number>
-    );
-
+  // No exercise available (empty queue from backend)
+  if (!currentExercise) {
     return (
       <View
-        className="flex-1"
-        style={{
-          paddingTop: insets.top + 8,
-          backgroundColor: colors.background,
-        }}
+        className="flex-1 items-center justify-center px-6"
+        style={{ backgroundColor: colors.background }}
       >
-        <View className="flex-row items-center justify-between px-4 pb-4">
-          <Text className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            {t('training.smartSession')}
-          </Text>
-          <Pressable onPress={goBack} className="p-2">
-            <X size={20} color={isDark ? '#FAFAF9' : '#111827'} />
-          </Pressable>
-        </View>
-
-        <View className="flex-1 px-4 justify-center">
-          <View className="bg-card rounded-2xl p-6 shadow-sm">
-            <Text className="text-2xl font-bold text-foreground mb-2">
-              {t('training.smartSession')}
-            </Text>
-            <Text className="text-base text-muted-foreground mb-6">
-              {t('training.smartSessionDesc')}
-            </Text>
-
-            {items.length > 0 ? (
-              <>
-                <View className="mb-6">
-                  <Text className="text-sm font-semibold text-foreground mb-3">
-                    {t('training.queueComposition')}
-                  </Text>
-                  <View className="gap-2">
-                    {Object.entries(typeCounts).map(([type, count]) => (
-                      <View
-                        key={type}
-                        className="flex-row items-center justify-between"
-                      >
-                        <Text className="text-sm text-muted-foreground capitalize">
-                          {type.replace('_', ' ')}
-                        </Text>
-                        <Text className="text-sm font-semibold text-foreground">
-                          {count} {t('training.items')}
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-                </View>
-
-                <Pressable
-                  className="bg-primary rounded-xl py-4 items-center active:opacity-80"
-                  onPress={() => session.start()}
-                >
-                  <Text className="text-white font-semibold text-base">
-                    {t('common.startSession')}
-                  </Text>
-                </Pressable>
-
-                <Text className="text-xs text-muted-foreground text-center mt-3">
-                  {t('training.stopAnytime')}
-                </Text>
-              </>
-            ) : (
-              <View className="items-center py-6">
-                <Text className="text-base text-muted-foreground text-center">
-                  {t('training.noItemsAvailable')}
-                </Text>
-              </View>
-            )}
-          </View>
-        </View>
+        <Text className="text-lg font-semibold text-foreground mb-2">
+          {t("training.allDoneTitle") || "All Done!"}
+        </Text>
+        <Text className="text-base text-muted-foreground text-center mb-6">
+          {t("training.noItemsAvailable")}
+        </Text>
+        <Pressable
+          className="bg-primary rounded-xl py-4 px-8 active:opacity-80"
+          onPress={handleDone}
+        >
+          <Text className="text-white font-semibold text-base">{t("common.done") || "Done"}</Text>
+        </Pressable>
       </View>
     );
   }
 
-  const progress =
-    session.sessionItems.length > 0
-      ? ((session.currentIndex + 1) / session.sessionItems.length) * 100
-      : 0;
-
+  // Active session
   return (
     <View
       className="flex-1"
@@ -225,171 +376,88 @@ export default function TrainingScreen({ onBack }: TrainingScreenProps = {}) {
     >
       <View className="flex-row items-center justify-between px-4 pb-3">
         <Pressable onPress={handleExit} className="p-2 active:opacity-50">
-          <X size={20} color={isDark ? '#FAFAF9' : '#111827'} />
+          <X size={20} color={isDark ? "#FAFAF9" : "#111827"} />
         </Pressable>
 
         <View className="flex-row items-center gap-4">
-          <Text className="text-sm text-muted-foreground">
-            {session.completedCount}/{session.sessionItems.length}
-          </Text>
+          <Text className="text-sm text-muted-foreground">#{stats.total + 1}</Text>
           <Text className="text-sm font-semibold text-foreground">
-            {session.stats.accuracy}%
+            {stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 100}%
           </Text>
         </View>
 
-        <Pressable
-          onPress={() => session.endSession()}
-          className="active:opacity-50"
-        >
-          <Text className="text-sm font-medium text-primary">
-            {t('learningFeed.endSession')}
-          </Text>
+        <Pressable onPress={handleEndSession} className="active:opacity-50">
+          <Text className="text-sm font-medium text-primary">{t("learningFeed.endSession")}</Text>
         </Pressable>
       </View>
 
-      <View className="h-1 mx-4 bg-muted rounded-full overflow-hidden mb-2">
-        <View
-          className="h-full rounded-full bg-primary"
-          style={{ width: `${progress}%` }}
-        />
+      {/* Exercise counter bar */}
+      <View className="flex-row items-center justify-between px-4 mb-2">
+        <View className="flex-row items-center gap-2">
+          <View className="w-2 h-2 rounded-full bg-primary" />
+          <Text className="text-xs text-muted-foreground">
+            {stats.correct} {t("trainingSummary.correct")?.toLowerCase()} / {stats.incorrect}{" "}
+            {t("training.wrong")?.toLowerCase()}
+          </Text>
+        </View>
+        <Text className="text-xs text-muted-foreground font-mono">
+          {Math.floor(elapsedSeconds / 60)}:{String(elapsedSeconds % 60).padStart(2, "0")}
+        </Text>
       </View>
 
-      {session.currentItem && (
-        <ExerciseRouter
-          item={session.currentItem}
-          index={session.currentIndex}
-          isLocked={session.isLocked}
-          onAnswer={session.submitAnswer}
-          onNext={session.nextItem}
-        />
-      )}
+      <ExerciseRouter
+        exercise={currentExercise}
+        isLocked={isLocked}
+        onAnswer={handleAnswer}
+        onNext={handleNext}
+      />
     </View>
   );
 }
 
-function buildContentForItem(
-  item: UnifiedQueueItem,
-  index: number,
-  t: (key: string) => string
-): { type: string; content: ExerciseContent } {
-  const data = item.typeSpecificData || {};
-  const translation = (data.translation as string) || '';
-  const definition = (data.definition as string) || '';
-  const ipa = (data.ipa as string) || (data.phonetic as string) || '';
-  const audioUrl = (data.audioUrl as string) || '';
-  const partOfSpeech = (data.partOfSpeech as string[]) || [];
-  const estimatedLevel = (data.estimatedLevel as string) || null;
-  const currentMastery = (data.currentMastery as number) || 0;
-
-  const wordMeta = {
-    wordId: item.metadataId,
-    word: item.title,
-    translation,
-    definition,
-    ipa,
-    audioUrl,
-    partOfSpeech,
-    estimatedLevel,
-    currentMastery,
-    skill: 0,
-    seenCount: 0,
-    lastSeenAt: null,
-    nextDueAt: null,
-  };
-
-  // Rotate exercise type based on index for variety
-  if (item.itemType === 'word' || item.itemType === 'phrase') {
-    const variant = index % 3;
-
-    if (variant === 0) {
-      const mc: MultipleChoiceContent = {
-        ...wordMeta,
-        direction: 'word_to_translation',
-        prompt: t('learningFeed.chooseTranslation'),
-        options: translation
-          ? [translation, '...', '...', '...']
-          : [item.title, '...', '...', '...'],
-        correctIndex: 0,
-        mcOptionId: null,
-      };
-      return { type: 'multiple_choice', content: mc };
-    }
-
-    if (variant === 1 && translation) {
-      const tw: TypeTheWordContent = {
-        ...wordMeta,
-        prompt: t('learningFeed.typeWord'),
-        correctAnswer: item.title,
-        hint:
-          item.title.length > 2
-            ? `${item.title[0]}...${item.title[item.title.length - 1]}`
-            : '',
-      };
-      return { type: 'type_the_word', content: tw };
-    }
-
-    // Default to multiple choice
-    const mc: MultipleChoiceContent = {
-      ...wordMeta,
-      direction: translation ? 'translation_to_word' : 'word_to_translation',
-      prompt: translation
-        ? t('learningFeed.chooseTranslation')
-        : t('learningFeed.chooseTranslation'),
-      options: translation
-        ? [item.title, '...', '...', '...']
-        : [item.title, '...', '...', '...'],
-      correctIndex: 0,
-      mcOptionId: null,
-    };
-    return { type: 'multiple_choice', content: mc };
-  }
-
-  if (
-    item.itemType === 'grammar_rule' ||
-    item.itemType === 'grammar_vocabulary'
-  ) {
-    const mc: MultipleChoiceContent = {
-      ...wordMeta,
-      direction: 'word_to_translation',
-      prompt: item.title,
-      options: [translation || item.title, '...', '...', '...'],
-      correctIndex: 0,
-      mcOptionId: null,
-    };
-    return { type: 'multiple_choice', content: mc };
-  }
-
-  // Fallback: multiple choice
-  const mc: MultipleChoiceContent = {
-    ...wordMeta,
-    direction: 'word_to_translation',
-    prompt: t('learningFeed.chooseTranslation'),
-    options: [translation || item.title, '...', '...', '...'],
-    correctIndex: 0,
-    mcOptionId: null,
-  };
-  return { type: 'multiple_choice', content: mc };
-}
-
 function ExerciseRouter({
-  item,
-  index,
+  exercise,
   isLocked,
   onAnswer,
   onNext,
 }: {
-  item: UnifiedQueueItem;
-  index: number;
+  exercise: CurrentExercise;
   isLocked: boolean;
   onAnswer: (correct: boolean, quality: number, answer?: string) => void;
   onNext: () => void;
 }) {
-  const { t } = useTranslation();
+  const content = exercise.exerciseData as unknown as ExerciseContent;
 
-  const { content } = useMemo(
-    () => buildContentForItem(item, index, t),
-    [item, index, t]
-  );
+  // Flashcard — uses Word interface, not ExerciseContent
+  if (exercise.exerciseType === "flashcard") {
+    const data = exercise.exerciseData;
+    const word = {
+      id: (data.wordId as string) || exercise.itemId,
+      word: (data.word as string) || exercise.title,
+      definition: (data.definition as string) || "",
+      translation: (data.translation as string) || "",
+      phonetic: {
+        text: (data.ipa as string) || "",
+        audio: (data.audioUrl as string) || "",
+      },
+      status: 1 as const,
+      userId: "",
+      createdAt: "",
+      updatedAt: "",
+    };
+
+    return (
+      <FlashcardCard
+        word={word}
+        onRate={(quality) => {
+          const correct = quality >= 3;
+          onAnswer(correct, quality);
+          // Auto-advance after rating
+          setTimeout(onNext, 300);
+        }}
+      />
+    );
+  }
 
   // Route using type guards for real exercise content
   if (isContextFillContent(content)) {
@@ -497,7 +565,7 @@ function ExerciseRouter({
     );
   }
 
-  // Ultimate fallback — cast to MultipleChoiceContent
+  // Ultimate fallback
   return (
     <MultipleChoiceCard
       content={content as unknown as MultipleChoiceContent}

@@ -1,5 +1,5 @@
-export type QuizDirection = 'native_to_learning' | 'learning_to_native';
-export type QuizDifficulty = 'easy' | 'medium' | 'hard';
+export type QuizDirection = "native_to_learning" | "learning_to_native";
+export type QuizDifficulty = "easy" | "medium" | "hard";
 
 export interface QuizQuestion {
   id: string;

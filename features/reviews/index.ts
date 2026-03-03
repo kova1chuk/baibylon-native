@@ -1,1 +1,1 @@
-export { default as ReviewsScreen } from './components/ReviewsScreen';
+export { default as ReviewsScreen } from "./components/ReviewsScreen";

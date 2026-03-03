@@ -7,8 +7,8 @@ appId: com.vocairo
 - takeScreenshot: 02_auth_screen
 # Check for sign in UI elements
 - assertVisible:
-    text: '.*Sign.*'
+    text: ".*Sign.*"
     optional: true
 - assertVisible:
-    text: '.*Email.*'
+    text: ".*Email.*"
     optional: true

@@ -1,4 +1,4 @@
-import { WordStatus } from '@/shared/types';
+import { WordStatus } from "@/shared/types";
 
 export interface MasteryChange {
   wordId: string;
@@ -64,21 +64,21 @@ export interface UpdateWordRequest {
 }
 
 export const WORD_STATUS_LABELS = {
-  1: 'Not Started',
-  2: 'Discovered',
-  3: 'Learning',
-  4: 'Practicing',
-  5: 'Familiar',
-  6: 'Confident',
-  7: 'Mastered',
+  1: "Not Started",
+  2: "Discovered",
+  3: "Learning",
+  4: "Practicing",
+  5: "Familiar",
+  6: "Confident",
+  7: "Mastered",
 } as const;
 
 export const WORD_STATUS_COLORS = {
-  1: 'bg-status-not-started status-not-started border-status-not-started',
-  2: 'bg-status-discovered status-discovered border-status-discovered',
-  3: 'bg-status-learning status-learning border-status-learning',
-  4: 'bg-status-practicing status-practicing border-status-practicing',
-  5: 'bg-status-familiar status-familiar border-status-familiar',
-  6: 'bg-status-confident status-confident border-status-confident',
-  7: 'bg-status-mastered status-mastered border-status-mastered',
+  1: "bg-status-not-started status-not-started border-status-not-started",
+  2: "bg-status-discovered status-discovered border-status-discovered",
+  3: "bg-status-learning status-learning border-status-learning",
+  4: "bg-status-practicing status-practicing border-status-practicing",
+  5: "bg-status-familiar status-familiar border-status-familiar",
+  6: "bg-status-confident status-confident border-status-confident",
+  7: "bg-status-mastered status-mastered border-status-mastered",
 } as const;

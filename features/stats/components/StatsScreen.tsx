@@ -1,28 +1,22 @@
-import React from 'react';
+import React from "react";
 
-import {
-  BarChart3,
-  BookOpen,
-  Clock,
-  Target,
-  TrendingUp,
-  Trophy,
-  Zap,
-} from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
+import { BarChart3, BookOpen, Clock, Target, TrendingUp, Trophy, Zap } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   useGetStreakInfoQuery,
   useGetLearningStatisticsQuery,
-} from '@/entities/learning-queue/api/multiSessionApi';
-import { useGetActivityHeatmapQuery } from '@/features/hub/api/dashboardApi';
+} from "@/entities/learning-queue/api/multiSessionApi";
+import { useGetActivityHeatmapQuery } from "@/features/hub/api/dashboardApi";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
+import { useRefetchOnFocus } from "@/hooks/useRefetchOnFocus";
+import { useRefreshControl } from "@/hooks/useRefreshControl";
 
-import ActivityHeatmapSection from './ActivityHeatmapSection';
+import ActivityHeatmapSection from "./ActivityHeatmapSection";
 
 interface StatCardProps {
   icon: React.ReactNode;
@@ -38,10 +32,10 @@ function StatCard({ icon, label, value, sub, color, isDark }: StatCardProps) {
     <View
       className="rounded-xl p-4 flex-1"
       style={{
-        backgroundColor: isDark ? '#111113' : '#FFFFFF',
+        backgroundColor: isDark ? "#111113" : "#FFFFFF",
         borderWidth: 1,
-        borderColor: isDark ? '#27272A' : '#E7E5E4',
-        minWidth: '47%',
+        borderColor: isDark ? "#27272A" : "#E7E5E4",
+        minWidth: "47%",
       }}
     >
       <View className="flex-row items-center gap-2 mb-3">
@@ -51,14 +45,10 @@ function StatCard({ icon, label, value, sub, color, isDark }: StatCardProps) {
         >
           {icon}
         </View>
-        <Text className="text-[10px] text-muted-foreground uppercase tracking-wider">
-          {label}
-        </Text>
+        <Text className="text-[10px] text-muted-foreground uppercase tracking-wider">{label}</Text>
       </View>
       <Text className="text-2xl font-bold text-foreground">{value}</Text>
-      {sub ? (
-        <Text className="text-xs text-muted-foreground mt-0.5">{sub}</Text>
-      ) : null}
+      {sub ? <Text className="text-xs text-muted-foreground mt-0.5">{sub}</Text> : null}
     </View>
   );
 }
@@ -71,13 +61,24 @@ function formatHours(hours: number): string {
 export default function StatsScreen() {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
   const colors = useColors();
 
-  const { data: streak, isLoading: loadingStreak } = useGetStreakInfoQuery();
-  const { data: stats, isLoading: loadingStats } =
-    useGetLearningStatisticsQuery();
-  const { data: heatmapData } = useGetActivityHeatmapQuery({ weeks: 12 });
+  const {
+    data: streak,
+    isLoading: loadingStreak,
+    refetch: refetchStreak,
+  } = useGetStreakInfoQuery();
+  const {
+    data: stats,
+    isLoading: loadingStats,
+    refetch: refetchStats,
+  } = useGetLearningStatisticsQuery();
+  const { data: heatmapData, refetch: refetchHeatmap } = useGetActivityHeatmapQuery({ weeks: 12 });
+
+  const allRefetches = [refetchStreak, refetchStats, refetchHeatmap];
+  useRefetchOnFocus(allRefetches);
+  const { refreshing, onRefresh } = useRefreshControl(allRefetches);
 
   const isLoading = loadingStreak || loadingStats;
 
@@ -88,9 +89,7 @@ export default function StatsScreen() {
         style={{ backgroundColor: colors.background }}
       >
         <ActivityIndicator size="large" />
-        <Text className="text-muted-foreground mt-2">
-          {t('common.loading')}
-        </Text>
+        <Text className="text-muted-foreground mt-2">{t("common.loading")}</Text>
       </View>
     );
   }
@@ -100,12 +99,11 @@ export default function StatsScreen() {
       className="flex-1"
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={{ padding: 16 }}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       <View className="flex-row items-center gap-2 mb-5">
         <BarChart3 size={20} color="#6EE7B7" />
-        <Text className="text-xl font-bold text-foreground">
-          {t('nav.stats')}
-        </Text>
+        <Text className="text-xl font-bold text-foreground">{t("nav.stats")}</Text>
       </View>
 
       {/* Streak Banner */}
@@ -113,38 +111,30 @@ export default function StatsScreen() {
         <View
           className="rounded-2xl p-4 mb-5"
           style={{
-            backgroundColor: isDark
-              ? 'rgba(129,140,248,0.06)'
-              : 'rgba(129,140,248,0.04)',
+            backgroundColor: isDark ? "rgba(129,140,248,0.06)" : "rgba(129,140,248,0.04)",
             borderWidth: 1,
-            borderColor: isDark
-              ? 'rgba(129,140,248,0.15)'
-              : 'rgba(129,140,248,0.1)',
+            borderColor: isDark ? "rgba(129,140,248,0.15)" : "rgba(129,140,248,0.1)",
           }}
         >
           <View className="flex-row items-center justify-around">
             <View className="items-center">
-              <Text className="text-3xl font-bold" style={{ color: '#818CF8' }}>
+              <Text className="text-3xl font-bold" style={{ color: "#818CF8" }}>
                 {streak.currentStreak}
               </Text>
-              <Text className="text-xs text-muted-foreground mt-0.5">
-                Current Streak
-              </Text>
+              <Text className="text-xs text-muted-foreground mt-0.5">Current Streak</Text>
             </View>
             <View
               style={{
                 width: 1,
                 height: 36,
-                backgroundColor: isDark ? '#27272A' : '#E7E5E4',
+                backgroundColor: isDark ? "#27272A" : "#E7E5E4",
               }}
             />
             <View className="items-center">
-              <Text className="text-3xl font-bold" style={{ color: '#F59E0B' }}>
+              <Text className="text-3xl font-bold" style={{ color: "#F59E0B" }}>
                 {streak.longestStreak}
               </Text>
-              <Text className="text-xs text-muted-foreground mt-0.5">
-                Longest Streak
-              </Text>
+              <Text className="text-xs text-muted-foreground mt-0.5">Longest Streak</Text>
             </View>
           </View>
         </View>
@@ -208,49 +198,48 @@ export default function StatsScreen() {
         <View
           className="rounded-xl p-4 mt-5"
           style={{
-            backgroundColor: isDark ? '#111113' : '#FFFFFF',
+            backgroundColor: isDark ? "#111113" : "#FFFFFF",
             borderWidth: 1,
-            borderColor: isDark ? '#27272A' : '#E7E5E4',
+            borderColor: isDark ? "#27272A" : "#E7E5E4",
           }}
         >
           <Text className="text-base font-semibold text-foreground mb-3">
             Exercise Distribution
           </Text>
-          {Object.entries(stats.typeDistributionSummary).map(
-            ([type, count]) => {
-              const total = Object.values(
-                stats.typeDistributionSummary!
-              ).reduce((sum, c) => sum + c, 0);
-              const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+          {Object.entries(stats.typeDistributionSummary).map(([type, count]) => {
+            const total = Object.values(stats.typeDistributionSummary!).reduce(
+              (sum, c) => sum + c,
+              0,
+            );
+            const pct = total > 0 ? Math.round((count / total) * 100) : 0;
 
-              return (
-                <View key={type} className="mb-2.5">
-                  <View className="flex-row items-center justify-between mb-1">
-                    <Text className="text-sm text-foreground capitalize">
-                      {type.replace(/_/g, ' ')}
-                    </Text>
-                    <Text className="text-xs text-muted-foreground">
-                      {count} ({pct}%)
-                    </Text>
-                  </View>
-                  <View
-                    className="h-1.5 rounded-full overflow-hidden"
-                    style={{
-                      backgroundColor: isDark ? '#27272A' : '#E5E7EB',
-                    }}
-                  >
-                    <View
-                      className="h-full rounded-full"
-                      style={{
-                        width: `${pct}%`,
-                        backgroundColor: '#818CF8',
-                      }}
-                    />
-                  </View>
+            return (
+              <View key={type} className="mb-2.5">
+                <View className="flex-row items-center justify-between mb-1">
+                  <Text className="text-sm text-foreground capitalize">
+                    {type.replace(/_/g, " ")}
+                  </Text>
+                  <Text className="text-xs text-muted-foreground">
+                    {count} ({pct}%)
+                  </Text>
                 </View>
-              );
-            }
-          )}
+                <View
+                  className="h-1.5 rounded-full overflow-hidden"
+                  style={{
+                    backgroundColor: isDark ? "#27272A" : "#E5E7EB",
+                  }}
+                >
+                  <View
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${pct}%`,
+                      backgroundColor: "#818CF8",
+                    }}
+                  />
+                </View>
+              </View>
+            );
+          })}
         </View>
       )}
     </ScrollView>

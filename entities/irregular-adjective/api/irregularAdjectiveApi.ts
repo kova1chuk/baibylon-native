@@ -1,22 +1,22 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { dictionaryApi } from '@/entities/dictionary/api/dictionaryApi';
-import { dashboardApi } from '@/features/hub/api/dashboardApi';
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { dictionaryApi } from "@/entities/dictionary/api/dictionaryApi";
+import { dashboardApi } from "@/features/hub/api/dashboardApi";
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type {
   FetchIrregularAdjectivesPageResponse,
   FetchIrregularAdjectivesPageParams,
   DictionaryIrregularAdjectiveRow,
-} from './types';
+} from "./types";
 
-import type { WordStatus } from '@/shared/types';
+import type { WordStatus } from "@/shared/types";
 
 export const irregularAdjectiveApi = createApi({
-  reducerPath: 'irregularAdjectiveApi',
+  reducerPath: "irregularAdjectiveApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['IrregularAdjectives'],
-  endpoints: builder => ({
+  tagTypes: ["IrregularAdjectives"],
+  endpoints: (builder) => ({
     fetchIrregularAdjectivesPage: builder.query<
       FetchIrregularAdjectivesPageResponse,
       FetchIrregularAdjectivesPageParams
@@ -25,34 +25,32 @@ export const irregularAdjectiveApi = createApi({
         page,
         pageSize,
         statusFilter = [],
-        search = '',
-        langCode = 'en',
-        translationLang = 'uk',
+        search = "",
+        langCode = "en",
+        translationLang = "uk",
       }) => ({
-        url: '/dictionary/irregular-adjectives',
+        url: "/dictionary/irregular-adjectives",
         params: {
           langCode,
           translationLang,
           limitCount: pageSize,
           offsetCount: (page - 1) * pageSize,
           searchText: search || undefined,
-          statusFilter:
-            statusFilter.length > 0 ? statusFilter.join(',') : undefined,
+          statusFilter: statusFilter.length > 0 ? statusFilter.join(",") : undefined,
         },
       }),
       providesTags: (_result, _error, arg) => {
-        return [{ type: 'IrregularAdjectives', id: arg.page }];
+        return [{ type: "IrregularAdjectives", id: arg.page }];
       },
       transformResponse: (
         response: DictionaryIrregularAdjectiveRow[],
         _meta,
-        arg: FetchIrregularAdjectivesPageParams
+        arg: FetchIrregularAdjectivesPageParams,
       ) => {
         const rows = response || [];
-        const totalIrregularAdjectives =
-          rows.length > 0 ? Number(rows[0].total_count) : 0;
+        const totalIrregularAdjectives = rows.length > 0 ? Number(rows[0].total_count) : 0;
 
-        const irregularAdjectives = rows.map(row => ({
+        const irregularAdjectives = rows.map((row) => ({
           id: row.irregular_adjective_id,
           baseForm: row.base_form,
           comparative: row.comparative,
@@ -60,7 +58,7 @@ export const irregularAdjectiveApi = createApi({
           definition: row.definition,
           translation: row.translation,
           status: parseInt(row.status) as WordStatus,
-          userId: '',
+          userId: "",
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           phonetic: {
@@ -88,10 +86,10 @@ export const irregularAdjectiveApi = createApi({
     >({
       query: ({ langCode, irregularAdjectiveId, newStatus }) => ({
         url: `/dictionary/irregular-adjectives/${irregularAdjectiveId}/status`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { langCode, newStatus },
       }),
-      invalidatesTags: ['IrregularAdjectives'],
+      invalidatesTags: ["IrregularAdjectives"],
     }),
     removeIrregularAdjectiveFromDictionary: builder.mutation<
       void,
@@ -99,10 +97,10 @@ export const irregularAdjectiveApi = createApi({
     >({
       query: ({ langCode, irregularAdjectiveId }) => ({
         url: `/dictionary/irregular-adjectives/${irregularAdjectiveId}`,
-        method: 'DELETE',
+        method: "DELETE",
         params: { langCode },
       }),
-      invalidatesTags: ['IrregularAdjectives'],
+      invalidatesTags: ["IrregularAdjectives"],
     }),
     addIrregularAdjective: builder.mutation<
       string | null,
@@ -114,30 +112,22 @@ export const irregularAdjectiveApi = createApi({
         irregularAdjectiveId?: string;
       }
     >({
-      query: ({
-        langCode,
-        baseForm,
-        comparative,
-        superlative,
-        irregularAdjectiveId,
-      }) => ({
-        url: '/dictionary/irregular-adjectives',
-        method: 'POST',
+      query: ({ langCode, baseForm, comparative, superlative, irregularAdjectiveId }) => ({
+        url: "/dictionary/irregular-adjectives",
+        method: "POST",
         body: {
           langCode,
-          baseForm: baseForm ?? '',
-          comparative: comparative ?? '',
-          superlative: superlative ?? '',
+          baseForm: baseForm ?? "",
+          comparative: comparative ?? "",
+          superlative: superlative ?? "",
           irregularAdjectiveId,
         },
       }),
-      invalidatesTags: ['IrregularAdjectives'],
+      invalidatesTags: ["IrregularAdjectives"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['DictionaryStats', 'Words'])
-        );
-        dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
+        dispatch(dictionaryApi.util.invalidateTags(["DictionaryStats", "Words"]));
+        dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
       },
     }),
     updateIrregularAdjectiveDefinition: builder.mutation<
@@ -150,15 +140,9 @@ export const irregularAdjectiveApi = createApi({
         phoneticAudioLink?: string;
       }
     >({
-      query: ({
-        langCode,
-        irregularAdjectiveId,
-        definition,
-        phoneticText,
-        phoneticAudioLink,
-      }) => ({
+      query: ({ langCode, irregularAdjectiveId, definition, phoneticText, phoneticAudioLink }) => ({
         url: `/dictionary/irregular-adjectives/${irregularAdjectiveId}/definition`,
-        method: 'PATCH',
+        method: "PATCH",
         body: {
           langCode,
           definition: definition || undefined,
@@ -166,7 +150,7 @@ export const irregularAdjectiveApi = createApi({
           phoneticAudioLink: phoneticAudioLink || undefined,
         },
       }),
-      invalidatesTags: ['IrregularAdjectives'],
+      invalidatesTags: ["IrregularAdjectives"],
     }),
     updateIrregularAdjectiveTranslation: builder.mutation<
       { success: boolean },
@@ -186,7 +170,7 @@ export const irregularAdjectiveApi = createApi({
         translationsText,
       }) => ({
         url: `/dictionary/irregular-adjectives/${irregularAdjectiveId}/translation`,
-        method: 'PATCH',
+        method: "PATCH",
         body: {
           langCode,
           targetLangCode,
@@ -194,7 +178,7 @@ export const irregularAdjectiveApi = createApi({
           translationsText,
         },
       }),
-      invalidatesTags: ['IrregularAdjectives'],
+      invalidatesTags: ["IrregularAdjectives"],
     }),
     reloadIrregularAdjectiveDefinition: builder.mutation<
       {
@@ -206,10 +190,10 @@ export const irregularAdjectiveApi = createApi({
     >({
       query: ({ langCode, irregularAdjectiveId }) => ({
         url: `/dictionary/irregular-adjectives/${irregularAdjectiveId}/reload-definition`,
-        method: 'POST',
+        method: "POST",
         body: { langCode },
       }),
-      invalidatesTags: ['IrregularAdjectives'],
+      invalidatesTags: ["IrregularAdjectives"],
     }),
     reloadIrregularAdjectiveTranslation: builder.mutation<
       { translatedText: string },
@@ -219,12 +203,12 @@ export const irregularAdjectiveApi = createApi({
         targetLangCode?: string;
       }
     >({
-      query: ({ langCode, irregularAdjectiveId, targetLangCode = 'uk' }) => ({
+      query: ({ langCode, irregularAdjectiveId, targetLangCode = "uk" }) => ({
         url: `/dictionary/irregular-adjectives/${irregularAdjectiveId}/reload-translation`,
-        method: 'POST',
+        method: "POST",
         body: { langCode, targetLangCode },
       }),
-      invalidatesTags: ['IrregularAdjectives'],
+      invalidatesTags: ["IrregularAdjectives"],
     }),
   }),
 });

@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import { Check, X } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
+import { Check, X } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from "react-native";
 
-import type { RuleQuizContent } from '@/entities/exercise/api/exerciseApi';
+import type { RuleQuizContent } from "@/entities/exercise/api/exerciseApi";
 
 interface RuleQuizCardProps {
   content: RuleQuizContent;
@@ -14,14 +14,9 @@ interface RuleQuizCardProps {
   isLocked: boolean;
 }
 
-type OptionState = 'idle' | 'correct' | 'wrong' | 'dimmed';
+type OptionState = "idle" | "correct" | "wrong" | "dimmed";
 
-export default function RuleQuizCard({
-  content,
-  onAnswer,
-  onNext,
-  isLocked,
-}: RuleQuizCardProps) {
+export default function RuleQuizCard({ content, onAnswer, onNext, isLocked }: RuleQuizCardProps) {
   const { t } = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -34,7 +29,7 @@ export default function RuleQuizCard({
       const isCorrect = index === content.correctIndex;
       onAnswer(isCorrect, index);
     },
-    [answered, isLocked, content.correctIndex, onAnswer]
+    [answered, isLocked, content.correctIndex, onAnswer],
   );
 
   const handleNext = useCallback(() => {
@@ -44,34 +39,34 @@ export default function RuleQuizCard({
   }, [onNext]);
 
   const getOptionState = (index: number): OptionState => {
-    if (!answered) return 'idle';
-    if (index === content.correctIndex) return 'correct';
-    if (index === selectedIndex) return 'wrong';
-    return 'dimmed';
+    if (!answered) return "idle";
+    if (index === content.correctIndex) return "correct";
+    if (index === selectedIndex) return "wrong";
+    return "dimmed";
   };
 
   const getOptionStyles = (state: OptionState) => {
     switch (state) {
-      case 'correct':
+      case "correct":
         return {
-          borderColor: '#10B981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderColor: "#10B981",
+          backgroundColor: "rgba(16, 185, 129, 0.1)",
         };
-      case 'wrong':
+      case "wrong":
         return {
-          borderColor: '#EF4444',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          borderColor: "#EF4444",
+          backgroundColor: "rgba(239, 68, 68, 0.1)",
         };
-      case 'dimmed':
+      case "dimmed":
         return {
-          borderColor: '#D1D5DB',
-          backgroundColor: 'transparent',
+          borderColor: "#D1D5DB",
+          backgroundColor: "transparent",
           opacity: 0.4,
         };
       default:
         return {
-          borderColor: '#D1D5DB',
-          backgroundColor: 'transparent',
+          borderColor: "#D1D5DB",
+          backgroundColor: "transparent",
         };
     }
   };
@@ -108,17 +103,13 @@ export default function RuleQuizCard({
                   className="text-base font-medium flex-1"
                   style={{
                     color:
-                      state === 'correct'
-                        ? '#10B981'
-                        : state === 'wrong'
-                          ? '#EF4444'
-                          : undefined,
+                      state === "correct" ? "#10B981" : state === "wrong" ? "#EF4444" : undefined,
                   }}
                 >
                   {option}
                 </Text>
-                {state === 'correct' && <Check size={20} color="#10B981" />}
-                {state === 'wrong' && <X size={20} color="#EF4444" />}
+                {state === "correct" && <Check size={20} color="#10B981" />}
+                {state === "wrong" && <X size={20} color="#EF4444" />}
               </View>
             </Pressable>
           );
@@ -127,9 +118,7 @@ export default function RuleQuizCard({
 
       {answered && content.explanation && (
         <View className="mt-4 p-3 bg-card rounded-xl">
-          <Text className="text-sm text-muted-foreground">
-            {content.explanation}
-          </Text>
+          <Text className="text-sm text-muted-foreground">{content.explanation}</Text>
         </View>
       )}
 
@@ -138,9 +127,7 @@ export default function RuleQuizCard({
           className="bg-primary rounded-xl py-4 items-center mt-6 active:opacity-80"
           onPress={handleNext}
         >
-          <Text className="text-white font-semibold text-base">
-            {t('learningFeed.next')}
-          </Text>
+          <Text className="text-white font-semibold text-base">{t("learningFeed.next")}</Text>
         </Pressable>
       )}
     </View>

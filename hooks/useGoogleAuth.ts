@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import { makeRedirectUri } from 'expo-auth-session';
-import * as Linking from 'expo-linking';
-import * as WebBrowser from 'expo-web-browser';
+import { makeRedirectUri } from "expo-auth-session";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
 
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from "@/lib/supabase";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -15,19 +15,19 @@ export function useGoogleAuth() {
 
   useEffect(() => {
     const handleDeepLink = async (url: string) => {
-      if (url.includes('auth/callback')) {
+      if (url.includes("auth/callback")) {
         try {
           await WebBrowser.dismissBrowser();
         } catch {}
 
         try {
-          const hashIndex = url.indexOf('#');
+          const hashIndex = url.indexOf("#");
           if (hashIndex !== -1) {
             const hash = url.substring(hashIndex + 1);
             const params = new URLSearchParams(hash);
 
-            const accessToken = params.get('access_token');
-            const refreshToken = params.get('refresh_token');
+            const accessToken = params.get("access_token");
+            const refreshToken = params.get("refresh_token");
 
             if (accessToken && refreshToken) {
               const { error } = await supabase.auth.setSession({
@@ -36,23 +36,23 @@ export function useGoogleAuth() {
               });
 
               if (error) {
-                console.error('Auth error:', error.message);
+                console.error("Auth error:", error.message);
               }
             }
           }
         } catch (error) {
-          console.error('OAuth error:', error);
+          console.error("OAuth error:", error);
         }
 
         setIsLoading(false);
       }
     };
 
-    const subscription = Linking.addEventListener('url', ({ url }) => {
+    const subscription = Linking.addEventListener("url", ({ url }) => {
       handleDeepLink(url);
     });
 
-    Linking.getInitialURL().then(url => {
+    Linking.getInitialURL().then((url) => {
       if (url) {
         handleDeepLink(url);
       }
@@ -68,12 +68,12 @@ export function useGoogleAuth() {
       setIsLoading(true);
 
       const redirectUrl = makeRedirectUri({
-        scheme: 'vocairo',
-        path: 'auth/callback',
+        scheme: "vocairo",
+        path: "auth/callback",
       });
 
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider: "google",
         options: {
           redirectTo: redirectUrl,
           skipBrowserRedirect: true,
@@ -81,8 +81,8 @@ export function useGoogleAuth() {
       });
 
       if (error) {
-        console.error('OAuth error:', error.message);
-        Alert.alert('Error', error.message || 'Failed to sign in with Google');
+        console.error("OAuth error:", error.message);
+        Alert.alert("Error", error.message || "Failed to sign in with Google");
         setIsLoading(false);
         return;
       }
@@ -92,13 +92,13 @@ export function useGoogleAuth() {
           showInRecents: true,
         });
 
-        if (result.type === 'cancel' || result.type === 'dismiss') {
+        if (result.type === "cancel" || result.type === "dismiss") {
           setIsLoading(false);
         }
       }
     } catch (error) {
-      console.error('OAuth error:', error);
-      Alert.alert('Error', 'Failed to sign in with Google. Please try again.');
+      console.error("OAuth error:", error);
+      Alert.alert("Error", "Failed to sign in with Google. Please try again.");
       setIsLoading(false);
     }
   };

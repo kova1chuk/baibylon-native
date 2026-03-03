@@ -1,22 +1,22 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { dictionaryApi } from '@/entities/dictionary/api/dictionaryApi';
-import { dashboardApi } from '@/features/hub/api/dashboardApi';
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { dictionaryApi } from "@/entities/dictionary/api/dictionaryApi";
+import { dashboardApi } from "@/features/hub/api/dashboardApi";
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type {
   FetchIrregularVerbsPageResponse,
   FetchIrregularVerbsPageParams,
   DictionaryIrregularVerbRow,
-} from './types';
+} from "./types";
 
-import type { WordStatus } from '@/shared/types';
+import type { WordStatus } from "@/shared/types";
 
 export const irregularVerbApi = createApi({
-  reducerPath: 'irregularVerbApi',
+  reducerPath: "irregularVerbApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['IrregularVerbs'],
-  endpoints: builder => ({
+  tagTypes: ["IrregularVerbs"],
+  endpoints: (builder) => ({
     fetchIrregularVerbsPage: builder.query<
       FetchIrregularVerbsPageResponse,
       FetchIrregularVerbsPageParams
@@ -25,34 +25,32 @@ export const irregularVerbApi = createApi({
         page,
         pageSize,
         statusFilter = [],
-        search = '',
-        langCode = 'en',
-        translationLang = 'uk',
+        search = "",
+        langCode = "en",
+        translationLang = "uk",
       }) => ({
-        url: '/dictionary/irregular-verbs',
+        url: "/dictionary/irregular-verbs",
         params: {
           langCode,
           translationLang,
           limitCount: pageSize,
           offsetCount: (page - 1) * pageSize,
           searchText: search || undefined,
-          statusFilter:
-            statusFilter.length > 0 ? statusFilter.join(',') : undefined,
+          statusFilter: statusFilter.length > 0 ? statusFilter.join(",") : undefined,
         },
       }),
       providesTags: (result, error, arg) => {
-        return [{ type: 'IrregularVerbs', id: arg.page }];
+        return [{ type: "IrregularVerbs", id: arg.page }];
       },
       transformResponse: (
         response: DictionaryIrregularVerbRow[],
         _meta,
-        arg: FetchIrregularVerbsPageParams
+        arg: FetchIrregularVerbsPageParams,
       ) => {
         const rows = response || [];
-        const totalIrregularVerbs =
-          rows.length > 0 ? Number(rows[0].total_count) : 0;
+        const totalIrregularVerbs = rows.length > 0 ? Number(rows[0].total_count) : 0;
 
-        const irregularVerbs = rows.map(row => ({
+        const irregularVerbs = rows.map((row) => ({
           id: row.irregular_verb_id,
           baseForm: row.base_form,
           pastSimple: row.past_simple,
@@ -60,7 +58,7 @@ export const irregularVerbApi = createApi({
           definition: row.definition,
           translation: row.translation,
           status: parseInt(row.status) as WordStatus,
-          userId: '',
+          userId: "",
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           phonetic: {
@@ -84,10 +82,10 @@ export const irregularVerbApi = createApi({
     >({
       query: ({ langCode, irregularVerbId, newStatus }) => ({
         url: `/dictionary/irregular-verbs/${irregularVerbId}/status`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { langCode, newStatus },
       }),
-      invalidatesTags: ['IrregularVerbs'],
+      invalidatesTags: ["IrregularVerbs"],
     }),
     removeIrregularVerbFromDictionary: builder.mutation<
       void,
@@ -95,10 +93,10 @@ export const irregularVerbApi = createApi({
     >({
       query: ({ langCode, irregularVerbId }) => ({
         url: `/dictionary/irregular-verbs/${irregularVerbId}`,
-        method: 'DELETE',
+        method: "DELETE",
         params: { langCode },
       }),
-      invalidatesTags: ['IrregularVerbs'],
+      invalidatesTags: ["IrregularVerbs"],
     }),
     addIrregularVerb: builder.mutation<
       string | null,
@@ -110,30 +108,22 @@ export const irregularVerbApi = createApi({
         irregularVerbId?: string;
       }
     >({
-      query: ({
-        langCode,
-        baseForm,
-        pastSimple,
-        pastParticiple,
-        irregularVerbId,
-      }) => ({
-        url: '/dictionary/irregular-verbs',
-        method: 'POST',
+      query: ({ langCode, baseForm, pastSimple, pastParticiple, irregularVerbId }) => ({
+        url: "/dictionary/irregular-verbs",
+        method: "POST",
         body: {
           langCode,
-          baseForm: baseForm ?? '',
-          pastSimple: pastSimple ?? '',
-          pastParticiple: pastParticiple ?? '',
+          baseForm: baseForm ?? "",
+          pastSimple: pastSimple ?? "",
+          pastParticiple: pastParticiple ?? "",
           irregularVerbId,
         },
       }),
-      invalidatesTags: ['IrregularVerbs'],
+      invalidatesTags: ["IrregularVerbs"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['DictionaryStats', 'Words'])
-        );
-        dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
+        dispatch(dictionaryApi.util.invalidateTags(["DictionaryStats", "Words"]));
+        dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
       },
     }),
     updateIrregularVerbDefinition: builder.mutation<
@@ -146,15 +136,9 @@ export const irregularVerbApi = createApi({
         phoneticAudioLink?: string;
       }
     >({
-      query: ({
-        langCode,
-        irregularVerbId,
-        definition,
-        phoneticText,
-        phoneticAudioLink,
-      }) => ({
+      query: ({ langCode, irregularVerbId, definition, phoneticText, phoneticAudioLink }) => ({
         url: `/dictionary/irregular-verbs/${irregularVerbId}/definition`,
-        method: 'PATCH',
+        method: "PATCH",
         body: {
           langCode,
           definition: definition || undefined,
@@ -162,7 +146,7 @@ export const irregularVerbApi = createApi({
           phoneticAudioLink: phoneticAudioLink || undefined,
         },
       }),
-      invalidatesTags: ['IrregularVerbs'],
+      invalidatesTags: ["IrregularVerbs"],
     }),
     updateIrregularVerbTranslation: builder.mutation<
       { success: boolean },
@@ -174,15 +158,9 @@ export const irregularVerbApi = createApi({
         translationsText: string;
       }
     >({
-      query: ({
-        langCode,
-        targetLangCode,
-        irregularVerbId,
-        definition,
-        translationsText,
-      }) => ({
+      query: ({ langCode, targetLangCode, irregularVerbId, definition, translationsText }) => ({
         url: `/dictionary/irregular-verbs/${irregularVerbId}/translation`,
-        method: 'PATCH',
+        method: "PATCH",
         body: {
           langCode,
           targetLangCode,
@@ -190,7 +168,7 @@ export const irregularVerbApi = createApi({
           translationsText,
         },
       }),
-      invalidatesTags: ['IrregularVerbs'],
+      invalidatesTags: ["IrregularVerbs"],
     }),
     reloadIrregularVerbDefinition: builder.mutation<
       { definition: string; phoneticText: string; phoneticAudioLink: string },
@@ -198,21 +176,21 @@ export const irregularVerbApi = createApi({
     >({
       query: ({ langCode, irregularVerbId }) => ({
         url: `/dictionary/irregular-verbs/${irregularVerbId}/reload-definition`,
-        method: 'POST',
+        method: "POST",
         body: { langCode },
       }),
-      invalidatesTags: ['IrregularVerbs'],
+      invalidatesTags: ["IrregularVerbs"],
     }),
     reloadIrregularVerbTranslation: builder.mutation<
       { translatedText: string },
       { langCode: string; irregularVerbId: string; targetLangCode?: string }
     >({
-      query: ({ langCode, irregularVerbId, targetLangCode = 'uk' }) => ({
+      query: ({ langCode, irregularVerbId, targetLangCode = "uk" }) => ({
         url: `/dictionary/irregular-verbs/${irregularVerbId}/reload-translation`,
-        method: 'POST',
+        method: "POST",
         body: { langCode, targetLangCode },
       }),
-      invalidatesTags: ['IrregularVerbs'],
+      invalidatesTags: ["IrregularVerbs"],
     }),
   }),
 });

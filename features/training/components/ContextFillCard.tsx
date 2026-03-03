@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import { Check, X } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
+import { Check, X } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from "react-native";
 
-import type { ContextFillContent } from '@/entities/exercise/api/exerciseApi';
+import type { ContextFillContent } from "@/entities/exercise/api/exerciseApi";
 
 interface ContextFillCardProps {
   content: ContextFillContent;
@@ -29,11 +29,10 @@ export default function ContextFillCard({
       if (answered || isLocked) return;
       setSelectedOption(option);
       setAnswered(true);
-      const isCorrect =
-        option.trim().toLowerCase() === content.answer.trim().toLowerCase();
+      const isCorrect = option.trim().toLowerCase() === content.answer.trim().toLowerCase();
       onAnswer(isCorrect, option);
     },
-    [answered, isLocked, content.answer, onAnswer]
+    [answered, isLocked, content.answer, onAnswer],
   );
 
   const handleNext = useCallback(() => {
@@ -43,51 +42,48 @@ export default function ContextFillCard({
   }, [onNext]);
 
   const getOptionState = (option: string) => {
-    if (!answered) return 'idle';
-    if (option.trim().toLowerCase() === content.answer.trim().toLowerCase())
-      return 'correct';
-    if (option === selectedOption) return 'wrong';
-    return 'dimmed';
+    if (!answered) return "idle";
+    if (option.trim().toLowerCase() === content.answer.trim().toLowerCase()) return "correct";
+    if (option === selectedOption) return "wrong";
+    return "dimmed";
   };
 
   const getOptionStyles = (state: string) => {
     switch (state) {
-      case 'correct':
+      case "correct":
         return {
-          borderColor: '#10B981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderColor: "#10B981",
+          backgroundColor: "rgba(16, 185, 129, 0.1)",
         };
-      case 'wrong':
+      case "wrong":
         return {
-          borderColor: '#EF4444',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          borderColor: "#EF4444",
+          backgroundColor: "rgba(239, 68, 68, 0.1)",
         };
-      case 'dimmed':
+      case "dimmed":
         return {
-          borderColor: '#D1D5DB',
-          backgroundColor: 'transparent',
+          borderColor: "#D1D5DB",
+          backgroundColor: "transparent",
           opacity: 0.4,
         };
       default:
         return {
-          borderColor: '#D1D5DB',
-          backgroundColor: 'transparent',
+          borderColor: "#D1D5DB",
+          backgroundColor: "transparent",
         };
     }
   };
 
-  const parts = content.sentence.split('___');
+  const parts = content.sentence.split("___");
 
   return (
     <View className="flex-1 px-4 pt-4">
       <View className="items-center mb-6">
-        <Text className="text-sm text-muted-foreground mb-2">
-          {t('learningFeed.contextFill')}
-        </Text>
+        <Text className="text-sm text-muted-foreground mb-2">{t("learningFeed.contextFill")}</Text>
         <Text className="text-lg font-semibold text-foreground text-center leading-relaxed">
           {parts[0]}
           <Text className="text-primary font-bold"> ______ </Text>
-          {parts[1] || ''}
+          {parts[1] || ""}
         </Text>
       </View>
 
@@ -109,17 +105,13 @@ export default function ContextFillCard({
                   className="text-base font-medium flex-1"
                   style={{
                     color:
-                      state === 'correct'
-                        ? '#10B981'
-                        : state === 'wrong'
-                          ? '#EF4444'
-                          : undefined,
+                      state === "correct" ? "#10B981" : state === "wrong" ? "#EF4444" : undefined,
                   }}
                 >
                   {option}
                 </Text>
-                {state === 'correct' && <Check size={20} color="#10B981" />}
-                {state === 'wrong' && <X size={20} color="#EF4444" />}
+                {state === "correct" && <Check size={20} color="#10B981" />}
+                {state === "wrong" && <X size={20} color="#EF4444" />}
               </View>
             </Pressable>
           );
@@ -128,9 +120,7 @@ export default function ContextFillCard({
 
       {answered && content.definition && (
         <View className="mt-4 p-3 bg-card rounded-xl">
-          <Text className="text-sm text-muted-foreground">
-            {content.definition}
-          </Text>
+          <Text className="text-sm text-muted-foreground">{content.definition}</Text>
         </View>
       )}
 
@@ -139,9 +129,7 @@ export default function ContextFillCard({
           className="bg-primary rounded-xl py-4 items-center mt-6 active:opacity-80"
           onPress={handleNext}
         >
-          <Text className="text-white font-semibold text-base">
-            {t('learningFeed.next')}
-          </Text>
+          <Text className="text-white font-semibold text-base">{t("learningFeed.next")}</Text>
         </Pressable>
       )}
     </View>

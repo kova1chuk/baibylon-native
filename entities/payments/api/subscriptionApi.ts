@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 interface NestResponse<T> {
   success: boolean;
@@ -12,7 +12,7 @@ export interface Subscription {
   user_id: string;
   stripe_customer_id: string;
   stripe_subscription_id: string | null;
-  status: 'pending' | 'active' | 'canceled' | 'past_due';
+  status: "pending" | "active" | "canceled" | "past_due";
   price_id: string | null;
   current_period_start: string | null;
   current_period_end: string | null;
@@ -27,15 +27,14 @@ export interface SubscriptionResponse {
 }
 
 export const subscriptionApi = createApi({
-  reducerPath: 'subscriptionApi',
+  reducerPath: "subscriptionApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['Subscription'],
-  endpoints: builder => ({
+  tagTypes: ["Subscription"],
+  endpoints: (builder) => ({
     getSubscription: builder.query<SubscriptionResponse, void>({
-      query: () => ({ url: '/payments/subscription' }),
-      providesTags: ['Subscription'],
-      transformResponse: (response: NestResponse<SubscriptionResponse>) =>
-        response.data,
+      query: () => ({ url: "/payments/subscription" }),
+      providesTags: ["Subscription"],
+      transformResponse: (response: NestResponse<SubscriptionResponse>) => response.data,
     }),
   }),
 });

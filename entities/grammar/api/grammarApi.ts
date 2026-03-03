@@ -1,13 +1,13 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type {
   GrammarLevelRow,
   GrammarCategoryRow,
   GrammarTopicRow,
   TopicContentData,
-} from './types';
+} from "./types";
 
 interface NestResponse<T> {
   success: boolean;
@@ -15,58 +15,38 @@ interface NestResponse<T> {
 }
 
 export const grammarApi = createApi({
-  reducerPath: 'grammarApi',
+  reducerPath: "grammarApi",
   baseQuery: nestBaseQuery,
-  tagTypes: [
-    'GrammarLevels',
-    'GrammarCategories',
-    'GrammarTopics',
-    'GrammarTopicContent',
-  ],
-  endpoints: builder => ({
+  tagTypes: ["GrammarLevels", "GrammarCategories", "GrammarTopics", "GrammarTopicContent"],
+  endpoints: (builder) => ({
     getGrammarLevels: builder.query<GrammarLevelRow[], void>({
-      query: () => ({ url: '/grammar/levels' }),
-      providesTags: ['GrammarLevels'],
-      transformResponse: (response: NestResponse<GrammarLevelRow[]>) =>
-        response.data || [],
+      query: () => ({ url: "/grammar/levels" }),
+      providesTags: ["GrammarLevels"],
+      transformResponse: (response: NestResponse<GrammarLevelRow[]>) => response.data || [],
     }),
 
-    getLevelCategories: builder.query<
-      GrammarCategoryRow[],
-      { levelId: string }
-    >({
+    getLevelCategories: builder.query<GrammarCategoryRow[], { levelId: string }>({
       query: ({ levelId }) => ({
         url: `/grammar/levels/${levelId}/categories`,
       }),
-      providesTags: (_result, _error, arg) => [
-        { type: 'GrammarCategories', id: arg.levelId },
-      ],
-      transformResponse: (response: NestResponse<GrammarCategoryRow[]>) =>
-        response.data || [],
+      providesTags: (_result, _error, arg) => [{ type: "GrammarCategories", id: arg.levelId }],
+      transformResponse: (response: NestResponse<GrammarCategoryRow[]>) => response.data || [],
     }),
 
-    getCategoryTopics: builder.query<GrammarTopicRow[], { categoryId: string }>(
-      {
-        query: ({ categoryId }) => ({
-          url: `/grammar/categories/${categoryId}/topics`,
-        }),
-        providesTags: (_result, _error, arg) => [
-          { type: 'GrammarTopics', id: arg.categoryId },
-        ],
-        transformResponse: (response: NestResponse<GrammarTopicRow[]>) =>
-          response.data || [],
-      }
-    ),
+    getCategoryTopics: builder.query<GrammarTopicRow[], { categoryId: string }>({
+      query: ({ categoryId }) => ({
+        url: `/grammar/categories/${categoryId}/topics`,
+      }),
+      providesTags: (_result, _error, arg) => [{ type: "GrammarTopics", id: arg.categoryId }],
+      transformResponse: (response: NestResponse<GrammarTopicRow[]>) => response.data || [],
+    }),
 
     getTopicContent: builder.query<TopicContentData, { topicId: string }>({
       query: ({ topicId }) => ({
         url: `/grammar/topics/${topicId}/content`,
       }),
-      providesTags: (_result, _error, arg) => [
-        { type: 'GrammarTopicContent', id: arg.topicId },
-      ],
-      transformResponse: (response: NestResponse<TopicContentData>) =>
-        response.data,
+      providesTags: (_result, _error, arg) => [{ type: "GrammarTopicContent", id: arg.topicId }],
+      transformResponse: (response: NestResponse<TopicContentData>) => response.data,
     }),
 
     updateTopicProgress: builder.mutation<
@@ -75,13 +55,13 @@ export const grammarApi = createApi({
     >({
       query: ({ topicId, status, masteryScore }) => ({
         url: `/grammar/topics/${topicId}/progress`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { status, masteryScore },
       }),
       invalidatesTags: (_result, _error, arg) => [
-        { type: 'GrammarTopicContent', id: arg.topicId },
-        'GrammarTopics',
-        'GrammarLevels',
+        { type: "GrammarTopicContent", id: arg.topicId },
+        "GrammarTopics",
+        "GrammarLevels",
       ],
     }),
 
@@ -91,10 +71,10 @@ export const grammarApi = createApi({
     >({
       query: ({ ruleId, understood, quality }) => ({
         url: `/grammar/rules/${ruleId}/progress`,
-        method: 'PATCH',
+        method: "PATCH",
         body: { understood, quality },
       }),
-      invalidatesTags: ['GrammarTopicContent', 'GrammarTopics'],
+      invalidatesTags: ["GrammarTopicContent", "GrammarTopics"],
     }),
   }),
 });

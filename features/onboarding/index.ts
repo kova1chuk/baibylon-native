@@ -1,5 +1,5 @@
-export { default as OnboardingPage } from './pages/OnboardingPage';
-export { default as OnboardingGuard } from './components/OnboardingGuard';
+export { default as OnboardingPage } from "./pages/OnboardingPage";
+export { default as OnboardingGuard } from "./components/OnboardingGuard";
 export {
   onboardingApi,
   useGetOnboardingStatusQuery,
@@ -8,11 +8,11 @@ export {
   useSubmitAssessmentMutation,
   useSubmitGoalMutation,
   useCompleteOnboardingMutation,
-} from './api/onboardingApi';
+} from "./api/onboardingApi";
 export type {
   OnboardingStatusData,
   OnboardingStage,
   AssessmentQuestion,
   AssessmentResult,
   GoalIntensity,
-} from './api/onboardingApi';
+} from "./api/onboardingApi";

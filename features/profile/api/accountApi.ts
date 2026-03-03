@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 interface UserProfile {
   id: string;
@@ -17,47 +17,43 @@ interface NestResponse<T> {
 }
 
 export const accountApi = createApi({
-  reducerPath: 'accountApi',
+  reducerPath: "accountApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['Profile'],
-  endpoints: builder => ({
+  tagTypes: ["Profile"],
+  endpoints: (builder) => ({
     getProfile: builder.query<UserProfile | null, void>({
-      query: () => ({ url: '/account/profile' }),
-      providesTags: ['Profile'],
-      transformResponse: (response: NestResponse<UserProfile | null>) =>
-        response.data,
+      query: () => ({ url: "/account/profile" }),
+      providesTags: ["Profile"],
+      transformResponse: (response: NestResponse<UserProfile | null>) => response.data,
     }),
 
-    updateLanguages: builder.mutation<
-      void,
-      { native: string; learning: string }
-    >({
-      query: body => ({
-        url: '/account/profile/languages',
-        method: 'PATCH',
+    updateLanguages: builder.mutation<void, { native: string; learning: string }>({
+      query: (body) => ({
+        url: "/account/profile/languages",
+        method: "PATCH",
         body,
       }),
-      invalidatesTags: ['Profile'],
+      invalidatesTags: ["Profile"],
     }),
 
     exportData: builder.query<string, void>({
       query: () => ({
-        url: '/account/export',
-        method: 'GET',
+        url: "/account/export",
+        method: "GET",
       }),
     }),
 
     resetProgress: builder.mutation<{ success: boolean }, void>({
       query: () => ({
-        url: '/account/reset-progress',
-        method: 'POST',
+        url: "/account/reset-progress",
+        method: "POST",
       }),
     }),
 
     deleteAccount: builder.mutation<{ success: boolean }, void>({
       query: () => ({
-        url: '/account',
-        method: 'DELETE',
+        url: "/account",
+        method: "DELETE",
       }),
     }),
   }),

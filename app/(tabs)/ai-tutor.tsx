@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { View } from 'react-native';
+import { View } from "react-native";
 
-import { AITutorScreen } from '@/features/ai-tutor';
+import { AITutorScreen } from "@/features/ai-tutor";
 
 export default function AITutorTab() {
   return (

@@ -1,39 +1,29 @@
-import React from 'react';
+import React from "react";
 
-import { BlurView } from 'expo-blur';
-import * as Haptics from 'expo-haptics';
-import { LinearGradient } from 'expo-linear-gradient';
-import {
-  LayoutDashboard,
-  Sparkles,
-  GraduationCap,
-  Target,
-  Play,
-} from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BlurView } from "expo-blur";
+import * as Haptics from "expo-haptics";
+import { LinearGradient } from "expo-linear-gradient";
+import { LayoutDashboard, Sparkles, GraduationCap, Target, Play } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text, Pressable, Platform, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Platform, StyleSheet } from "react-native";
 
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/contexts/ThemeContext";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
 
 const TAB_CONFIG = [
-  { name: 'index', labelKey: 'nav.home', Icon: LayoutDashboard },
-  { name: 'ai-tutor', labelKey: 'nav.aiTutor', Icon: Sparkles },
-  { name: '__play__', labelKey: '', Icon: Play },
-  { name: 'grammar', labelKey: 'nav.grammar', Icon: GraduationCap },
-  { name: 'training', labelKey: 'nav.training', Icon: Target },
+  { name: "index", labelKey: "nav.home", Icon: LayoutDashboard },
+  { name: "ai-tutor", labelKey: "nav.aiTutor", Icon: Sparkles },
+  { name: "__play__", labelKey: "", Icon: Play },
+  { name: "grammar", labelKey: "nav.grammar", Icon: GraduationCap },
+  { name: "training", labelKey: "nav.training", Icon: Target },
 ] as const;
 
-export function CustomTabBar({
-  state,
-  descriptors,
-  navigation,
-}: BottomTabBarProps) {
+export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
   const { t } = useTranslation();
   const { isDark } = useTheme();
   const colors = useColors();
@@ -42,12 +32,12 @@ export function CustomTabBar({
   const inactiveColor = colors.icon;
 
   const handlePress = (routeName: string, index: number) => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
 
-    if (routeName === '__play__') {
-      const trainingIdx = state.routes.findIndex(r => r.name === 'training');
+    if (routeName === "__play__") {
+      const trainingIdx = state.routes.findIndex((r) => r.name === "training");
       if (trainingIdx >= 0) {
         const route = state.routes[trainingIdx];
         navigation.navigate(route.name, route.params);
@@ -56,7 +46,7 @@ export function CustomTabBar({
     }
 
     const event = navigation.emit({
-      type: 'tabPress',
+      type: "tabPress",
       target: state.routes[index]?.key,
       canPreventDefault: true,
     });
@@ -70,20 +60,20 @@ export function CustomTabBar({
   };
 
   const getTabIndex = (configName: string): number => {
-    return state.routes.findIndex(r => r.name === configName);
+    return state.routes.findIndex((r) => r.name === configName);
   };
 
   const renderTab = (config: (typeof TAB_CONFIG)[number], idx: number) => {
-    if (config.name === '__play__') {
+    if (config.name === "__play__") {
       return (
         <View key="play" className="items-center justify-center flex-1">
           <Pressable
-            onPress={() => handlePress('__play__', -1)}
+            onPress={() => handlePress("__play__", -1)}
             className="items-center justify-center"
             style={styles.playButton}
           >
             <LinearGradient
-              colors={['#10b981', '#6ee7b7']}
+              colors={["#10b981", "#6ee7b7"]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.playGradient}
@@ -107,7 +97,7 @@ export function CustomTabBar({
       >
         <config.Icon size={22} color={color} strokeWidth={1.8} />
         <Text
-          style={{ color, fontSize: 9, fontWeight: isActive ? '600' : '400' }}
+          style={{ color, fontSize: 9, fontWeight: isActive ? "600" : "400" }}
           numberOfLines={1}
         >
           {t(config.labelKey)}
@@ -128,21 +118,15 @@ export function CustomTabBar({
     </View>
   );
 
-  if (Platform.OS === 'ios') {
+  if (Platform.OS === "ios") {
     return (
       <View style={styles.container}>
-        <BlurView
-          tint={isDark ? 'dark' : 'light'}
-          intensity={80}
-          style={StyleSheet.absoluteFill}
-        />
+        <BlurView tint={isDark ? "dark" : "light"} intensity={80} style={StyleSheet.absoluteFill} />
         <View
           style={[
             StyleSheet.absoluteFill,
             {
-              backgroundColor: isDark
-                ? 'rgba(17, 17, 19, 0.6)'
-                : 'rgba(255, 255, 255, 0.7)',
+              backgroundColor: isDark ? "rgba(17, 17, 19, 0.6)" : "rgba(255, 255, 255, 0.7)",
             },
           ]}
         />
@@ -168,7 +152,7 @@ export function CustomTabBar({
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
@@ -176,7 +160,7 @@ const styles = StyleSheet.create({
   },
   playButton: {
     marginTop: -28,
-    shadowColor: '#10b981',
+    shadowColor: "#10b981",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -186,7 +170,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

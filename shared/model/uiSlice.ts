@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UIState {
   isMenuOpen: boolean;
@@ -43,7 +43,7 @@ const initialState: UIState = {
 };
 
 const uiSlice = createSlice({
-  name: 'ui',
+  name: "ui",
   initialState,
   reducers: {
     setIsMenuOpen: (state, action: PayloadAction<boolean>) => {
@@ -52,7 +52,7 @@ const uiSlice = createSlice({
     setIsUserMenuOpen: (state, action: PayloadAction<boolean>) => {
       state.isUserMenuOpen = action.payload;
     },
-    closeAllMenus: state => {
+    closeAllMenus: (state) => {
       state.isMenuOpen = false;
       state.isUserMenuOpen = false;
     },
@@ -66,7 +66,7 @@ const uiSlice = createSlice({
     setShowAddWordForm: (state, action: PayloadAction<boolean>) => {
       state.showAddWordForm = action.payload;
     },
-    closeAllModals: state => {
+    closeAllModals: (state) => {
       state.showSettings = false;
       state.showWordInfo = false;
       state.showAddWordForm = false;

@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { Word } from '@/entities/word/types';
+import { Word } from "@/entities/word/types";
 
 interface TrainingQuestion {
   id: string;
   word: Word;
-  type: 'definition' | 'translation' | 'usage' | 'synonym';
+  type: "definition" | "translation" | "usage" | "synonym";
   question: string;
   correctAnswer: string;
   options?: string[];
@@ -44,7 +44,7 @@ const initialState: TrainingState = {
 };
 
 const trainingSlice = createSlice({
-  name: 'training',
+  name: "training",
   initialState,
   reducers: {
     startSession: (state, action: PayloadAction<TrainingQuestion[]>) => {
@@ -61,7 +61,7 @@ const trainingSlice = createSlice({
       state.currentQuestionIndex = 0;
       state.isSessionActive = true;
     },
-    endSession: state => {
+    endSession: (state) => {
       if (state.currentSession) {
         state.currentSession.endTime = new Date().toISOString();
         state.sessionHistory.push(state.currentSession);
@@ -70,16 +70,9 @@ const trainingSlice = createSlice({
       state.isSessionActive = false;
       state.currentQuestionIndex = 0;
     },
-    answerQuestion: (
-      state,
-      action: PayloadAction<{ answer: string; isCorrect: boolean }>
-    ) => {
-      if (
-        state.currentSession &&
-        state.currentSession.questions[state.currentQuestionIndex]
-      ) {
-        const currentQuestion =
-          state.currentSession.questions[state.currentQuestionIndex];
+    answerQuestion: (state, action: PayloadAction<{ answer: string; isCorrect: boolean }>) => {
+      if (state.currentSession && state.currentSession.questions[state.currentQuestionIndex]) {
+        const currentQuestion = state.currentSession.questions[state.currentQuestionIndex];
         currentQuestion.userAnswer = action.payload.answer;
         currentQuestion.isCorrect = action.payload.isCorrect;
         currentQuestion.timestamp = new Date().toISOString();
@@ -90,13 +83,11 @@ const trainingSlice = createSlice({
         }
 
         state.currentSession.score = Math.round(
-          (state.currentSession.correctAnswers /
-            state.currentSession.totalQuestions) *
-            100
+          (state.currentSession.correctAnswers / state.currentSession.totalQuestions) * 100,
         );
       }
     },
-    nextQuestion: state => {
+    nextQuestion: (state) => {
       if (
         state.currentSession &&
         state.currentQuestionIndex < state.currentSession.questions.length - 1
@@ -104,7 +95,7 @@ const trainingSlice = createSlice({
         state.currentQuestionIndex += 1;
       }
     },
-    previousQuestion: state => {
+    previousQuestion: (state) => {
       if (state.currentQuestionIndex > 0) {
         state.currentQuestionIndex -= 1;
       }
@@ -118,7 +109,7 @@ const trainingSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
-    clearHistory: state => {
+    clearHistory: (state) => {
       state.sessionHistory = [];
     },
   },

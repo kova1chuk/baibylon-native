@@ -1,5 +1,5 @@
-import type { IrregularVerb } from '@/entities/irregular-verb/types';
-import type { DictionaryIrregularVerbRowDto } from '@/shared/types/openapi';
+import type { IrregularVerb } from "@/entities/irregular-verb/types";
+import type { DictionaryIrregularVerbRowDto } from "@/shared/types/openapi";
 
 export type DictionaryIrregularVerbRow = DictionaryIrregularVerbRowDto;
 

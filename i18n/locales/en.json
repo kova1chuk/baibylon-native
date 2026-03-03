@@ -13,7 +13,12 @@
     "back": "Back",
     "exit": "Exit",
     "restart": "Restart",
-    "retry": "Retry Mistakes",
+    "retry": "Retry",
+    "error": "Error",
+    "ok": "OK",
+    "tryAgain": "Try again",
+    "done": "Done",
+    "retryMistakes": "Retry Mistakes",
     "startSession": "Start Session",
     "delete": "Delete",
     "export": "Export",
@@ -392,7 +397,8 @@
     "queueComposition": "Queue Composition",
     "items": "items",
     "stopAnytime": "Stop anytime — your progress is saved automatically",
-    "noItemsAvailable": "No items available for training right now"
+    "noItemsAvailable": "No items available for training right now",
+    "sessionStartError": "Could not start session. Please try again."
   },
   "feed": {
     "dueForReview": "Due for Review",

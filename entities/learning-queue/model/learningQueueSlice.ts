@@ -1,41 +1,41 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import type { LearningItemType, LearningStage } from '../api/types';
+import type { LearningItemType, LearningStage } from "../api/types";
 
 export type ExerciseType =
-  | 'flashcard'
-  | 'choose-translation'
-  | 'type-word'
-  | 'context-fill'
-  | 'fill-gap'
-  | 'phrase-builder'
-  | 'match-pairs'
-  | 'verb-forms'
-  | 'explanation-card'
-  | 'error-correction'
-  | 'sentence-builder'
-  | 'rule-quiz'
-  | 'sentence-transform'
-  | 'multiple-choice'
-  | 'listen-choose'
-  | 'minimal-pairs'
-  | 'picture-description'
-  | 'reading-passage'
-  | 'sentence-ordering'
-  | 'verb-forms-drill'
-  | 'odd-one-out'
-  | 'translate-sentence'
-  | 'word-formation'
-  | 'irregular-sort'
-  | 'cloze-test'
-  | 'idiom-match'
-  | 'summary-writing'
-  | 'dictation'
-  | 'visual-vocab';
+  | "flashcard"
+  | "choose-translation"
+  | "type-word"
+  | "context-fill"
+  | "fill-gap"
+  | "phrase-builder"
+  | "match-pairs"
+  | "verb-forms"
+  | "explanation-card"
+  | "error-correction"
+  | "sentence-builder"
+  | "rule-quiz"
+  | "sentence-transform"
+  | "multiple-choice"
+  | "listen-choose"
+  | "minimal-pairs"
+  | "picture-description"
+  | "reading-passage"
+  | "sentence-ordering"
+  | "verb-forms-drill"
+  | "odd-one-out"
+  | "translate-sentence"
+  | "word-formation"
+  | "irregular-sort"
+  | "cloze-test"
+  | "idiom-match"
+  | "summary-writing"
+  | "dictation"
+  | "visual-vocab";
 
-export type SessionPhase = 'setup' | 'active' | 'summary';
+export type SessionPhase = "setup" | "active" | "summary";
 
-export type FocusFilter = 'all' | 'words' | 'grammar' | 'errors';
+export type FocusFilter = "all" | "words" | "grammar" | "errors";
 
 export interface CurrentExercise {
   metadataId: string;
@@ -98,8 +98,8 @@ const initialState: LearningQueueState = {
   isActive: false,
 
   sessionId: null,
-  sessionPhase: 'setup',
-  focusFilter: 'all',
+  sessionPhase: "setup",
+  focusFilter: "all",
   currentExercise: null,
   exerciseHistory: [],
   exerciseStartTime: null,
@@ -120,7 +120,7 @@ const initialState: LearningQueueState = {
 };
 
 const learningQueueSlice = createSlice({
-  name: 'learningQueue',
+  name: "learningQueue",
   initialState,
   reducers: {
     startSession(state) {
@@ -152,10 +152,10 @@ const learningQueueSlice = createSlice({
       action: PayloadAction<{
         sessionId: string;
         firstExercise: CurrentExercise | null;
-      }>
+      }>,
     ) {
       state.sessionId = action.payload.sessionId;
-      state.sessionPhase = 'active';
+      state.sessionPhase = "active";
       state.currentExercise = action.payload.firstExercise;
       state.exerciseHistory = [];
       state.exerciseStartTime = Date.now();
@@ -199,16 +199,10 @@ const learningQueueSlice = createSlice({
           dailyTotal: number;
           dailyTarget: number;
         } | null;
-      }>
+      }>,
     ) {
-      const {
-        metadataId,
-        exerciseType,
-        correct,
-        durationMs,
-        stageProgression,
-        scoring,
-      } = action.payload;
+      const { metadataId, exerciseType, correct, durationMs, stageProgression, scoring } =
+        action.payload;
 
       state.exerciseHistory.push({
         metadataId,
@@ -225,8 +219,7 @@ const learningQueueSlice = createSlice({
       } else {
         state.stats.incorrect += 1;
       }
-      state.stats.itemsByType[exerciseType] =
-        (state.stats.itemsByType[exerciseType] || 0) + 1;
+      state.stats.itemsByType[exerciseType] = (state.stats.itemsByType[exerciseType] || 0) + 1;
 
       if (stageProgression) {
         state.stats.stageProgressions.push(stageProgression);
@@ -245,17 +238,17 @@ const learningQueueSlice = createSlice({
       state,
       action: PayloadAction<{
         durationSeconds: number;
-      }>
+      }>,
     ) {
-      state.sessionPhase = 'summary';
+      state.sessionPhase = "summary";
       state.stats.durationSeconds = action.payload.durationSeconds;
       state.currentExercise = null;
     },
 
     resetMultiSession(state) {
       state.sessionId = null;
-      state.sessionPhase = 'setup';
-      state.focusFilter = 'all';
+      state.sessionPhase = "setup";
+      state.focusFilter = "all";
       state.currentExercise = null;
       state.exerciseHistory = [];
       state.exerciseStartTime = null;

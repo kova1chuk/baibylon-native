@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { useTranslation } from 'react-i18next';
-import Svg, { Path } from 'react-native-svg';
+import { useTranslation } from "react-i18next";
+import Svg, { Path } from "react-native-svg";
 
-import { Pressable, View } from 'react-native';
+import { Pressable, View } from "react-native";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -15,14 +15,14 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
-import { Text } from '@/components/ui/text';
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Text } from "@/components/ui/text";
 
 interface AuthFormProps {
-  mode: 'signin' | 'signup';
+  mode: "signin" | "signup";
   onSubmit: (email: string, password: string) => void;
   onGoogleAuth: () => void;
   onSwitchMode: () => void;
@@ -50,30 +50,26 @@ export function AuthForm({
   isGoogleLoading = false,
 }: AuthFormProps) {
   const { t } = useTranslation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
 
-  const isSignIn = mode === 'signin';
-  const title = isSignIn ? t('auth.signInTitle') : t('auth.signUpTitle');
-  const description = isSignIn
-    ? t('auth.welcomeBack')
-    : t('auth.createAccount');
-  const submitText = isSignIn ? t('auth.signInTitle') : t('auth.signUpTitle');
-  const switchText = isSignIn
-    ? t('auth.dontHaveAccount')
-    : t('auth.alreadyHaveAccount');
-  const switchLinkText = isSignIn ? t('auth.signUpLink') : t('auth.signInLink');
+  const isSignIn = mode === "signin";
+  const title = isSignIn ? t("auth.signInTitle") : t("auth.signUpTitle");
+  const description = isSignIn ? t("auth.welcomeBack") : t("auth.createAccount");
+  const submitText = isSignIn ? t("auth.signInTitle") : t("auth.signUpTitle");
+  const switchText = isSignIn ? t("auth.dontHaveAccount") : t("auth.alreadyHaveAccount");
+  const switchLinkText = isSignIn ? t("auth.signUpLink") : t("auth.signInLink");
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = t('auth.emailValidation');
+      newErrors.email = t("auth.emailValidation");
     }
 
     if (!password || password.length < 6) {
-      newErrors.password = t('auth.passwordValidation');
+      newErrors.password = t("auth.passwordValidation");
     }
 
     setErrors(newErrors);
@@ -90,7 +86,7 @@ export function AuthForm({
   const handleEmailChange = (value: string) => {
     setEmail(value);
     if (errors.email) {
-      setErrors(prev => ({ ...prev, email: undefined }));
+      setErrors((prev) => ({ ...prev, email: undefined }));
     }
     if (error) onClearError();
   };
@@ -98,7 +94,7 @@ export function AuthForm({
   const handlePasswordChange = (value: string) => {
     setPassword(value);
     if (errors.password) {
-      setErrors(prev => ({ ...prev, password: undefined }));
+      setErrors((prev) => ({ ...prev, password: undefined }));
     }
     if (error) onClearError();
   };
@@ -110,60 +106,50 @@ export function AuthForm({
           <Text className="text-2xl font-bold text-center">{title}</Text>
         </CardTitle>
         <CardDescription>
-          <Text className="text-sm text-muted-foreground text-center">
-            {description}
-          </Text>
+          <Text className="text-sm text-muted-foreground text-center">{description}</Text>
         </CardDescription>
       </CardHeader>
 
       <CardContent className="gap-4">
         <View className="gap-2">
-          <Label nativeID="email">{t('auth.emailLabel')}</Label>
+          <Label nativeID="email">{t("auth.emailLabel")}</Label>
           <Input
-            placeholder={t('auth.emailPlaceholder')}
+            placeholder={t("auth.emailPlaceholder")}
             value={email}
             onChangeText={handleEmailChange}
             keyboardType="email-address"
             autoCapitalize="none"
             autoCorrect={false}
             aria-labelledby="email"
-            className={cn(errors.email && 'border-destructive')}
+            className={cn(errors.email && "border-destructive")}
           />
-          {errors.email && (
-            <Text className="text-xs text-destructive">{errors.email}</Text>
-          )}
+          {errors.email && <Text className="text-xs text-destructive">{errors.email}</Text>}
         </View>
 
         <View className="gap-2">
           <View className="flex-row items-center justify-between">
-            <Label nativeID="password">{t('auth.passwordLabel')}</Label>
+            <Label nativeID="password">{t("auth.passwordLabel")}</Label>
             {isSignIn && onForgotPassword && (
               <Pressable onPress={onForgotPassword}>
-                <Text className="text-sm font-medium text-primary">
-                  {t('auth.forgotPassword')}
-                </Text>
+                <Text className="text-sm font-medium text-primary">{t("auth.forgotPassword")}</Text>
               </Pressable>
             )}
           </View>
           <Input
-            placeholder={t('auth.passwordPlaceholder')}
+            placeholder={t("auth.passwordPlaceholder")}
             value={password}
             onChangeText={handlePasswordChange}
             secureTextEntry
             autoCapitalize="none"
             aria-labelledby="password"
-            className={cn(errors.password && 'border-destructive')}
+            className={cn(errors.password && "border-destructive")}
           />
-          {errors.password && (
-            <Text className="text-xs text-destructive">{errors.password}</Text>
-          )}
+          {errors.password && <Text className="text-xs text-destructive">{errors.password}</Text>}
         </View>
 
         {error && (
           <View className="rounded-xl bg-destructive/10 p-3">
-            <Text className="text-sm text-destructive text-center">
-              {error}
-            </Text>
+            <Text className="text-sm text-destructive text-center">{error}</Text>
           </View>
         )}
 
@@ -173,23 +159,19 @@ export function AuthForm({
           className="mt-2 bg-primary active:bg-primary/80"
         >
           <Text className="text-white font-semibold text-base">
-            {loading ? t('common.loading') : submitText}
+            {loading ? t("common.loading") : submitText}
           </Text>
         </Button>
 
         <View className="flex-row items-center gap-3 my-2">
           <Separator className="flex-1" />
           <Text className="text-xs text-muted-foreground uppercase">
-            {t('auth.orContinueWith')}
+            {t("auth.orContinueWith")}
           </Text>
           <Separator className="flex-1" />
         </View>
 
-        <Button
-          variant="outline"
-          onPress={onGoogleAuth}
-          disabled={isGoogleLoading || loading}
-        >
+        <Button variant="outline" onPress={onGoogleAuth} disabled={isGoogleLoading || loading}>
           <View className="flex-row items-center gap-2">
             <Svg width={20} height={20} viewBox="0 0 24 24">
               <Path
@@ -210,9 +192,7 @@ export function AuthForm({
               />
             </Svg>
             <Text className="font-medium text-foreground">
-              {isGoogleLoading
-                ? t('common.loading')
-                : t('auth.continueWithGoogle')}
+              {isGoogleLoading ? t("common.loading") : t("auth.continueWithGoogle")}
             </Text>
           </View>
         </Button>
@@ -222,9 +202,7 @@ export function AuthForm({
         <View className="flex-row items-center gap-1">
           <Text className="text-sm text-muted-foreground">{switchText}</Text>
           <Pressable onPress={onSwitchMode}>
-            <Text className="text-sm font-semibold text-primary">
-              {switchLinkText}
-            </Text>
+            <Text className="text-sm font-semibold text-primary">{switchLinkText}</Text>
           </Pressable>
         </View>
       </CardFooter>

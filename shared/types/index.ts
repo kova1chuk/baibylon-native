@@ -1,12 +1,12 @@
 export type WordStatus = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export type TrainingType =
-  | 'input_word'
-  | 'choose_translation'
-  | 'context_usage'
-  | 'synonym_match'
-  | 'audio_dictation'
-  | 'manual';
+  | "input_word"
+  | "choose_translation"
+  | "context_usage"
+  | "synonym_match"
+  | "audio_dictation"
+  | "manual";
 
 export interface TrainingQuestion {
   id: string;

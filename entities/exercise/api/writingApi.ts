@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 export interface SentencePromptResponse {
   id: string;
@@ -32,7 +32,7 @@ export interface WritingSubmission {
 export interface WritingScenarioResponse {
   id: string;
   title: string;
-  register: 'formal' | 'semi-formal' | 'informal';
+  register: "formal" | "semi-formal" | "informal";
   level: string;
   description: string;
   recipientEmail: string | null;
@@ -55,7 +55,7 @@ export interface SentenceEvaluationPayload {
 }
 
 export interface CriterionResult {
-  status: 'ok' | 'warn' | 'no';
+  status: "ok" | "warn" | "no";
   value: string;
 }
 
@@ -71,7 +71,7 @@ export interface SentenceEvaluationResponse {
   annotatedSentence: string;
   improvedSentence: string;
   notes: {
-    type: 'ok' | 'fix' | 'warn' | 'tip';
+    type: "ok" | "fix" | "warn" | "tip";
     text: string;
   }[];
 }
@@ -79,7 +79,7 @@ export interface SentenceEvaluationResponse {
 export interface EmailEvaluationPayload {
   scenarioTitle: string;
   scenarioDescription: string;
-  register: 'formal' | 'semi-formal' | 'informal';
+  register: "formal" | "semi-formal" | "informal";
   level: string;
   requirements: string[];
   subject: string;
@@ -104,7 +104,7 @@ export interface EmailEvaluationResponse {
   };
   requirementsMet: boolean[];
   feedbackSections: {
-    type: 'ok' | 'warn' | 'fix' | 'tip';
+    type: "ok" | "warn" | "fix" | "tip";
     title: string;
     body: string;
   }[];
@@ -119,7 +119,7 @@ export interface SummaryEvaluationPayload {
 }
 
 export interface SummaryFeedbackItem {
-  type: 'ok' | 'warn' | 'fix' | 'tip';
+  type: "ok" | "warn" | "fix" | "tip";
   category: string;
   message: string;
   originalText?: string;
@@ -140,7 +140,7 @@ export interface SummaryEvaluationResponse {
 }
 
 export interface WritingSubmitPayload {
-  exerciseType: 'SENTENCE' | 'EMAIL';
+  exerciseType: "SENTENCE" | "EMAIL";
   sessionId?: string;
   promptData: Record<string, unknown>;
   subject?: string;
@@ -148,88 +148,66 @@ export interface WritingSubmitPayload {
 }
 
 export const writingApi = createApi({
-  reducerPath: 'writingApi',
+  reducerPath: "writingApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['WritingSubmissions'],
-  endpoints: builder => ({
+  tagTypes: ["WritingSubmissions"],
+  endpoints: (builder) => ({
     getSentencePrompts: builder.query<SentencePromptResponse[], string | void>({
-      query: level => ({
-        url: '/exercises/writing/sentence-prompts',
+      query: (level) => ({
+        url: "/exercises/writing/sentence-prompts",
         params: level ? { level } : undefined,
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: SentencePromptResponse[];
-      }) => response.data,
+      transformResponse: (response: { success: boolean; data: SentencePromptResponse[] }) =>
+        response.data,
     }),
 
     getScenarios: builder.query<WritingScenarioResponse[], string | void>({
-      query: level => ({
-        url: '/exercises/writing/scenarios',
+      query: (level) => ({
+        url: "/exercises/writing/scenarios",
         params: level ? { level } : undefined,
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: WritingScenarioResponse[];
-      }) => response.data,
+      transformResponse: (response: { success: boolean; data: WritingScenarioResponse[] }) =>
+        response.data,
     }),
 
-    evaluateSentence: builder.mutation<
-      SentenceEvaluationResponse,
-      SentenceEvaluationPayload
-    >({
-      query: body => ({
-        url: '/exercises/writing/evaluate-sentence',
-        method: 'POST',
+    evaluateSentence: builder.mutation<SentenceEvaluationResponse, SentenceEvaluationPayload>({
+      query: (body) => ({
+        url: "/exercises/writing/evaluate-sentence",
+        method: "POST",
         body,
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: SentenceEvaluationResponse;
-      }) => response.data,
+      transformResponse: (response: { success: boolean; data: SentenceEvaluationResponse }) =>
+        response.data,
     }),
 
-    evaluateSummary: builder.mutation<
-      SummaryEvaluationResponse,
-      SummaryEvaluationPayload
-    >({
-      query: body => ({
-        url: '/exercises/writing/evaluate-summary',
-        method: 'POST',
+    evaluateSummary: builder.mutation<SummaryEvaluationResponse, SummaryEvaluationPayload>({
+      query: (body) => ({
+        url: "/exercises/writing/evaluate-summary",
+        method: "POST",
         body,
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: SummaryEvaluationResponse;
-      }) => response.data,
+      transformResponse: (response: { success: boolean; data: SummaryEvaluationResponse }) =>
+        response.data,
     }),
 
-    evaluateEmail: builder.mutation<
-      EmailEvaluationResponse,
-      EmailEvaluationPayload
-    >({
-      query: body => ({
-        url: '/exercises/writing/evaluate-email',
-        method: 'POST',
+    evaluateEmail: builder.mutation<EmailEvaluationResponse, EmailEvaluationPayload>({
+      query: (body) => ({
+        url: "/exercises/writing/evaluate-email",
+        method: "POST",
         body,
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: EmailEvaluationResponse;
-      }) => response.data,
+      transformResponse: (response: { success: boolean; data: EmailEvaluationResponse }) =>
+        response.data,
     }),
 
     submitWriting: builder.mutation<WritingSubmission, WritingSubmitPayload>({
-      query: body => ({
-        url: '/exercises/writing/submit',
-        method: 'POST',
+      query: (body) => ({
+        url: "/exercises/writing/submit",
+        method: "POST",
         body,
       }),
-      transformResponse: (response: {
-        success: boolean;
-        data: WritingSubmission;
-      }) => response.data,
-      invalidatesTags: ['WritingSubmissions'],
+      transformResponse: (response: { success: boolean; data: WritingSubmission }) => response.data,
+      invalidatesTags: ["WritingSubmissions"],
     }),
   }),
 });

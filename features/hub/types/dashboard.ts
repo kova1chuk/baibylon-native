@@ -37,7 +37,7 @@ export interface DashboardMetric {
   value: string | number;
   delta?: {
     value: string;
-    direction: 'up' | 'down' | 'neutral';
+    direction: "up" | "down" | "neutral";
   };
   subtitle?: string;
   gradientClass: string;

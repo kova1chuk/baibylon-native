@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import { View, Text } from 'react-native';
+import { View, Text } from "react-native";
 
-import type { DashboardHomeResponse } from '@/features/hub/types/dashboard';
+import type { DashboardHomeResponse } from "@/features/hub/types/dashboard";
 
 interface Skill {
   labelKey: string;
@@ -21,50 +21,42 @@ export default function EnglishSkillsChart({ data }: Props) {
 
   const skills: Skill[] = [
     {
-      labelKey: 'hub.words',
+      labelKey: "hub.words",
       value: data?.skillVocabulary ?? 0,
-      color: '#10B981',
+      color: "#10B981",
     },
     {
-      labelKey: 'hub.grammar',
+      labelKey: "hub.grammar",
       value: data?.skillGrammar ?? 0,
-      color: '#3B82F6',
+      color: "#3B82F6",
     },
     {
-      labelKey: 'learningFeed.vocabulary',
+      labelKey: "learningFeed.vocabulary",
       value: data?.skillReading ?? 0,
-      color: '#8B5CF6',
+      color: "#8B5CF6",
     },
     {
-      labelKey: 'hub.timeSpent',
+      labelKey: "hub.timeSpent",
       value: data?.skillListening ?? 0,
-      color: '#F59E0B',
+      color: "#F59E0B",
     },
   ];
 
   return (
     <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
       <View className="flex-row items-center justify-between mb-3">
-        <Text className="text-lg font-semibold text-foreground">
-          {t('hub.currentLevel')}
-        </Text>
+        <Text className="text-lg font-semibold text-foreground">{t("hub.currentLevel")}</Text>
         {data?.cefrLevel && (
-          <Text className="text-sm font-semibold text-primary">
-            {data.cefrLevel}
-          </Text>
+          <Text className="text-sm font-semibold text-primary">{data.cefrLevel}</Text>
         )}
       </View>
 
       <View className="gap-3">
-        {skills.map(skill => (
+        {skills.map((skill) => (
           <View key={skill.labelKey} className="gap-1">
             <View className="flex-row justify-between items-center">
-              <Text className="text-sm text-muted-foreground">
-                {t(skill.labelKey)}
-              </Text>
-              <Text className="text-sm font-semibold text-foreground">
-                {skill.value}%
-              </Text>
+              <Text className="text-sm text-muted-foreground">{t(skill.labelKey)}</Text>
+              <Text className="text-sm font-semibold text-foreground">{skill.value}%</Text>
             </View>
             <View className="h-2 rounded-full bg-muted overflow-hidden">
               <View

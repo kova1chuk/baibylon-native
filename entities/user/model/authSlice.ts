@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { AuthState, User } from '../types';
+import { AuthState, User } from "../types";
 
-import type { User as SupabaseUser } from '@supabase/supabase-js';
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const transformSupabaseUser = (supabaseUser: SupabaseUser): User => {
   return {
@@ -20,7 +20,7 @@ const transformSupabaseUser = (supabaseUser: SupabaseUser): User => {
     displayName:
       supabaseUser.user_metadata?.display_name ||
       supabaseUser.user_metadata?.full_name ||
-      supabaseUser.email?.split('@')[0],
+      supabaseUser.email?.split("@")[0],
     photoURL: supabaseUser.user_metadata?.avatar_url,
     emailVerified: !!supabaseUser.email_confirmed_at,
   };
@@ -35,7 +35,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: "auth",
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User | null>) => {
@@ -60,10 +60,10 @@ const authSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
-    clearError: state => {
+    clearError: (state) => {
       state.error = null;
     },
-    logout: state => {
+    logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
       state.error = null;

@@ -1,8 +1,8 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { dictionaryApi } from '@/entities/dictionary/api/dictionaryApi';
-import { dashboardApi } from '@/features/hub/api/dashboardApi';
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { dictionaryApi } from "@/entities/dictionary/api/dictionaryApi";
+import { dashboardApi } from "@/features/hub/api/dashboardApi";
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 interface NestResponse<T> {
   success: boolean;
@@ -44,8 +44,8 @@ function mapReviewRow(row: ReviewRow): Review {
     7: 0,
   };
 
-  if (row.words_stat && typeof row.words_stat === 'object') {
-    Object.keys(row.words_stat).forEach(key => {
+  if (row.words_stat && typeof row.words_stat === "object") {
+    Object.keys(row.words_stat).forEach((key) => {
       const status = Number(key);
       if (status >= 1 && status <= 7) {
         const count = Number(row.words_stat![status]);
@@ -58,9 +58,9 @@ function mapReviewRow(row: ReviewRow): Review {
 
   return {
     id: row.id,
-    title: row.title || 'Untitled Review',
+    title: row.title || "Untitled Review",
     createdAt: row.created_at || new Date().toISOString(),
-    userId: '',
+    userId: "",
     totalWords: row.total_words_count || 0,
     uniqueWords: row.unique_words_count || 0,
     wordsStat,
@@ -68,17 +68,13 @@ function mapReviewRow(row: ReviewRow): Review {
 }
 
 export const reviewApi = createApi({
-  reducerPath: 'reviewApi',
+  reducerPath: "reviewApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['Review'],
-  endpoints: builder => ({
-    getReviewsForFilter: builder.query<
-      ReviewsForFilterResponse,
-      { langCode: string }
-    >({
-      query: () => ({ url: '/reviews/filter' }),
-      transformResponse: (response: NestResponse<ReviewsForFilterResponse>) =>
-        response.data || [],
+  tagTypes: ["Review"],
+  endpoints: (builder) => ({
+    getReviewsForFilter: builder.query<ReviewsForFilterResponse, { langCode: string }>({
+      query: () => ({ url: "/reviews/filter" }),
+      transformResponse: (response: NestResponse<ReviewsForFilterResponse>) => response.data || [],
     }),
     getReviews: builder.query<
       { reviews: Review[]; hasMore: boolean; total: number },
@@ -87,7 +83,7 @@ export const reviewApi = createApi({
       query: ({ page = 1, pageSize = 10 }) => ({
         url: `/reviews?limit=${pageSize}&offset=${(page - 1) * pageSize}`,
       }),
-      providesTags: ['Review'],
+      providesTags: ["Review"],
       transformResponse: (response: NestResponse<ReviewRow[]>, _meta, arg) => {
         const rows = response.data || [];
         const reviews = rows.map(mapReviewRow);
@@ -105,39 +101,32 @@ export const reviewApi = createApi({
         document_link: string | null;
       }
     >({
-      query: body => ({
-        url: '/reviews',
-        method: 'POST',
+      query: (body) => ({
+        url: "/reviews",
+        method: "POST",
         body,
       }),
-      invalidatesTags: ['Review'],
+      invalidatesTags: ["Review"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['DictionaryStats', 'Words'])
-        );
-        dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
+        dispatch(dictionaryApi.util.invalidateTags(["DictionaryStats", "Words"]));
+        dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
       },
     }),
     deleteReview: builder.mutation<void, { reviewId: string }>({
       query: ({ reviewId }) => ({
         url: `/reviews/${reviewId}`,
-        method: 'DELETE',
+        method: "DELETE",
       }),
-      invalidatesTags: ['Review'],
+      invalidatesTags: ["Review"],
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['DictionaryStats', 'Words'])
-        );
-        dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
+        dispatch(dictionaryApi.util.invalidateTags(["DictionaryStats", "Words"]));
+        dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
       },
     }),
   }),
 });
 
-export const {
-  useGetReviewsForFilterQuery,
-  useGetReviewsQuery,
-  useDeleteReviewMutation,
-} = reviewApi;
+export const { useGetReviewsForFilterQuery, useGetReviewsQuery, useDeleteReviewMutation } =
+  reviewApi;

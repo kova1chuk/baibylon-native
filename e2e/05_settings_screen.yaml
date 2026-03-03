@@ -5,37 +5,37 @@ appId: com.vocairo
 
 # Navigate to Settings (if logged in)
 - tapOn:
-    text: '.*Settings.*'
+    text: ".*Settings.*"
     optional: true
 - waitForAnimationToEnd
 - takeScreenshot: 05_settings_screen
 
 # Check for settings sections
 - assertVisible:
-    text: '.*Appearance.*'
+    text: ".*Appearance.*"
     optional: true
 - assertVisible:
-    text: '.*Dark Mode.*'
+    text: ".*Dark Mode.*"
     optional: true
 - assertVisible:
-    text: '.*Legal.*'
+    text: ".*Legal.*"
     optional: true
 - assertVisible:
-    text: '.*Privacy Policy.*'
+    text: ".*Privacy Policy.*"
     optional: true
 - assertVisible:
-    text: '.*Terms of Service.*'
+    text: ".*Terms of Service.*"
     optional: true
 
 # Check pricing link
 - assertVisible:
-    text: '.*Pricing.*'
+    text: ".*Pricing.*"
     optional: true
 
 # Check danger zone
 - scrollUntilVisible:
     element:
-      text: '.*Danger Zone.*'
+      text: ".*Danger Zone.*"
     direction: DOWN
     timeout: 5000
 - takeScreenshot: 05_settings_bottom

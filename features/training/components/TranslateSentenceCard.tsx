@@ -1,12 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import { View, Text, TextInput, Pressable } from 'react-native';
+import { View, Text, TextInput, Pressable } from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/contexts/ThemeContext";
 
-import type { TranslateSentenceContent } from '@/entities/exercise/api/exerciseApi';
+import type { TranslateSentenceContent } from "@/entities/exercise/api/exerciseApi";
 
 interface TranslateSentenceCardProps {
   content: TranslateSentenceContent;
@@ -23,9 +23,9 @@ export default function TranslateSentenceCard({
 }: TranslateSentenceCardProps) {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
 
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
 
@@ -35,24 +35,15 @@ export default function TranslateSentenceCard({
     const normalized = inputValue.trim().toLowerCase();
     const correct =
       normalized === content.correctAnswer.trim().toLowerCase() ||
-      content.acceptableAnswers.some(
-        a => a.trim().toLowerCase() === normalized
-      );
+      content.acceptableAnswers.some((a) => a.trim().toLowerCase() === normalized);
 
     setSubmitted(true);
     setIsCorrect(correct);
     onAnswer(correct, inputValue.trim());
-  }, [
-    inputValue,
-    submitted,
-    isLocked,
-    content.correctAnswer,
-    content.acceptableAnswers,
-    onAnswer,
-  ]);
+  }, [inputValue, submitted, isLocked, content.correctAnswer, content.acceptableAnswers, onAnswer]);
 
   const handleNext = useCallback(() => {
-    setInputValue('');
+    setInputValue("");
     setSubmitted(false);
     setIsCorrect(false);
     onNext();
@@ -62,7 +53,7 @@ export default function TranslateSentenceCard({
     <View className="flex-1 px-4 pt-4">
       <View className="items-center mb-6">
         <Text className="text-sm text-muted-foreground mb-2">
-          {t('learningFeed.translateSentence')}
+          {t("learningFeed.translateSentence")}
         </Text>
         <Text className="text-xl font-semibold text-foreground text-center">
           {content.nativeTranslation}
@@ -80,14 +71,14 @@ export default function TranslateSentenceCard({
           style={{
             borderColor: submitted
               ? isCorrect
-                ? '#10B981'
-                : '#EF4444'
+                ? "#10B981"
+                : "#EF4444"
               : isDark
-                ? '#27272A'
-                : '#E7E5E4',
+                ? "#27272A"
+                : "#E7E5E4",
           }}
-          placeholder={t('learningFeed.yourSentence')}
-          placeholderTextColor={isDark ? '#52525B' : '#A1A1AA'}
+          placeholder={t("learningFeed.yourSentence")}
+          placeholderTextColor={isDark ? "#52525B" : "#A1A1AA"}
           value={inputValue}
           onChangeText={setInputValue}
           autoCapitalize="none"
@@ -100,9 +91,7 @@ export default function TranslateSentenceCard({
 
       {submitted && !isCorrect && (
         <View className="mb-4 p-3 bg-card rounded-xl">
-          <Text className="text-sm text-muted-foreground">
-            {t('learningFeed.correctAnswer')}
-          </Text>
+          <Text className="text-sm text-muted-foreground">{t("learningFeed.correctAnswer")}</Text>
           <Text className="text-base font-semibold text-foreground mt-1">
             {content.correctAnswer}
           </Text>
@@ -116,18 +105,14 @@ export default function TranslateSentenceCard({
           disabled={!inputValue.trim()}
           style={{ opacity: inputValue.trim() ? 1 : 0.5 }}
         >
-          <Text className="text-white font-semibold text-base">
-            {t('learningFeed.check')}
-          </Text>
+          <Text className="text-white font-semibold text-base">{t("learningFeed.check")}</Text>
         </Pressable>
       ) : (
         <Pressable
           className="bg-primary rounded-xl py-4 items-center active:opacity-80"
           onPress={handleNext}
         >
-          <Text className="text-white font-semibold text-base">
-            {t('learningFeed.next')}
-          </Text>
+          <Text className="text-white font-semibold text-base">{t("learningFeed.next")}</Text>
         </Pressable>
       )}
     </View>

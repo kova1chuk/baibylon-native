@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { Redirect, Tabs } from 'expo-router';
+import { Redirect, Tabs } from "expo-router";
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/contexts/AuthContext";
 
-import { CustomTabBar } from '@/components/ui/CustomTabBar';
+import { CustomTabBar } from "@/components/ui/CustomTabBar";
 
 export default function TabLayout() {
   const { user, loading } = useAuth();
@@ -14,7 +14,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      tabBar={props => <CustomTabBar {...props} />}
+      tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{
         headerShown: false,
       }}

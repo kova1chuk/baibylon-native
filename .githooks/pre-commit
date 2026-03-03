@@ -2,22 +2,20 @@
 
 echo "🔄 Pre-commit: Running linting and formatting checks..."
 
-# Run ESLint
-echo "📝 Checking code with ESLint..."
-pnpm exec eslint . --ext .js,.jsx,.ts,.tsx
+echo "📝 Checking code with oxlint..."
+pnpm exec oxlint
 
 if [ $? -ne 0 ]; then
-  echo "❌ Pre-commit: ESLint found issues. Please fix them before committing."
+  echo "❌ Pre-commit: oxlint found issues. Please fix them before committing."
   exit 1
 fi
 
-# Run Prettier check
-echo "🎨 Checking code formatting with Prettier..."
-pnpm exec prettier --check .
+echo "🎨 Checking code formatting with oxfmt..."
+pnpm exec oxfmt --check .
 
 if [ $? -ne 0 ]; then
-  echo "❌ Pre-commit: Prettier found formatting issues. Please run 'pnpm exec prettier --write .' to fix them."
+  echo "❌ Pre-commit: oxfmt found formatting issues. Run 'pnpm format' to fix them."
   exit 1
 fi
 
-echo "✅ Pre-commit: All checks passed successfully!"
+echo "✅ Pre-commit: All checks passed!"

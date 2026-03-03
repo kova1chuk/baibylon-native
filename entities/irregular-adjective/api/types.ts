@@ -1,4 +1,4 @@
-import type { IrregularAdjective } from '@/entities/irregular-adjective/types';
+import type { IrregularAdjective } from "@/entities/irregular-adjective/types";
 
 export interface DictionaryIrregularAdjectiveRow {
   irregular_adjective_id: string;

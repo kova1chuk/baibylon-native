@@ -1,31 +1,31 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
-import { View, Text } from 'react-native';
+import { View, Text } from "react-native";
 
 const CELL_SIZE = 14;
 const CELL_GAP = 3;
 const MONTHS_SHORT = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 const WEEKS = 12;
 
 function getIntensityColor(count: number, isDark: boolean): string {
-  if (count === 0) return isDark ? '#1A1A2E' : '#EBEDF0';
-  if (count <= 1) return isDark ? '#0E4429' : '#9BE9A8';
-  if (count <= 3) return isDark ? '#006D32' : '#40C463';
-  if (count <= 5) return isDark ? '#26A641' : '#30A14E';
-  return isDark ? '#39D353' : '#216E39';
+  if (count === 0) return isDark ? "#1A1A2E" : "#EBEDF0";
+  if (count <= 1) return isDark ? "#0E4429" : "#9BE9A8";
+  if (count <= 3) return isDark ? "#006D32" : "#40C463";
+  if (count <= 5) return isDark ? "#26A641" : "#30A14E";
+  return isDark ? "#39D353" : "#216E39";
 }
 
 interface ActivityHeatmapSectionProps {
@@ -33,14 +33,11 @@ interface ActivityHeatmapSectionProps {
   isDark: boolean;
 }
 
-export default function ActivityHeatmapSection({
-  data,
-  isDark,
-}: ActivityHeatmapSectionProps) {
+export default function ActivityHeatmapSection({ data, isDark }: ActivityHeatmapSectionProps) {
   const { grid, monthHeaders, totalSessions } = useMemo(() => {
     const dateMap = new Map<string, number>();
     let total = 0;
-    data.forEach(day => {
+    data.forEach((day) => {
       dateMap.set(day.activity_date, day.session_count);
       total += day.session_count;
     });
@@ -59,7 +56,7 @@ export default function ActivityHeatmapSection({
     const d = new Date(startDate);
 
     while (d <= today) {
-      const dateStr = d.toISOString().split('T')[0];
+      const dateStr = d.toISOString().split("T")[0];
       currentWeek.push({
         date: new Date(d),
         count: dateMap.get(dateStr) || 0,
@@ -93,18 +90,14 @@ export default function ActivityHeatmapSection({
     <View
       className="rounded-xl p-4"
       style={{
-        backgroundColor: isDark ? '#111113' : '#FFFFFF',
+        backgroundColor: isDark ? "#111113" : "#FFFFFF",
         borderWidth: 1,
-        borderColor: isDark ? '#27272A' : '#E7E5E4',
+        borderColor: isDark ? "#27272A" : "#E7E5E4",
       }}
     >
       <View className="flex-row items-center justify-between mb-3">
-        <Text className="text-base font-semibold text-foreground">
-          Activity ({WEEKS} weeks)
-        </Text>
-        <Text className="text-xs text-muted-foreground">
-          {totalSessions} sessions
-        </Text>
+        <Text className="text-base font-semibold text-foreground">Activity ({WEEKS} weeks)</Text>
+        <Text className="text-xs text-muted-foreground">{totalSessions} sessions</Text>
       </View>
 
       <View className="mb-1 h-4 relative">
@@ -137,12 +130,9 @@ export default function ActivityHeatmapSection({
         ))}
       </View>
 
-      <View
-        className="flex-row items-center justify-end mt-2"
-        style={{ gap: 4 }}
-      >
+      <View className="flex-row items-center justify-end mt-2" style={{ gap: 4 }}>
         <Text className="text-[10px] text-muted-foreground">Less</Text>
-        {[0, 1, 2, 4, 6].map(count => (
+        {[0, 1, 2, 4, 6].map((count) => (
           <View
             key={count}
             style={{

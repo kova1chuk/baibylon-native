@@ -1,6 +1,6 @@
-import { View } from 'react-native';
+import { View } from "react-native";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
 
 export default function TabBarBackground() {
   const colors = useColors();

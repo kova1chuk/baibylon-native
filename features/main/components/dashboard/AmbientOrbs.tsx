@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 import Animated, {
   useSharedValue,
@@ -7,27 +7,14 @@ import Animated, {
   withTiming,
   withSequence,
   Easing,
-} from 'react-native-reanimated';
-import Svg, {
-  Defs,
-  RadialGradient,
-  Stop,
-  Circle as SvgCircle,
-} from 'react-native-svg';
+} from "react-native-reanimated";
+import Svg, { Defs, RadialGradient, Stop, Circle as SvgCircle } from "react-native-svg";
 
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-function RadialOrb({
-  size,
-  color,
-  opacity,
-}: {
-  size: number;
-  color: string;
-  opacity: number;
-}) {
+function RadialOrb({ size, color, opacity }: { size: number; color: string; opacity: number }) {
   return (
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <Defs>
@@ -37,12 +24,7 @@ function RadialOrb({
           <Stop offset="1" stopColor={color} stopOpacity={0} />
         </RadialGradient>
       </Defs>
-      <SvgCircle
-        cx={size / 2}
-        cy={size / 2}
-        r={size / 2}
-        fill={`url(#grad-${color})`}
-      />
+      <SvgCircle cx={size / 2} cy={size / 2} r={size / 2} fill={`url(#grad-${color})`} />
     </Svg>
   );
 }
@@ -59,31 +41,31 @@ export default function AmbientOrbs() {
     orb1X.value = withRepeat(
       withSequence(
         withTiming(40, { duration: 9000, easing: ease }),
-        withTiming(0, { duration: 9000, easing: ease })
+        withTiming(0, { duration: 9000, easing: ease }),
       ),
-      -1
+      -1,
     );
     orb1Y.value = withRepeat(
       withSequence(
         withTiming(30, { duration: 9000, easing: ease }),
-        withTiming(0, { duration: 9000, easing: ease })
+        withTiming(0, { duration: 9000, easing: ease }),
       ),
-      -1
+      -1,
     );
 
     orb2X.value = withRepeat(
       withSequence(
         withTiming(-30, { duration: 11000, easing: ease }),
-        withTiming(0, { duration: 11000, easing: ease })
+        withTiming(0, { duration: 11000, easing: ease }),
       ),
-      -1
+      -1,
     );
     orb2Y.value = withRepeat(
       withSequence(
         withTiming(-40, { duration: 11000, easing: ease }),
-        withTiming(0, { duration: 11000, easing: ease })
+        withTiming(0, { duration: 11000, easing: ease }),
       ),
-      -1
+      -1,
     );
   }, [orb1X, orb1Y, orb2X, orb2Y]);
 
@@ -109,21 +91,21 @@ export default function AmbientOrbs() {
 
 const styles = StyleSheet.create({
   orb1: {
-    position: 'absolute',
+    position: "absolute",
     top: -60,
     left: -60,
     width: 288,
     height: 288,
     zIndex: 0,
-    pointerEvents: 'none',
+    pointerEvents: "none",
   },
   orb2: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 40,
     right: -40,
     width: 256,
     height: 256,
     zIndex: 0,
-    pointerEvents: 'none',
+    pointerEvents: "none",
   },
 });

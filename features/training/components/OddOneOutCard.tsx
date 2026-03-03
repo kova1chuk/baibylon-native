@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import { Check, X } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
+import { Check, X } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from "react-native";
 
-import type { OddOneOutContent } from '@/entities/exercise/api/exerciseApi';
+import type { OddOneOutContent } from "@/entities/exercise/api/exerciseApi";
 
 interface OddOneOutCardProps {
   content: OddOneOutContent;
@@ -14,12 +14,7 @@ interface OddOneOutCardProps {
   isLocked: boolean;
 }
 
-export default function OddOneOutCard({
-  content,
-  onAnswer,
-  onNext,
-  isLocked,
-}: OddOneOutCardProps) {
+export default function OddOneOutCard({ content, onAnswer, onNext, isLocked }: OddOneOutCardProps) {
   const { t } = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
@@ -32,7 +27,7 @@ export default function OddOneOutCard({
       const isCorrect = index === content.oddIndex;
       onAnswer(isCorrect, index);
     },
-    [answered, isLocked, content.oddIndex, onAnswer]
+    [answered, isLocked, content.oddIndex, onAnswer],
   );
 
   const handleNext = useCallback(() => {
@@ -42,34 +37,34 @@ export default function OddOneOutCard({
   }, [onNext]);
 
   const getOptionState = (index: number) => {
-    if (!answered) return 'idle';
-    if (index === content.oddIndex) return 'correct';
-    if (index === selectedIndex) return 'wrong';
-    return 'dimmed';
+    if (!answered) return "idle";
+    if (index === content.oddIndex) return "correct";
+    if (index === selectedIndex) return "wrong";
+    return "dimmed";
   };
 
   const getOptionStyles = (state: string) => {
     switch (state) {
-      case 'correct':
+      case "correct":
         return {
-          borderColor: '#10B981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          borderColor: "#10B981",
+          backgroundColor: "rgba(16, 185, 129, 0.1)",
         };
-      case 'wrong':
+      case "wrong":
         return {
-          borderColor: '#EF4444',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          borderColor: "#EF4444",
+          backgroundColor: "rgba(239, 68, 68, 0.1)",
         };
-      case 'dimmed':
+      case "dimmed":
         return {
-          borderColor: '#D1D5DB',
-          backgroundColor: 'transparent',
+          borderColor: "#D1D5DB",
+          backgroundColor: "transparent",
           opacity: 0.4,
         };
       default:
         return {
-          borderColor: '#D1D5DB',
-          backgroundColor: 'transparent',
+          borderColor: "#D1D5DB",
+          backgroundColor: "transparent",
         };
     }
   };
@@ -77,12 +72,8 @@ export default function OddOneOutCard({
   return (
     <View className="flex-1 px-4 pt-4">
       <View className="items-center mb-6">
-        <Text className="text-sm text-muted-foreground mb-2">
-          {t('exercises.oddOneOut')}
-        </Text>
-        <Text className="text-base text-muted-foreground text-center">
-          {content.category}
-        </Text>
+        <Text className="text-sm text-muted-foreground mb-2">{t("exercises.oddOneOut")}</Text>
+        <Text className="text-base text-muted-foreground text-center">{content.category}</Text>
       </View>
 
       <View className="gap-3">
@@ -103,17 +94,13 @@ export default function OddOneOutCard({
                   className="text-base font-medium flex-1"
                   style={{
                     color:
-                      state === 'correct'
-                        ? '#10B981'
-                        : state === 'wrong'
-                          ? '#EF4444'
-                          : undefined,
+                      state === "correct" ? "#10B981" : state === "wrong" ? "#EF4444" : undefined,
                   }}
                 >
                   {word}
                 </Text>
-                {state === 'correct' && <Check size={20} color="#10B981" />}
-                {state === 'wrong' && <X size={20} color="#EF4444" />}
+                {state === "correct" && <Check size={20} color="#10B981" />}
+                {state === "wrong" && <X size={20} color="#EF4444" />}
               </View>
             </Pressable>
           );
@@ -122,9 +109,7 @@ export default function OddOneOutCard({
 
       {answered && (
         <View className="mt-4 p-3 bg-card rounded-xl">
-          <Text className="text-sm text-muted-foreground">
-            {content.definition}
-          </Text>
+          <Text className="text-sm text-muted-foreground">{content.definition}</Text>
         </View>
       )}
 
@@ -133,9 +118,7 @@ export default function OddOneOutCard({
           className="bg-primary rounded-xl py-4 items-center mt-6 active:opacity-80"
           onPress={handleNext}
         >
-          <Text className="text-white font-semibold text-base">
-            {t('learningFeed.next')}
-          </Text>
+          <Text className="text-white font-semibold text-base">{t("learningFeed.next")}</Text>
         </Pressable>
       )}
     </View>

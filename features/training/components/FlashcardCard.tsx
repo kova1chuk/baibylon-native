@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from "react-native";
 
-import type { Word } from '@/entities/word/types';
+import type { Word } from "@/entities/word/types";
 
 interface FlashcardCardProps {
   word: Word;
@@ -16,7 +16,7 @@ export default function FlashcardCard({ word, onRate }: FlashcardCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const handleFlip = useCallback(() => {
-    setIsFlipped(prev => !prev);
+    setIsFlipped((prev) => !prev);
   }, []);
 
   const handleRate = useCallback(
@@ -24,7 +24,7 @@ export default function FlashcardCard({ word, onRate }: FlashcardCardProps) {
       setIsFlipped(false);
       onRate(quality);
     },
-    [onRate]
+    [onRate],
   );
 
   return (
@@ -36,16 +36,12 @@ export default function FlashcardCard({ word, onRate }: FlashcardCardProps) {
       >
         {!isFlipped ? (
           <View className="items-center gap-3">
-            <Text className="text-4xl font-bold text-foreground text-center">
-              {word.word}
-            </Text>
+            <Text className="text-4xl font-bold text-foreground text-center">{word.word}</Text>
             {word.phonetic?.text && (
-              <Text className="text-base text-muted-foreground">
-                {word.phonetic.text}
-              </Text>
+              <Text className="text-base text-muted-foreground">{word.phonetic.text}</Text>
             )}
             <Text className="text-sm text-muted-foreground mt-4">
-              {t('learningFeed.pressSpaceToFlip')}
+              {t("learningFeed.pressSpaceToFlip")}
             </Text>
           </View>
         ) : (
@@ -73,39 +69,31 @@ export default function FlashcardCard({ word, onRate }: FlashcardCardProps) {
         <View className="flex-row gap-3 mt-4 mb-4">
           <Pressable
             className="flex-1 rounded-xl py-3 items-center active:opacity-80"
-            style={{ backgroundColor: '#EF4444' }}
+            style={{ backgroundColor: "#EF4444" }}
             onPress={() => handleRate(1)}
           >
-            <Text className="text-white font-semibold">
-              {t('learningFeed.again')}
-            </Text>
+            <Text className="text-white font-semibold">{t("learningFeed.again")}</Text>
           </Pressable>
           <Pressable
             className="flex-1 rounded-xl py-3 items-center active:opacity-80"
-            style={{ backgroundColor: '#F59E0B' }}
+            style={{ backgroundColor: "#F59E0B" }}
             onPress={() => handleRate(3)}
           >
-            <Text className="text-white font-semibold">
-              {t('learningFeed.hard')}
-            </Text>
+            <Text className="text-white font-semibold">{t("learningFeed.hard")}</Text>
           </Pressable>
           <Pressable
             className="flex-1 rounded-xl py-3 items-center active:opacity-80"
-            style={{ backgroundColor: '#3B82F6' }}
+            style={{ backgroundColor: "#3B82F6" }}
             onPress={() => handleRate(4)}
           >
-            <Text className="text-white font-semibold">
-              {t('learningFeed.good')}
-            </Text>
+            <Text className="text-white font-semibold">{t("learningFeed.good")}</Text>
           </Pressable>
           <Pressable
             className="flex-1 rounded-xl py-3 items-center active:opacity-80"
-            style={{ backgroundColor: '#10B981' }}
+            style={{ backgroundColor: "#10B981" }}
             onPress={() => handleRate(5)}
           >
-            <Text className="text-white font-semibold">
-              {t('learningFeed.easy')}
-            </Text>
+            <Text className="text-white font-semibold">{t("learningFeed.easy")}</Text>
           </Pressable>
         </View>
       )}

@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { AlertTriangle, RefreshCw } from 'lucide-react-native';
+import { AlertTriangle, RefreshCw } from "lucide-react-native";
 
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from "react-native";
 
 interface Props {
   children: React.ReactNode;
@@ -42,14 +42,12 @@ export default class ErrorBoundary extends Component<Props, State> {
       return (
         <View
           className="flex-1 items-center justify-center p-6"
-          style={{ backgroundColor: '#FAF9F6' }}
+          style={{ backgroundColor: "#FAF9F6" }}
         >
           <AlertTriangle size={48} color="#EF4444" />
-          <Text className="text-lg font-semibold text-foreground mt-4">
-            Something went wrong
-          </Text>
+          <Text className="text-lg font-semibold text-foreground mt-4">Something went wrong</Text>
           <Text className="text-sm text-muted-foreground mt-2 text-center">
-            {this.state.error?.message || 'An unexpected error occurred'}
+            {this.state.error?.message || "An unexpected error occurred"}
           </Text>
           {this.state.errorInfo?.componentStack && (
             <View className="mt-4 p-2 bg-gray-100 rounded max-h-[300px]">

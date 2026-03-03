@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import { View, Text, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator } from "react-native";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
 
 interface LoadingScreenProps {
   message?: string;
@@ -20,9 +20,7 @@ export default function LoadingScreen({ message }: LoadingScreenProps) {
       style={{ backgroundColor: colors.background }}
     >
       <ActivityIndicator size="large" />
-      <Text className="text-muted-foreground mt-3">
-        {message || t('common.loading')}
-      </Text>
+      <Text className="text-muted-foreground mt-3">{message || t("common.loading")}</Text>
     </View>
   );
 }

@@ -1,9 +1,9 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { dictionaryApi } from '@/entities/dictionary/api/dictionaryApi';
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { dictionaryApi } from "@/entities/dictionary/api/dictionaryApi";
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
-export type McDirection = 'word_to_translation' | 'translation_to_word';
+export type McDirection = "word_to_translation" | "translation_to_word";
 
 export interface MultipleChoiceContent {
   wordId: string;
@@ -213,7 +213,7 @@ export interface SentenceOrderingContent {
 }
 
 export interface RPQuestionChoice {
-  type: 'mc' | 'inf';
+  type: "mc" | "inf";
   text: string;
   options: string[];
   correct: number;
@@ -221,7 +221,7 @@ export interface RPQuestionChoice {
 }
 
 export interface RPQuestionTF {
-  type: 'tf';
+  type: "tf";
   text: string;
   correct: boolean;
   explain: string;
@@ -299,114 +299,79 @@ export type ExerciseContent =
   | WriteSentenceContent;
 
 export function isSentenceOrderingContent(
-  content: ExerciseContent
+  content: ExerciseContent,
 ): content is SentenceOrderingContent {
-  return (
-    'passageKey' in content && 'sentences' in content && 'prompt' in content
-  );
+  return "passageKey" in content && "sentences" in content && "prompt" in content;
 }
 
 export function isReadingPassageContent(
-  content: ExerciseContent
+  content: ExerciseContent,
 ): content is ReadingPassageContent {
-  return 'passageKey' in content && 'html' in content && 'questions' in content;
+  return "passageKey" in content && "html" in content && "questions" in content;
 }
 
-export function isContextFillContent(
-  content: ExerciseContent
-): content is ContextFillContent {
-  return 'sentence' in content && 'answer' in content;
+export function isContextFillContent(content: ExerciseContent): content is ContextFillContent {
+  return "sentence" in content && "answer" in content;
 }
 
 export function isMultipleChoiceContent(
-  content: ExerciseContent
+  content: ExerciseContent,
 ): content is MultipleChoiceContent {
-  return 'correctIndex' in content && 'direction' in content;
+  return "correctIndex" in content && "direction" in content;
 }
 
-export function isTypeTheWordContent(
-  content: ExerciseContent
-): content is TypeTheWordContent {
-  return (
-    'typedWord' in content || ('correctAnswer' in content && 'hint' in content)
-  );
+export function isTypeTheWordContent(content: ExerciseContent): content is TypeTheWordContent {
+  return "typedWord" in content || ("correctAnswer" in content && "hint" in content);
 }
 
-export function isOddOneOutContent(
-  content: ExerciseContent
-): content is OddOneOutContent {
-  return 'oddIndex' in content && 'words' in content && 'category' in content;
+export function isOddOneOutContent(content: ExerciseContent): content is OddOneOutContent {
+  return "oddIndex" in content && "words" in content && "category" in content;
 }
 
-export function isWordFormationContent(
-  content: ExerciseContent
-): content is WordFormationContent {
-  return 'baseWord' in content && 'targetPOS' in content && 'hints' in content;
+export function isWordFormationContent(content: ExerciseContent): content is WordFormationContent {
+  return "baseWord" in content && "targetPOS" in content && "hints" in content;
 }
 
 export function isVerbFormsDrillContent(
-  content: ExerciseContent
+  content: ExerciseContent,
 ): content is VerbFormsDrillContent {
-  return (
-    'baseForm' in content &&
-    'pastSimple' in content &&
-    'pastParticiple' in content
-  );
+  return "baseForm" in content && "pastSimple" in content && "pastParticiple" in content;
 }
 
 export function isErrorCorrectionContent(
-  content: ExerciseContent
+  content: ExerciseContent,
 ): content is ErrorCorrectionContent {
-  return 'errorIdx' in content && 'correction' in content && 'words' in content;
+  return "errorIdx" in content && "correction" in content && "words" in content;
 }
 
 export function isSentenceTransformContent(
-  content: ExerciseContent
+  content: ExerciseContent,
 ): content is SentenceTransformContent {
-  return 'original' in content && 'answers' in content && 'model' in content;
+  return "original" in content && "answers" in content && "model" in content;
 }
 
-export function isClozeTestContent(
-  content: ExerciseContent
-): content is ClozeTestContent {
-  return (
-    'blanks' in content &&
-    'text' in content &&
-    'title' in content &&
-    'ruleId' in content
-  );
+export function isClozeTestContent(content: ExerciseContent): content is ClozeTestContent {
+  return "blanks" in content && "text" in content && "title" in content && "ruleId" in content;
 }
 
-export function isPhraseBuilderContent(
-  content: ExerciseContent
-): content is PhraseBuilderContent {
-  return 'correctSentence' in content && 'scrambledWords' in content;
+export function isPhraseBuilderContent(content: ExerciseContent): content is PhraseBuilderContent {
+  return "correctSentence" in content && "scrambledWords" in content;
 }
 
-export function isRuleQuizContent(
-  content: ExerciseContent
-): content is RuleQuizContent {
-  return (
-    'ruleId' in content && 'ruleTitle' in content && 'rulePattern' in content
-  );
+export function isRuleQuizContent(content: ExerciseContent): content is RuleQuizContent {
+  return "ruleId" in content && "ruleTitle" in content && "rulePattern" in content;
 }
 
 export function isTranslateSentenceContent(
-  content: ExerciseContent
+  content: ExerciseContent,
 ): content is TranslateSentenceContent {
   return (
-    'nativeTranslation' in content &&
-    'correctAnswer' in content &&
-    'nativeLanguage' in content
+    "nativeTranslation" in content && "correctAnswer" in content && "nativeLanguage" in content
   );
 }
 
-export function isWriteSentenceContent(
-  content: ExerciseContent
-): content is WriteSentenceContent {
-  return (
-    'targetWord' in content && 'minWords' in content && 'maxWords' in content
-  );
+export function isWriteSentenceContent(content: ExerciseContent): content is WriteSentenceContent {
+  return "targetWord" in content && "minWords" in content && "maxWords" in content;
 }
 
 export interface ExerciseQuestion {
@@ -464,35 +429,35 @@ interface CompleteSessionResponse {
 }
 
 export const exerciseApi = createApi({
-  reducerPath: 'exerciseApi',
+  reducerPath: "exerciseApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['ExerciseSession'],
-  endpoints: builder => ({
+  tagTypes: ["ExerciseSession"],
+  endpoints: (builder) => ({
     startExerciseSession: builder.mutation<
       StartSessionResponse,
       {
         exerciseType:
-          | 'MULTIPLE_CHOICE'
-          | 'CONTEXT_FILL'
-          | 'TYPE_THE_WORD'
-          | 'ODD_ONE_OUT'
-          | 'WORD_FORMATION'
-          | 'VERB_FORMS_DRILL'
-          | 'RULE_QUIZ'
-          | 'ERROR_CORRECTION'
-          | 'SENTENCE_TRANSFORM'
-          | 'CLOZE_TEST'
-          | 'PHRASE_BUILDER'
-          | 'SENTENCE_ORDERING'
-          | 'READING_PASSAGE'
-          | 'TRANSLATE_SENTENCE'
-          | 'WRITE_SENTENCE';
+          | "MULTIPLE_CHOICE"
+          | "CONTEXT_FILL"
+          | "TYPE_THE_WORD"
+          | "ODD_ONE_OUT"
+          | "WORD_FORMATION"
+          | "VERB_FORMS_DRILL"
+          | "RULE_QUIZ"
+          | "ERROR_CORRECTION"
+          | "SENTENCE_TRANSFORM"
+          | "CLOZE_TEST"
+          | "PHRASE_BUILDER"
+          | "SENTENCE_ORDERING"
+          | "READING_PASSAGE"
+          | "TRANSLATE_SENTENCE"
+          | "WRITE_SENTENCE";
         strategy?: string;
       }
     >({
-      query: body => ({
-        url: '/exercises/sessions',
-        method: 'POST',
+      query: (body) => ({
+        url: "/exercises/sessions",
+        method: "POST",
         body,
       }),
     }),
@@ -519,7 +484,7 @@ export const exerciseApi = createApi({
     >({
       query: ({ sessionId, ...body }) => ({
         url: `/exercises/sessions/${sessionId}/answer`,
-        method: 'POST',
+        method: "POST",
         body,
       }),
     }),
@@ -530,37 +495,30 @@ export const exerciseApi = createApi({
     >({
       query: ({ sessionId, ...body }) => ({
         url: `/exercises/sessions/${sessionId}/batch`,
-        method: 'POST',
+        method: "POST",
         body,
       }),
     }),
 
-    completeExerciseSession: builder.mutation<
-      CompleteSessionResponse,
-      { sessionId: string }
-    >({
+    completeExerciseSession: builder.mutation<CompleteSessionResponse, { sessionId: string }>({
       query: ({ sessionId }) => ({
         url: `/exercises/sessions/${sessionId}/complete`,
-        method: 'POST',
+        method: "POST",
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['Words', 'DictionaryStats'])
-        );
+        dispatch(dictionaryApi.util.invalidateTags(["Words", "DictionaryStats"]));
       },
     }),
 
     abandonExerciseSession: builder.mutation<void, { sessionId: string }>({
       query: ({ sessionId }) => ({
         url: `/exercises/sessions/${sessionId}/abandon`,
-        method: 'POST',
+        method: "POST",
       }),
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['Words', 'DictionaryStats'])
-        );
+        dispatch(dictionaryApi.util.invalidateTags(["Words", "DictionaryStats"]));
       },
     }),
   }),

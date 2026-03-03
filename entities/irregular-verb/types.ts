@@ -1,4 +1,4 @@
-import { WordStatus } from '@/shared/types';
+import { WordStatus } from "@/shared/types";
 
 export interface Phonetic {
   text: string;

@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { Image } from 'expo-image';
+import { Image } from "expo-image";
 
-import { View, Text } from 'react-native';
+import { View, Text } from "react-native";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface AvatarProps {
   src?: string | null;
@@ -18,10 +18,7 @@ function Avatar({ src, fallback, size = 40, className }: AvatarProps) {
 
   return (
     <View
-      className={cn(
-        'items-center justify-center rounded-full bg-muted overflow-hidden',
-        className
-      )}
+      className={cn("items-center justify-center rounded-full bg-muted overflow-hidden", className)}
       style={{ width: size, height: size }}
     >
       {src && !hasError ? (
@@ -31,10 +28,7 @@ function Avatar({ src, fallback, size = 40, className }: AvatarProps) {
           onError={() => setHasError(true)}
         />
       ) : (
-        <Text
-          className="font-semibold text-muted-foreground"
-          style={{ fontSize: size * 0.4 }}
-        >
+        <Text className="font-semibold text-muted-foreground" style={{ fontSize: size * 0.4 }}>
           {fallback}
         </Text>
       )}

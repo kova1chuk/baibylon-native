@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-import { Word, WordState, UpdateWordRequest } from '../types';
+import { Word, WordState, UpdateWordRequest } from "../types";
 
 const initialState: WordState = {
   words: [],
@@ -10,7 +10,7 @@ const initialState: WordState = {
 };
 
 const wordSlice = createSlice({
-  name: 'word',
+  name: "word",
   initialState,
   reducers: {
     setWords: (state, action: PayloadAction<Word[]>) => {
@@ -22,20 +22,18 @@ const wordSlice = createSlice({
       state.error = null;
     },
     updateWord: (state, action: PayloadAction<UpdateWordRequest>) => {
-      const index = state.words.findIndex(
-        word => word.id === action.payload.id
-      );
+      const index = state.words.findIndex((word) => word.id === action.payload.id);
       if (index !== -1) {
         state.words[index] = {
           ...state.words[index],
           ...action.payload,
-          status: action.payload.status as unknown as Word['status'],
+          status: action.payload.status as unknown as Word["status"],
         };
       }
       state.error = null;
     },
     deleteWord: (state, action: PayloadAction<string>) => {
-      state.words = state.words.filter(word => word.id !== action.payload);
+      state.words = state.words.filter((word) => word.id !== action.payload);
       state.error = null;
     },
     setSelectedWord: (state, action: PayloadAction<Word | null>) => {
@@ -48,7 +46,7 @@ const wordSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
-    clearError: state => {
+    clearError: (state) => {
       state.error = null;
     },
   },

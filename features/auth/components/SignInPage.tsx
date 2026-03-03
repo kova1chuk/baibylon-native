@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { useRouter } from 'expo-router';
-import { useTranslation } from 'react-i18next';
+import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ActivityIndicator, ScrollView, View } from "react-native";
 
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase";
 
-import { useColors } from '@/hooks/useColors';
-import { useGoogleAuth } from '@/hooks/useGoogleAuth';
+import { useColors } from "@/hooks/useColors";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 
-import { AuthForm } from './AuthForm';
+import { AuthForm } from "./AuthForm";
 
 export default function SignInPage() {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (session && !authLoading) {
-      router.replace('/(tabs)');
+      router.replace("/(tabs)");
     }
   }, [session, authLoading, router]);
 
@@ -37,10 +37,10 @@ export default function SignInPage() {
         password,
       });
       if (authError) {
-        setError(authError.message || t('auth.signInError'));
+        setError(authError.message || t("auth.signInError"));
       }
     } catch {
-      setError(t('auth.signInError'));
+      setError(t("auth.signInError"));
     } finally {
       setLoading(false);
     }
@@ -50,7 +50,7 @@ export default function SignInPage() {
     try {
       await promptAsync();
     } catch {
-      setError(t('auth.googleSignInError'));
+      setError(t("auth.googleSignInError"));
     }
   };
 
@@ -71,7 +71,7 @@ export default function SignInPage() {
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         flexGrow: 1,
-        justifyContent: 'center',
+        justifyContent: "center",
         paddingVertical: 40,
         paddingHorizontal: 20,
       }}
@@ -80,8 +80,8 @@ export default function SignInPage() {
         mode="signin"
         onSubmit={handleSignIn}
         onGoogleAuth={handleGoogleSignIn}
-        onSwitchMode={() => router.push('/auth/signup')}
-        onForgotPassword={() => router.push('/auth/forgot-password')}
+        onSwitchMode={() => router.push("/auth/signup")}
+        onForgotPassword={() => router.push("/auth/forgot-password")}
         loading={loading}
         error={error}
         onClearError={() => setError(null)}

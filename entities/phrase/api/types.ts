@@ -1,5 +1,5 @@
-import type { Phrase } from '@/entities/phrase/types';
-import type { DictionaryPhraseRowDto } from '@/shared/types/openapi';
+import type { Phrase } from "@/entities/phrase/types";
+import type { DictionaryPhraseRowDto } from "@/shared/types/openapi";
 
 export type DictionaryPhraseRow = DictionaryPhraseRowDto;
 

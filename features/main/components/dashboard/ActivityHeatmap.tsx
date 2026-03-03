@@ -1,36 +1,36 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
-import { View, Text } from 'react-native';
+import { View, Text } from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/contexts/ThemeContext";
 
-import type { ActivityHeatmapData } from '@/features/hub/types/dashboard';
+import type { ActivityHeatmapData } from "@/features/hub/types/dashboard";
 
 const CELL_SIZE = 14;
 const CELL_GAP = 3;
 const MONTHS_SHORT = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 function getIntensityColor(count: number, isDark: boolean): string {
-  if (count === 0) return isDark ? '#1A1A2E' : '#EBEDF0';
-  if (count <= 1) return isDark ? '#0E4429' : '#9BE9A8';
-  if (count <= 3) return isDark ? '#006D32' : '#40C463';
-  if (count <= 5) return isDark ? '#26A641' : '#30A14E';
-  return isDark ? '#39D353' : '#216E39';
+  if (count === 0) return isDark ? "#1A1A2E" : "#EBEDF0";
+  if (count <= 1) return isDark ? "#0E4429" : "#9BE9A8";
+  if (count <= 3) return isDark ? "#006D32" : "#40C463";
+  if (count <= 5) return isDark ? "#26A641" : "#30A14E";
+  return isDark ? "#39D353" : "#216E39";
 }
 
 export const HEATMAP_WEEKS = 12;
@@ -42,11 +42,11 @@ interface Props {
 export default function ActivityHeatmap({ activityData }: Props) {
   const { t } = useTranslation();
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
 
   const { grid, monthHeaders } = useMemo(() => {
     const dateMap = new Map<string, number>();
-    (activityData || []).forEach(day => {
+    (activityData || []).forEach((day) => {
       dateMap.set(day.activity_date, day.session_count);
     });
 
@@ -64,7 +64,7 @@ export default function ActivityHeatmap({ activityData }: Props) {
     const d = new Date(startDate);
 
     while (d <= today) {
-      const dateStr = d.toISOString().split('T')[0];
+      const dateStr = d.toISOString().split("T")[0];
       currentWeek.push({ date: new Date(d), count: dateMap.get(dateStr) || 0 });
 
       if (currentWeek.length === 7) {
@@ -94,7 +94,7 @@ export default function ActivityHeatmap({ activityData }: Props) {
   return (
     <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
       <Text className="text-lg font-semibold text-foreground mb-3">
-        {t('dashboard.activityLabel', { weeks: HEATMAP_WEEKS })}
+        {t("dashboard.activityLabel", { weeks: HEATMAP_WEEKS })}
       </Text>
 
       <View className="mb-1 h-4 relative">
@@ -127,14 +127,9 @@ export default function ActivityHeatmap({ activityData }: Props) {
         ))}
       </View>
 
-      <View
-        className="flex-row items-center justify-end mt-2"
-        style={{ gap: 4 }}
-      >
-        <Text className="text-[10px] text-muted-foreground">
-          {t('dashboard.less')}
-        </Text>
-        {[0, 1, 2, 4, 6].map(count => (
+      <View className="flex-row items-center justify-end mt-2" style={{ gap: 4 }}>
+        <Text className="text-[10px] text-muted-foreground">{t("dashboard.less")}</Text>
+        {[0, 1, 2, 4, 6].map((count) => (
           <View
             key={count}
             style={{
@@ -145,9 +140,7 @@ export default function ActivityHeatmap({ activityData }: Props) {
             }}
           />
         ))}
-        <Text className="text-[10px] text-muted-foreground">
-          {t('dashboard.more')}
-        </Text>
+        <Text className="text-[10px] text-muted-foreground">{t("dashboard.more")}</Text>
       </View>
     </View>
   );

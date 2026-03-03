@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export interface SessionWord {
   word: string;
@@ -6,7 +6,7 @@ export interface SessionWord {
   correct: boolean;
 }
 
-export type TutorMode = 'adaptive' | 'free-talk' | 'grammar';
+export type TutorMode = "adaptive" | "free-talk" | "grammar";
 
 interface SessionStats {
   correctCount: number;
@@ -19,7 +19,7 @@ interface SessionStats {
 
 interface AiTutorState {
   currentSessionId: string | null;
-  view: 'welcome' | 'chat';
+  view: "welcome" | "chat";
   selectedChatId: string | null;
   sessionStats: SessionStats;
   sessionWords: SessionWord[];
@@ -35,7 +35,7 @@ interface AiTutorState {
 
 const initialState: AiTutorState = {
   currentSessionId: null,
-  view: 'welcome',
+  view: "welcome",
   selectedChatId: null,
   sessionStats: {
     correctCount: 0,
@@ -46,21 +46,21 @@ const initialState: AiTutorState = {
     elapsedMinutes: 0,
   },
   sessionWords: [],
-  mode: 'adaptive',
+  mode: "adaptive",
   preferences: {
     enableSuggestions: true,
     autoCorrect: true,
     showTranslations: true,
-    difficulty: 'adaptive',
+    difficulty: "adaptive",
     sessionLength: 10,
   },
 };
 
 const aiTutorSlice = createSlice({
-  name: 'aiTutor',
+  name: "aiTutor",
   initialState,
   reducers: {
-    setView(state, action: PayloadAction<'welcome' | 'chat'>) {
+    setView(state, action: PayloadAction<"welcome" | "chat">) {
       state.view = action.payload;
     },
     setMode(state, action: PayloadAction<TutorMode>) {
@@ -80,7 +80,7 @@ const aiTutorSlice = createSlice({
         elapsedMinutes: 0,
       };
       state.sessionWords = [];
-      state.view = 'chat';
+      state.view = "chat";
     },
     endSession(state) {
       state.currentSessionId = null;
@@ -93,7 +93,7 @@ const aiTutorSlice = createSlice({
         correct: boolean;
         word?: string;
         base?: string;
-      }>
+      }>,
     ) {
       const { correct, word, base } = action.payload;
       state.sessionStats.totalCount += 1;
@@ -105,11 +105,7 @@ const aiTutorSlice = createSlice({
       }
       state.sessionStats.accuracy =
         state.sessionStats.totalCount > 0
-          ? Math.round(
-              (state.sessionStats.correctCount /
-                state.sessionStats.totalCount) *
-                100
-            )
+          ? Math.round((state.sessionStats.correctCount / state.sessionStats.totalCount) * 100)
           : 0;
 
       if (word) {
@@ -126,17 +122,14 @@ const aiTutorSlice = createSlice({
     setPreference(
       state,
       action: PayloadAction<{
-        key: keyof AiTutorState['preferences'];
+        key: keyof AiTutorState["preferences"];
         value: boolean | string | number;
-      }>
+      }>,
     ) {
       const { key, value } = action.payload;
       (state.preferences as Record<string, unknown>)[key] = value;
     },
-    setAllPreferences(
-      state,
-      action: PayloadAction<Partial<AiTutorState['preferences']>>
-    ) {
+    setAllPreferences(state, action: PayloadAction<Partial<AiTutorState["preferences"]>>) {
       Object.assign(state.preferences, action.payload);
     },
     resetSession(state) {

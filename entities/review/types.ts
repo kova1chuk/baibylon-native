@@ -63,7 +63,7 @@ export interface ReviewState {
 }
 
 export interface ReviewViewState {
-  viewMode: 'list' | 'columns';
+  viewMode: "list" | "columns";
   isFullScreen: boolean;
   currentPage: number;
   sentencesPerPage: number;

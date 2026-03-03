@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from "react";
 
-import { io, Socket } from 'socket.io-client';
+import { io, Socket } from "socket.io-client";
 
-import { useAuth } from '@/contexts/AuthContext';
-import { API_BASE_URL } from '@/shared/config/api';
+import { useAuth } from "@/contexts/AuthContext";
+import { API_BASE_URL } from "@/shared/config/api";
 
 interface UseSocketOptions {
   autoConnect?: boolean;
@@ -20,7 +20,7 @@ export function useSocket(options: UseSocketOptions = {}) {
     if (!autoConnect || !session) return;
 
     const socket = io(API_BASE_URL, {
-      transports: ['websocket', 'polling'],
+      transports: ["websocket", "polling"],
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
@@ -31,26 +31,26 @@ export function useSocket(options: UseSocketOptions = {}) {
 
     socketRef.current = socket;
 
-    socket.on('connect', () => {
+    socket.on("connect", () => {
       setIsConnected(true);
       setConnectionError(null);
     });
 
-    socket.on('connected', () => {
+    socket.on("connected", () => {
       setIsConnected(true);
       setConnectionError(null);
     });
 
-    socket.on('disconnect', () => {
+    socket.on("disconnect", () => {
       setIsConnected(false);
     });
 
-    socket.on('connect_error', (error: Error) => {
+    socket.on("connect_error", (error: Error) => {
       setConnectionError(error.message);
       setIsConnected(false);
     });
 
-    socket.on('error', (data: { message: string }) => {
+    socket.on("error", (data: { message: string }) => {
       setConnectionError(data.message);
     });
 
@@ -73,16 +73,13 @@ export function useSocket(options: UseSocketOptions = {}) {
     };
   }, []);
 
-  const off = useCallback(
-    (event: string, callback?: (...args: unknown[]) => void) => {
-      if (callback) {
-        socketRef.current?.off(event, callback);
-      } else {
-        socketRef.current?.off(event);
-      }
-    },
-    []
-  );
+  const off = useCallback((event: string, callback?: (...args: unknown[]) => void) => {
+    if (callback) {
+      socketRef.current?.off(event, callback);
+    } else {
+      socketRef.current?.off(event);
+    }
+  }, []);
 
   return {
     socket: socketRef.current,

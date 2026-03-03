@@ -1,17 +1,13 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { ChevronDown } from 'lucide-react-native';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import { ChevronDown } from "lucide-react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
-import { View, Pressable, Text } from 'react-native';
+import { View, Pressable, Text } from "react-native";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
 
 interface AccordionItemProps {
   title: string;
@@ -20,12 +16,7 @@ interface AccordionItemProps {
   className?: string;
 }
 
-function AccordionItem({
-  title,
-  children,
-  defaultOpen = false,
-  className,
-}: AccordionItemProps) {
+function AccordionItem({ title, children, defaultOpen = false, className }: AccordionItemProps) {
   const [isOpen, setIsOpen] = React.useState(defaultOpen);
   const colors = useColors();
   const rotation = useSharedValue(defaultOpen ? 180 : 0);
@@ -40,14 +31,12 @@ function AccordionItem({
   }));
 
   return (
-    <View className={cn('border-b border-border', className)}>
+    <View className={cn("border-b border-border", className)}>
       <Pressable
         className="flex-row items-center justify-between py-4 active:opacity-70"
         onPress={toggleOpen}
       >
-        <Text className="text-base font-medium text-foreground flex-1">
-          {title}
-        </Text>
+        <Text className="text-base font-medium text-foreground flex-1">{title}</Text>
         <Animated.View style={chevronStyle}>
           <ChevronDown size={18} color={colors.text} />
         </Animated.View>

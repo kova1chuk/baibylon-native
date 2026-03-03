@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type {
   GetDictStatsResponse,
@@ -12,14 +12,11 @@ import type {
   TrainingQueueRow,
   TrainingQueueParams,
   UnifiedQueueItem,
-} from './types';
+} from "./types";
 
-import type { WordStatus } from '@/shared/types';
+import type { WordStatus } from "@/shared/types";
 
-function mapRowToWord(
-  row: DictionaryWordRow | QueueDictionaryWordRow,
-  arg: FetchWordsPageParams
-) {
+function mapRowToWord(row: DictionaryWordRow | QueueDictionaryWordRow, arg: FetchWordsPageParams) {
   return {
     id: row.word_id,
     word: row.text,
@@ -27,7 +24,7 @@ function mapRowToWord(
     translation: row.translation,
     example: undefined,
     status: parseInt(row.status) as WordStatus,
-    userId: '',
+    userId: "",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     phonetic: {
@@ -36,124 +33,103 @@ function mapRowToWord(
     },
     analysisIds: row.in_reviews ? arg.reviewIds : undefined,
     usageCount: row.usagecount,
-    queueScore: 'queue_score' in row ? Number(row.queue_score) : undefined,
-    masteryScore:
-      'mastery_score' in row ? Number(row.mastery_score) : undefined,
+    queueScore: "queue_score" in row ? Number(row.queue_score) : undefined,
+    masteryScore: "mastery_score" in row ? Number(row.mastery_score) : undefined,
   };
 }
 
 export const dictionaryApi = createApi({
-  reducerPath: 'dictionaryApi',
+  reducerPath: "dictionaryApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['DictionaryStats', 'Words', 'UnifiedQueue', 'GrammarProgress'],
-  endpoints: builder => ({
-    getDictStats: builder.query<
-      UserDictionaryStatsResponse,
-      { langCode: string }
-    >({
+  tagTypes: ["DictionaryStats", "Words", "UnifiedQueue", "GrammarProgress"],
+  endpoints: (builder) => ({
+    getDictStats: builder.query<UserDictionaryStatsResponse, { langCode: string }>({
       query: ({ langCode }) => ({
-        url: '/dictionary/stats',
+        url: "/dictionary/stats",
         params: { langCode },
       }),
-      providesTags: ['DictionaryStats'],
+      providesTags: ["DictionaryStats"],
       transformResponse: (response: GetDictStatsResponse) => ({
-        totalWords: Object.values(response?.wordStats || {}).reduce(
-          (sum, count) => sum + count,
-          0
-        ),
+        totalWords: Object.values(response?.wordStats || {}).reduce((sum, count) => sum + count, 0),
         wordStats: response?.wordStats || {},
         accuracy: response?.accuracy ?? 0,
       }),
     }),
-    fetchWordsPage: builder.query<FetchWordsPageResponse, FetchWordsPageParams>(
-      {
-        query: ({
-          page,
-          pageSize,
-          statusFilter = [],
-          search = '',
-          langCode = 'en',
-          translationLang = 'uk',
-          reviewIds,
-          sortMode = 'recent',
-          exerciseType,
-        }) => ({
-          url: '/dictionary/words',
-          params: {
-            langCode,
-            translationLang,
-            sortMode,
-            limitCount: pageSize,
-            offsetCount: (page - 1) * pageSize,
-            searchText: search || undefined,
-            statusFilter:
-              statusFilter.length > 0 ? statusFilter.join(',') : undefined,
-            reviewIds:
-              reviewIds && reviewIds.length > 0
-                ? reviewIds.join(',')
-                : undefined,
-            exerciseType: exerciseType || undefined,
+    fetchWordsPage: builder.query<FetchWordsPageResponse, FetchWordsPageParams>({
+      query: ({
+        page,
+        pageSize,
+        statusFilter = [],
+        search = "",
+        langCode = "en",
+        translationLang = "uk",
+        reviewIds,
+        sortMode = "recent",
+        exerciseType,
+      }) => ({
+        url: "/dictionary/words",
+        params: {
+          langCode,
+          translationLang,
+          sortMode,
+          limitCount: pageSize,
+          offsetCount: (page - 1) * pageSize,
+          searchText: search || undefined,
+          statusFilter: statusFilter.length > 0 ? statusFilter.join(",") : undefined,
+          reviewIds: reviewIds && reviewIds.length > 0 ? reviewIds.join(",") : undefined,
+          exerciseType: exerciseType || undefined,
+        },
+      }),
+      providesTags: (_result, _error, arg) => {
+        return [
+          {
+            type: "Words",
+            id: `${arg.sortMode ?? "recent"}-${arg.exerciseType ?? "all"}-${arg.page}`,
           },
-        }),
-        providesTags: (_result, _error, arg) => {
-          return [
-            {
-              type: 'Words',
-              id: `${arg.sortMode ?? 'recent'}-${arg.exerciseType ?? 'all'}-${arg.page}`,
-            },
-          ];
-        },
-        transformResponse: (
-          response: DictionaryWordRow[] | QueueDictionaryWordRow[],
-          _meta,
-          arg: FetchWordsPageParams
-        ) => {
-          const rows = response || [];
-          const totalWords = rows.length > 0 ? Number(rows[0].total_count) : 0;
-          const words = rows.map(row => mapRowToWord(row, arg));
-          return {
-            words,
-            totalWords,
-            page: arg.page,
-            hasMore: arg.page * arg.pageSize < totalWords,
-          };
-        },
-      }
-    ),
-    getTrainingQueue: builder.query<
-      FetchWordsPageResponse,
-      TrainingQueueParams
-    >({
+        ];
+      },
+      transformResponse: (
+        response: DictionaryWordRow[] | QueueDictionaryWordRow[],
+        _meta,
+        arg: FetchWordsPageParams,
+      ) => {
+        const rows = response || [];
+        const totalWords = rows.length > 0 ? Number(rows[0].total_count) : 0;
+        const words = rows.map((row) => mapRowToWord(row, arg));
+        return {
+          words,
+          totalWords,
+          page: arg.page,
+          hasMore: arg.page * arg.pageSize < totalWords,
+        };
+      },
+    }),
+    getTrainingQueue: builder.query<FetchWordsPageResponse, TrainingQueueParams>({
       query: ({ trainingType, limit = 200, statusFilter, reviewIds }) => ({
-        url: '/dictionary/words/training-queue',
+        url: "/dictionary/words/training-queue",
         params: {
           trainingType,
           limit,
           statusFilter:
             statusFilter && statusFilter.length > 0
-              ? statusFilter.map(String).join(',')
+              ? statusFilter.map(String).join(",")
               : undefined,
-          reviewIds:
-            reviewIds && reviewIds.length > 0 ? reviewIds.join(',') : undefined,
+          reviewIds: reviewIds && reviewIds.length > 0 ? reviewIds.join(",") : undefined,
         },
       }),
       providesTags: (_result, _error, arg) => [
-        { type: 'Words', id: `training-queue-${arg.trainingType}` },
+        { type: "Words", id: `training-queue-${arg.trainingType}` },
       ],
-      transformResponse: (
-        response: TrainingQueueRow[],
-        _meta,
-        _arg: TrainingQueueParams
-      ) => {
+      transformResponse: (response: TrainingQueueRow[], _meta, _arg: TrainingQueueParams) => {
         const rows = response || [];
-        const words = rows.map(row => ({
+        const words = rows.map((row) => ({
           id: row.word_id,
           word: row.text,
           definition: row.definition,
           translation: row.translation,
           example: undefined,
           status: parseInt(row.status) as WordStatus,
-          userId: '',
+          userId: "",
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           phonetic: {
@@ -176,8 +152,8 @@ export const dictionaryApi = createApi({
       DictionaryWordRow | null,
       { langCode?: string; translationLang?: string; _timestamp?: number }
     >({
-      query: ({ langCode = 'en', translationLang = 'uk' }) => ({
-        url: '/dictionary/words/random',
+      query: ({ langCode = "en", translationLang = "uk" }) => ({
+        url: "/dictionary/words/random",
         params: { langCode, translationLang },
       }),
       transformResponse: (response: DictionaryWordRow[]) => {
@@ -185,15 +161,12 @@ export const dictionaryApi = createApi({
       },
       keepUnusedDataFor: 0,
     }),
-    getUnifiedQueue: builder.query<
-      UnifiedQueueItem[],
-      { size?: number; focusLevel?: string }
-    >({
-      query: params => ({
-        url: '/learning-queue',
+    getUnifiedQueue: builder.query<UnifiedQueueItem[], { size?: number; focusLevel?: string }>({
+      query: (params) => ({
+        url: "/learning-queue",
         params,
       }),
-      providesTags: ['UnifiedQueue'],
+      providesTags: ["UnifiedQueue"],
     }),
     submitLearningResult: builder.mutation<
       unknown,
@@ -204,12 +177,12 @@ export const dictionaryApi = createApi({
         newStage?: string;
       }
     >({
-      query: body => ({
-        url: '/learning-queue/result',
-        method: 'POST',
+      query: (body) => ({
+        url: "/learning-queue/result",
+        method: "POST",
         body,
       }),
-      invalidatesTags: ['UnifiedQueue'],
+      invalidatesTags: ["UnifiedQueue"],
     }),
     submitWordSessionStepResult: builder.mutation<
       {
@@ -230,23 +203,20 @@ export const dictionaryApi = createApi({
         context?: string;
       }
     >({
-      query: body => ({
-        url: '/learning-queue/word-session/step-result',
-        method: 'POST',
+      query: (body) => ({
+        url: "/learning-queue/word-session/step-result",
+        method: "POST",
         body,
       }),
-      invalidatesTags: ['Words'],
+      invalidatesTags: ["Words"],
     }),
-    addNewWord: builder.mutation<
-      string,
-      { langCode: string; wordText: string; wordId?: string }
-    >({
+    addNewWord: builder.mutation<string, { langCode: string; wordText: string; wordId?: string }>({
       query: ({ langCode, wordText, wordId }) => ({
-        url: '/dictionary/words',
-        method: 'POST',
+        url: "/dictionary/words",
+        method: "POST",
         body: { langCode, wordText, wordId },
       }),
-      invalidatesTags: ['DictionaryStats', 'Words'],
+      invalidatesTags: ["DictionaryStats", "Words"],
     }),
     submitGrammarQuizStepResult: builder.mutation<
       {
@@ -266,12 +236,12 @@ export const dictionaryApi = createApi({
         topicId?: string;
       }
     >({
-      query: body => ({
-        url: '/grammar/quiz/step-result',
-        method: 'POST',
+      query: (body) => ({
+        url: "/grammar/quiz/step-result",
+        method: "POST",
         body,
       }),
-      invalidatesTags: ['GrammarProgress'],
+      invalidatesTags: ["GrammarProgress"],
     }),
   }),
 });

@@ -1,15 +1,10 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
-export type GoalIntensity = 'casual' | 'regular' | 'intensive';
+export type GoalIntensity = "casual" | "regular" | "intensive";
 
-export type OnboardingStage =
-  | 'pending'
-  | 'languages'
-  | 'assessment'
-  | 'goal'
-  | 'complete';
+export type OnboardingStage = "pending" | "languages" | "assessment" | "goal" | "complete";
 
 export interface OnboardingStatusData {
   stage: OnboardingStage;
@@ -50,68 +45,64 @@ interface AssessmentSubmitResponse {
 }
 
 export const onboardingApi = createApi({
-  reducerPath: 'onboardingApi',
+  reducerPath: "onboardingApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['OnboardingStatus'],
-  endpoints: builder => ({
+  tagTypes: ["OnboardingStatus"],
+  endpoints: (builder) => ({
     getOnboardingStatus: builder.query<OnboardingStatusData, void>({
       query: () => ({
-        url: '/onboarding/status',
-        method: 'GET',
+        url: "/onboarding/status",
+        method: "GET",
       }),
       transformResponse: (response: OnboardingStatusResponse) => response.data,
-      providesTags: ['OnboardingStatus'],
+      providesTags: ["OnboardingStatus"],
     }),
 
     getAssessmentQuestions: builder.query<AssessmentQuestion[], void>({
       query: () => ({
-        url: '/onboarding/assessment-questions',
-        method: 'GET',
+        url: "/onboarding/assessment-questions",
+        method: "GET",
       }),
-      transformResponse: (response: AssessmentQuestionsResponse) =>
-        response.data,
+      transformResponse: (response: AssessmentQuestionsResponse) => response.data,
     }),
 
-    submitLanguages: builder.mutation<
-      void,
-      { nativeLanguage: string; learningLanguage: string }
-    >({
-      query: body => ({
-        url: '/onboarding/languages',
-        method: 'POST',
+    submitLanguages: builder.mutation<void, { nativeLanguage: string; learningLanguage: string }>({
+      query: (body) => ({
+        url: "/onboarding/languages",
+        method: "POST",
         body,
       }),
-      invalidatesTags: ['OnboardingStatus'],
+      invalidatesTags: ["OnboardingStatus"],
     }),
 
     submitAssessment: builder.mutation<
       AssessmentResult,
       { answers: { questionId: string; selectedIndex: number }[] }
     >({
-      query: body => ({
-        url: '/onboarding/assessment',
-        method: 'POST',
+      query: (body) => ({
+        url: "/onboarding/assessment",
+        method: "POST",
         body,
       }),
       transformResponse: (response: AssessmentSubmitResponse) => response.data,
-      invalidatesTags: ['OnboardingStatus'],
+      invalidatesTags: ["OnboardingStatus"],
     }),
 
     submitGoal: builder.mutation<void, { intensity: GoalIntensity }>({
-      query: body => ({
-        url: '/onboarding/goal',
-        method: 'POST',
+      query: (body) => ({
+        url: "/onboarding/goal",
+        method: "POST",
         body,
       }),
-      invalidatesTags: ['OnboardingStatus'],
+      invalidatesTags: ["OnboardingStatus"],
     }),
 
     completeOnboarding: builder.mutation<void, void>({
       query: () => ({
-        url: '/onboarding/complete',
-        method: 'POST',
+        url: "/onboarding/complete",
+        method: "POST",
       }),
-      invalidatesTags: ['OnboardingStatus'],
+      invalidatesTags: ["OnboardingStatus"],
     }),
   }),
 });

@@ -1,38 +1,38 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { View } from 'react-native';
+import { View } from "react-native";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-import { TextClassContext } from './text';
+import { TextClassContext } from "./text";
 
-const badgeVariants = cva('flex-row items-center rounded-full px-2.5 py-0.5', {
+const badgeVariants = cva("flex-row items-center rounded-full px-2.5 py-0.5", {
   variants: {
     variant: {
-      default: 'bg-primary',
-      secondary: 'bg-secondary',
-      destructive: 'bg-destructive',
-      outline: 'border border-border',
+      default: "bg-primary",
+      secondary: "bg-secondary",
+      destructive: "bg-destructive",
+      outline: "border border-border",
     },
   },
   defaultVariants: {
-    variant: 'default',
+    variant: "default",
   },
 });
 
-const badgeTextVariants = cva('text-xs font-semibold', {
+const badgeTextVariants = cva("text-xs font-semibold", {
   variants: {
     variant: {
-      default: 'text-primary-foreground',
-      secondary: 'text-secondary-foreground',
-      destructive: 'text-destructive-foreground',
-      outline: 'text-foreground',
+      default: "text-primary-foreground",
+      secondary: "text-secondary-foreground",
+      destructive: "text-destructive-foreground",
+      outline: "text-foreground",
     },
   },
   defaultVariants: {
-    variant: 'default',
+    variant: "default",
   },
 });
 

@@ -1,18 +1,18 @@
-import type { PropsWithChildren, ReactElement } from 'react';
+import type { PropsWithChildren, ReactElement } from "react";
 
 import Animated, {
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
-import { ThemedView } from '@/components/ThemedView';
-import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
+import { ThemedView } from "@/components/ThemedView";
+import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useColorScheme } from "@/hooks/useColorScheme";
 
 const HEADER_HEIGHT = 250;
 
@@ -26,7 +26,7 @@ export default function ParallaxScrollView({
   headerImage,
   headerBackgroundColor,
 }: Props) {
-  const colorScheme = useColorScheme() ?? 'light';
+  const colorScheme = useColorScheme() ?? "light";
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
   const bottom = useBottomTabOverflow();
@@ -37,15 +37,11 @@ export default function ParallaxScrollView({
           translateY: interpolate(
             scrollOffset.value,
             [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75]
+            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75],
           ),
         },
         {
-          scale: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [2, 1, 1]
-          ),
+          scale: interpolate(scrollOffset.value, [-HEADER_HEIGHT, 0, HEADER_HEIGHT], [2, 1, 1]),
         },
       ],
     };
@@ -80,12 +76,12 @@ const styles = StyleSheet.create({
   },
   header: {
     height: HEADER_HEIGHT,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   content: {
     flex: 1,
     padding: 32,
     gap: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
 });

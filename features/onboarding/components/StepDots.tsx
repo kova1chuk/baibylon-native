@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { View } from 'react-native';
+import { View } from "react-native";
 
 interface StepDotsProps {
   current: number;
@@ -16,8 +16,7 @@ export default function StepDots({ current, total }: StepDotsProps) {
           className="h-1.5 rounded-full"
           style={{
             width: i === current ? 24 : 6,
-            backgroundColor:
-              i <= current ? '#818cf8' : 'rgba(255,255,255,0.15)',
+            backgroundColor: i <= current ? "#818cf8" : "rgba(255,255,255,0.15)",
           }}
         />
       ))}

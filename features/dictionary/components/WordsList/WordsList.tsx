@@ -1,49 +1,45 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-import { Volume2 } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
+import { Volume2 } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
-import {
-  View,
-  Text,
-  Pressable,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, Pressable, FlatList, ActivityIndicator, RefreshControl } from "react-native";
 
-import type { Word } from '@/entities/word/types';
-import type { WordStatus } from '@/shared/types';
+import type { Word } from "@/entities/word/types";
+import type { WordStatus } from "@/shared/types";
 
 interface WordsListProps {
   words: Word[];
   totalWords: number;
   hasMore: boolean;
   isFetching: boolean;
-  onStatusFilterChange?: (status: WordStatus | 'all') => void;
-  selectedStatus?: WordStatus | 'all';
+  onStatusFilterChange?: (status: WordStatus | "all") => void;
+  selectedStatus?: WordStatus | "all";
   onLoadMore?: () => void;
   contentPaddingBottom?: number;
+  refreshing?: boolean;
+  onRefresh?: () => void;
 }
 
-const STATUS_COLORS: Record<WordStatus | 'all', string> = {
-  '1': '#6B7280',
-  '2': '#EF4444',
-  '3': '#F97316',
-  '4': '#F59E0B',
-  '5': '#3B82F6',
-  '6': '#10B981',
-  '7': '#8B5CF6',
-  all: '#6B7280',
+const STATUS_COLORS: Record<WordStatus | "all", string> = {
+  "1": "#6B7280",
+  "2": "#EF4444",
+  "3": "#F97316",
+  "4": "#F59E0B",
+  "5": "#3B82F6",
+  "6": "#10B981",
+  "7": "#8B5CF6",
+  all: "#6B7280",
 };
 
 const STATUS_I18N_KEYS: Record<WordStatus, string> = {
-  1: 'wordStatus.notStarted',
-  2: 'wordStatus.introduced',
-  3: 'wordStatus.encountered',
-  4: 'wordStatus.learning',
-  5: 'wordStatus.familiar',
-  6: 'wordStatus.confident',
-  7: 'wordStatus.mastered',
+  1: "wordStatus.notStarted",
+  2: "wordStatus.introduced",
+  3: "wordStatus.encountered",
+  4: "wordStatus.learning",
+  5: "wordStatus.familiar",
+  6: "wordStatus.confident",
+  7: "wordStatus.mastered",
 };
 
 export default function WordsList({
@@ -51,25 +47,27 @@ export default function WordsList({
   hasMore,
   isFetching,
   onStatusFilterChange,
-  selectedStatus = 'all',
+  selectedStatus = "all",
   onLoadMore,
   contentPaddingBottom = 0,
+  refreshing = false,
+  onRefresh,
 }: WordsListProps) {
   const { t } = useTranslation();
 
-  const statusFilters: { key: WordStatus | 'all'; labelKey: string }[] = [
-    { key: 'all', labelKey: 'feed.all' },
-    { key: 1, labelKey: 'wordStatus.notStarted' },
-    { key: 2, labelKey: 'wordStatus.introduced' },
-    { key: 3, labelKey: 'wordStatus.encountered' },
-    { key: 4, labelKey: 'wordStatus.learning' },
-    { key: 5, labelKey: 'wordStatus.familiar' },
-    { key: 6, labelKey: 'wordStatus.confident' },
-    { key: 7, labelKey: 'wordStatus.mastered' },
+  const statusFilters: { key: WordStatus | "all"; labelKey: string }[] = [
+    { key: "all", labelKey: "feed.all" },
+    { key: 1, labelKey: "wordStatus.notStarted" },
+    { key: 2, labelKey: "wordStatus.introduced" },
+    { key: 3, labelKey: "wordStatus.encountered" },
+    { key: 4, labelKey: "wordStatus.learning" },
+    { key: 5, labelKey: "wordStatus.familiar" },
+    { key: 6, labelKey: "wordStatus.confident" },
+    { key: 7, labelKey: "wordStatus.mastered" },
   ];
 
   const renderStatusFilter = useCallback(
-    ({ item }: { item: { key: WordStatus | 'all'; labelKey: string } }) => {
+    ({ item }: { item: { key: WordStatus | "all"; labelKey: string } }) => {
       const isSelected = selectedStatus === item.key;
       const color = STATUS_COLORS[item.key];
 
@@ -78,21 +76,21 @@ export default function WordsList({
           className="rounded-lg px-4 py-2 min-w-[80px] items-center active:opacity-70"
           style={{
             borderWidth: 1,
-            borderColor: isSelected ? color : '#D1D5DB',
-            backgroundColor: isSelected ? color : 'transparent',
+            borderColor: isSelected ? color : "#D1D5DB",
+            backgroundColor: isSelected ? color : "transparent",
           }}
           onPress={() => onStatusFilterChange?.(item.key)}
         >
           <Text
             className="font-medium text-sm"
-            style={{ color: isSelected ? '#FFFFFF' : '#6B7280' }}
+            style={{ color: isSelected ? "#FFFFFF" : "#6B7280" }}
           >
             {t(item.labelKey)}
           </Text>
         </Pressable>
       );
     },
-    [selectedStatus, onStatusFilterChange, t]
+    [selectedStatus, onStatusFilterChange, t],
   );
 
   const renderWordItem = useCallback(
@@ -108,37 +106,25 @@ export default function WordsList({
           >
             <View className="flex-row justify-between items-center mb-2">
               <View className="flex-row items-center gap-2 flex-1">
-                <Text className="text-xl font-semibold text-foreground">
-                  {item.word}
-                </Text>
+                <Text className="text-xl font-semibold text-foreground">{item.word}</Text>
                 {item.phonetic?.text && (
                   <View className="flex-row items-center gap-1">
                     <Volume2 size={12} color="#999" />
-                    <Text className="text-xs text-muted-foreground">
-                      {item.phonetic.text}
-                    </Text>
+                    <Text className="text-xs text-muted-foreground">{item.phonetic.text}</Text>
                   </View>
                 )}
               </View>
-              <View
-                className="px-2 py-1 rounded-lg"
-                style={{ backgroundColor: color }}
-              >
+              <View className="px-2 py-1 rounded-lg" style={{ backgroundColor: color }}>
                 <Text className="text-xs font-medium text-white">{label}</Text>
               </View>
             </View>
 
             {item.translation && (
-              <Text className="text-base mb-1 text-foreground opacity-80">
-                {item.translation}
-              </Text>
+              <Text className="text-base mb-1 text-foreground opacity-80">{item.translation}</Text>
             )}
 
             {item.definition && (
-              <Text
-                className="text-sm text-muted-foreground italic"
-                numberOfLines={2}
-              >
+              <Text className="text-sm text-muted-foreground italic" numberOfLines={2}>
                 {item.definition}
               </Text>
             )}
@@ -146,7 +132,7 @@ export default function WordsList({
         </View>
       );
     },
-    [t]
+    [t],
   );
 
   const renderFooter = useCallback(() => {
@@ -164,7 +150,7 @@ export default function WordsList({
         <FlatList
           data={statusFilters}
           renderItem={renderStatusFilter}
-          keyExtractor={item => String(item.key)}
+          keyExtractor={(item) => String(item.key)}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}
@@ -174,7 +160,7 @@ export default function WordsList({
       <FlatList
         data={words}
         renderItem={renderWordItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           padding: 16,
@@ -183,11 +169,12 @@ export default function WordsList({
         onEndReached={onLoadMore}
         onEndReachedThreshold={0.3}
         ListFooterComponent={renderFooter}
+        refreshControl={
+          onRefresh ? <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> : undefined
+        }
         ListEmptyComponent={
           <View className="items-center py-10">
-            <Text className="text-base text-muted-foreground">
-              {t('dictionary.noItemsFound')}
-            </Text>
+            <Text className="text-base text-muted-foreground">{t("dictionary.noItemsFound")}</Text>
           </View>
         }
       />

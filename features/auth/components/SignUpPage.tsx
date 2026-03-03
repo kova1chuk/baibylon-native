@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { useRouter } from 'expo-router';
-import { useTranslation } from 'react-i18next';
+import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
-import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { ActivityIndicator, ScrollView, View } from "react-native";
 
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase";
 
-import { useColors } from '@/hooks/useColors';
-import { useGoogleAuth } from '@/hooks/useGoogleAuth';
+import { useColors } from "@/hooks/useColors";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth";
 
-import { AuthForm } from './AuthForm';
+import { AuthForm } from "./AuthForm";
 
 export default function SignUpPage() {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ export default function SignUpPage() {
 
   useEffect(() => {
     if (session && !authLoading) {
-      router.replace('/(tabs)');
+      router.replace("/(tabs)");
     }
   }, [session, authLoading, router]);
 
@@ -37,15 +37,15 @@ export default function SignUpPage() {
         password,
       });
       if (authError) {
-        setError(authError.message || t('auth.signUpError'));
+        setError(authError.message || t("auth.signUpError"));
       } else {
         router.push({
-          pathname: '/auth/verify-email',
+          pathname: "/auth/verify-email",
           params: { email },
         });
       }
     } catch {
-      setError(t('auth.signUpError'));
+      setError(t("auth.signUpError"));
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export default function SignUpPage() {
     try {
       await promptAsync();
     } catch {
-      setError(t('auth.googleSignInError'));
+      setError(t("auth.googleSignInError"));
     }
   };
 
@@ -76,7 +76,7 @@ export default function SignUpPage() {
       style={{ backgroundColor: colors.background }}
       contentContainerStyle={{
         flexGrow: 1,
-        justifyContent: 'center',
+        justifyContent: "center",
         paddingVertical: 40,
         paddingHorizontal: 20,
       }}
@@ -85,7 +85,7 @@ export default function SignUpPage() {
         mode="signup"
         onSubmit={handleSignUp}
         onGoogleAuth={handleGoogleSignUp}
-        onSwitchMode={() => router.push('/auth/signin')}
+        onSwitchMode={() => router.push("/auth/signin")}
         loading={loading}
         error={error}
         onClearError={() => setError(null)}

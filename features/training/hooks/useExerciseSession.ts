@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from "react";
 
 import {
   useStartExerciseSessionMutation,
@@ -6,31 +6,28 @@ import {
   useBatchExerciseQuestionsMutation,
   useCompleteExerciseSessionMutation,
   useAbandonExerciseSessionMutation,
-} from '@/entities/exercise/api/exerciseApi';
+} from "@/entities/exercise/api/exerciseApi";
 
-import type {
-  ExerciseQuestion,
-  SubmitAnswerResult,
-} from '@/entities/exercise/api/exerciseApi';
+import type { ExerciseQuestion, SubmitAnswerResult } from "@/entities/exercise/api/exerciseApi";
 
-export type ExerciseSessionPhase = 'idle' | 'loading' | 'active' | 'summary';
+export type ExerciseSessionPhase = "idle" | "loading" | "active" | "summary";
 
 type ExerciseType =
-  | 'MULTIPLE_CHOICE'
-  | 'CONTEXT_FILL'
-  | 'TYPE_THE_WORD'
-  | 'ODD_ONE_OUT'
-  | 'WORD_FORMATION'
-  | 'VERB_FORMS_DRILL'
-  | 'RULE_QUIZ'
-  | 'ERROR_CORRECTION'
-  | 'SENTENCE_TRANSFORM'
-  | 'CLOZE_TEST'
-  | 'PHRASE_BUILDER'
-  | 'SENTENCE_ORDERING'
-  | 'READING_PASSAGE'
-  | 'TRANSLATE_SENTENCE'
-  | 'WRITE_SENTENCE';
+  | "MULTIPLE_CHOICE"
+  | "CONTEXT_FILL"
+  | "TYPE_THE_WORD"
+  | "ODD_ONE_OUT"
+  | "WORD_FORMATION"
+  | "VERB_FORMS_DRILL"
+  | "RULE_QUIZ"
+  | "ERROR_CORRECTION"
+  | "SENTENCE_TRANSFORM"
+  | "CLOZE_TEST"
+  | "PHRASE_BUILDER"
+  | "SENTENCE_ORDERING"
+  | "READING_PASSAGE"
+  | "TRANSLATE_SENTENCE"
+  | "WRITE_SENTENCE";
 
 type AnswerPayload =
   | { selectedIndex: number }
@@ -53,10 +50,9 @@ export interface ExerciseSessionStats {
 }
 
 export function useExerciseSession() {
-  const [phase, setPhase] = useState<ExerciseSessionPhase>('idle');
+  const [phase, setPhase] = useState<ExerciseSessionPhase>("idle");
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [currentQuestion, setCurrentQuestion] =
-    useState<ExerciseQuestion | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState<ExerciseQuestion | null>(null);
   const [questionQueue, setQuestionQueue] = useState<ExerciseQuestion[]>([]);
   const [stats, setStats] = useState<ExerciseSessionStats>({
     total: 0,
@@ -78,7 +74,7 @@ export function useExerciseSession() {
 
   const start = useCallback(
     async (exerciseType: ExerciseType) => {
-      setPhase('loading');
+      setPhase("loading");
       try {
         const result = await startSession({ exerciseType }).unwrap();
         setSessionId(result.sessionId);
@@ -87,7 +83,7 @@ export function useExerciseSession() {
         setLastResult(null);
         startTimeRef.current = Date.now();
         questionStartRef.current = Date.now();
-        setPhase('active');
+        setPhase("active");
 
         // Pre-fetch next batch
         try {
@@ -100,10 +96,10 @@ export function useExerciseSession() {
           // Non-critical — we can still proceed with nextQuestion from submit
         }
       } catch {
-        setPhase('idle');
+        setPhase("idle");
       }
     },
-    [startSession, batchQuestions]
+    [startSession, batchQuestions],
   );
 
   const submit = useCallback(
@@ -130,13 +126,12 @@ export function useExerciseSession() {
           total: newTotal,
           correct: newCorrect,
           wrong: newWrong,
-          accuracy:
-            newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0,
+          accuracy: newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 0,
         });
 
         // Queue the next question
         if (result.nextQuestion) {
-          setQuestionQueue(prev => [...prev, result.nextQuestion!]);
+          setQuestionQueue((prev) => [...prev, result.nextQuestion!]);
         }
 
         return result.result;
@@ -146,7 +141,7 @@ export function useExerciseSession() {
         setIsSubmitting(false);
       }
     },
-    [sessionId, currentQuestion, isSubmitting, stats, submitAnswer]
+    [sessionId, currentQuestion, isSubmitting, stats, submitAnswer],
   );
 
   const next = useCallback(() => {
@@ -158,7 +153,7 @@ export function useExerciseSession() {
       questionStartRef.current = Date.now();
     } else {
       // No more questions — end session
-      setPhase('summary');
+      setPhase("summary");
       if (sessionId) {
         completeSession({ sessionId }).catch(() => {});
       }
@@ -166,7 +161,7 @@ export function useExerciseSession() {
   }, [questionQueue, sessionId, completeSession]);
 
   const end = useCallback(async () => {
-    setPhase('summary');
+    setPhase("summary");
     if (sessionId) {
       try {
         await completeSession({ sessionId }).unwrap();
@@ -184,7 +179,7 @@ export function useExerciseSession() {
         // Ignore
       }
     }
-    setPhase('idle');
+    setPhase("idle");
     setSessionId(null);
     setCurrentQuestion(null);
     setQuestionQueue([]);
@@ -193,7 +188,7 @@ export function useExerciseSession() {
   }, [sessionId, abandonSession]);
 
   const reset = useCallback(() => {
-    setPhase('idle');
+    setPhase("idle");
     setSessionId(null);
     setCurrentQuestion(null);
     setQuestionQueue([]);

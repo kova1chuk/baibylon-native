@@ -1,14 +1,7 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from "react";
 
-import { useRouter } from 'expo-router';
-import {
-  User,
-  LogOut,
-  BarChart3,
-  Moon,
-  Sun,
-  ChevronDown,
-} from 'lucide-react-native';
+import { useRouter } from "expo-router";
+import { User, LogOut, BarChart3, Moon, Sun, ChevronDown } from "lucide-react-native";
 
 import {
   View,
@@ -18,10 +11,10 @@ import {
   Modal,
   TouchableWithoutFeedback,
   Animated as RNAnimated,
-} from 'react-native';
+} from "react-native";
 
-import { useAuth } from '@/contexts/AuthContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface DashboardHeaderProps {
   insetTop: number;
@@ -36,19 +29,19 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
   const fadeAnim = useRef(new RNAnimated.Value(0)).current;
   const avatarRef = useRef<View>(null);
 
-  const textColor = isDark ? 'rgba(250,250,250,0.9)' : '#111827';
-  const mutedColor = isDark ? 'rgba(250,250,250,0.45)' : 'rgba(0,0,0,0.45)';
-  const menuBg = isDark ? '#141416' : '#FFFFFF';
-  const menuBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
-  const separatorColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-  const hoverBg = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)';
+  const textColor = isDark ? "rgba(250,250,250,0.9)" : "#111827";
+  const mutedColor = isDark ? "rgba(250,250,250,0.45)" : "rgba(0,0,0,0.45)";
+  const menuBg = isDark ? "#141416" : "#FFFFFF";
+  const menuBorder = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+  const separatorColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+  const hoverBg = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)";
 
-  const email = user?.email ?? '';
+  const email = user?.email ?? "";
   const initials = email
-    .split('@')[0]
-    .split('.')
+    .split("@")[0]
+    .split(".")
     .map((n: string) => n[0])
-    .join('')
+    .join("")
     .toUpperCase()
     .slice(0, 2);
 
@@ -77,7 +70,7 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
       closeMenu();
       setTimeout(action, 180);
     },
-    [closeMenu]
+    [closeMenu],
   );
 
   const handleSignOut = useCallback(() => {
@@ -87,7 +80,7 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
   }, [handleMenuItem, signOut]);
 
   const handleThemeToggle = useCallback(() => {
-    setPreference(isDark ? 'light' : 'dark');
+    setPreference(isDark ? "light" : "dark");
   }, [isDark, setPreference]);
 
   return (
@@ -99,7 +92,7 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
             style={[
               styles.logoDot,
               {
-                shadowColor: '#34d399',
+                shadowColor: "#34d399",
                 shadowOpacity: 0.7,
                 shadowRadius: 6,
                 shadowOffset: { width: 0, height: 0 },
@@ -120,11 +113,7 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
             style={styles.themeBtn}
             accessibilityLabel="Toggle theme"
           >
-            {isDark ? (
-              <Moon size={17} color={mutedColor} />
-            ) : (
-              <Sun size={17} color={mutedColor} />
-            )}
+            {isDark ? <Moon size={17} color={mutedColor} /> : <Sun size={17} color={mutedColor} />}
           </Pressable>
 
           <Pressable
@@ -137,20 +126,15 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
               style={[
                 styles.avatar,
                 {
-                  backgroundColor: isDark
-                    ? 'rgba(255,255,255,0.06)'
-                    : 'rgba(0,0,0,0.05)',
+                  backgroundColor: isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.05)",
                   borderColor: menuBorder,
                 },
               ]}
             >
               <Text
-                style={[
-                  styles.avatarText,
-                  { color: isDark ? 'rgba(250,250,250,0.5)' : '#78716C' },
-                ]}
+                style={[styles.avatarText, { color: isDark ? "rgba(250,250,250,0.5)" : "#78716C" }]}
               >
-                {initials || 'U'}
+                {initials || "U"}
               </Text>
             </View>
             <ChevronDown size={13} color={mutedColor} />
@@ -164,6 +148,7 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
         transparent
         animationType="none"
         onRequestClose={closeMenu}
+        statusBarTranslucent
       >
         <TouchableWithoutFeedback onPress={closeMenu}>
           <View style={styles.overlay}>
@@ -190,64 +175,39 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
                 <View>
                   {/* Email */}
                   <View style={styles.menuHeader}>
-                    <Text style={[styles.menuLabel, { color: mutedColor }]}>
-                      Signed in as
-                    </Text>
-                    <Text
-                      style={[styles.menuEmail, { color: textColor }]}
-                      numberOfLines={1}
-                    >
+                    <Text style={[styles.menuLabel, { color: mutedColor }]}>Signed in as</Text>
+                    <Text style={[styles.menuEmail, { color: textColor }]} numberOfLines={1}>
                       {email}
                     </Text>
                   </View>
 
-                  <View
-                    style={[
-                      styles.separator,
-                      { backgroundColor: separatorColor },
-                    ]}
-                  />
+                  <View style={[styles.separator, { backgroundColor: separatorColor }]} />
 
                   {/* Profile */}
                   <Pressable
-                    onPress={() =>
-                      handleMenuItem(() =>
-                        router.push('/(tabs)/settings' as never)
-                      )
-                    }
+                    onPress={() => handleMenuItem(() => router.push("/(tabs)/settings" as never))}
                     style={({ pressed }) => [
                       styles.menuItem,
                       pressed && { backgroundColor: hoverBg },
                     ]}
                   >
                     <User size={16} color={mutedColor} />
-                    <Text style={[styles.menuItemText, { color: textColor }]}>
-                      Profile
-                    </Text>
+                    <Text style={[styles.menuItemText, { color: textColor }]}>Profile</Text>
                   </Pressable>
 
                   {/* Stats */}
                   <Pressable
-                    onPress={() =>
-                      handleMenuItem(() => router.push('/stats' as never))
-                    }
+                    onPress={() => handleMenuItem(() => router.push("/stats" as never))}
                     style={({ pressed }) => [
                       styles.menuItem,
                       pressed && { backgroundColor: hoverBg },
                     ]}
                   >
                     <BarChart3 size={16} color={mutedColor} />
-                    <Text style={[styles.menuItemText, { color: textColor }]}>
-                      Stats
-                    </Text>
+                    <Text style={[styles.menuItemText, { color: textColor }]}>Stats</Text>
                   </Pressable>
 
-                  <View
-                    style={[
-                      styles.separator,
-                      { backgroundColor: separatorColor },
-                    ]}
-                  />
+                  <View style={[styles.separator, { backgroundColor: separatorColor }]} />
 
                   {/* Sign Out */}
                   <Pressable
@@ -258,9 +218,7 @@ export default function DashboardHeader({ insetTop }: DashboardHeaderProps) {
                     ]}
                   >
                     <LogOut size={16} color="#f87171" />
-                    <Text style={[styles.menuItemText, { color: '#f87171' }]}>
-                      Sign Out
-                    </Text>
+                    <Text style={[styles.menuItemText, { color: "#f87171" }]}>Sign Out</Text>
                   </Pressable>
                 </View>
               </TouchableWithoutFeedback>
@@ -278,45 +236,45 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   headerInner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   logoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   logoDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#10B981',
+    backgroundColor: "#10B981",
   },
   logoText: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     letterSpacing: -0.5,
   },
   logoAi: {
-    color: '#6ee7b7',
-    fontWeight: '400',
+    color: "#6ee7b7",
+    fontWeight: "400",
   },
   rightRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 6,
   },
   themeBtn: {
     width: 34,
     height: 34,
     borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   avatarRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 4,
     paddingVertical: 4,
     paddingHorizontal: 6,
@@ -326,53 +284,56 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
   },
   avatarText: {
     fontSize: 11,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   overlay: {
     flex: 1,
+    backgroundColor: "rgba(0,0,0,0.3)",
   },
   menu: {
-    position: 'absolute',
-    right: 20,
-    minWidth: 200,
-    borderRadius: 12,
+    position: "absolute",
+    right: 16,
+    minWidth: 220,
+    borderRadius: 14,
     borderWidth: 1,
-    shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
-    elevation: 8,
-    overflow: 'hidden',
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 10 },
+    elevation: 12,
+    overflow: "hidden",
   },
   menuHeader: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   menuLabel: {
     fontSize: 11,
   },
   menuEmail: {
     fontSize: 13,
-    fontWeight: '500',
-    marginTop: 2,
+    fontWeight: "600",
+    marginTop: 3,
   },
   separator: {
     height: 1,
+    marginHorizontal: 12,
   },
   menuItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   menuItemText: {
-    fontSize: 14,
+    fontSize: 15,
+    fontWeight: "500",
   },
 });

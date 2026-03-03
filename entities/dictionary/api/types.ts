@@ -1,8 +1,5 @@
-import type { Word } from '@/entities/word/types';
-import type {
-  DictionaryWordRowDto,
-  TrainingQueueRowDto,
-} from '@/shared/types/openapi';
+import type { Word } from "@/entities/word/types";
+import type { DictionaryWordRowDto, TrainingQueueRowDto } from "@/shared/types/openapi";
 
 export type DictionaryWordRow = DictionaryWordRowDto;
 export type QueueDictionaryWordRow = DictionaryWordRowDto;
@@ -26,7 +23,7 @@ export interface FetchWordsPageResponse {
   hasMore: boolean;
 }
 
-export type DictionarySortMode = 'recent' | 'queue';
+export type DictionarySortMode = "recent" | "queue";
 
 export interface FetchWordsPageParams {
   page: number;
@@ -48,12 +45,12 @@ export interface TrainingQueueParams {
 }
 
 export type UnifiedItemType =
-  | 'word'
-  | 'phrase'
-  | 'irregular_verb'
-  | 'grammar_rule'
-  | 'grammar_vocabulary'
-  | 'error_pattern';
+  | "word"
+  | "phrase"
+  | "irregular_verb"
+  | "grammar_rule"
+  | "grammar_vocabulary"
+  | "error_pattern";
 
 export interface UnifiedQueueItem {
   metadataId: string;

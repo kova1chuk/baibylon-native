@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { ForgotPasswordPage } from '@/features/auth';
+import { ForgotPasswordPage } from "@/features/auth";
 
 export default function ForgotPassword() {
   return <ForgotPasswordPage />;

@@ -1,20 +1,20 @@
 export type LearningItemType =
-  | 'word'
-  | 'phrase'
-  | 'irregular_verb'
-  | 'grammar_rule'
-  | 'grammar_vocabulary'
-  | 'error_pattern';
+  | "word"
+  | "phrase"
+  | "irregular_verb"
+  | "grammar_rule"
+  | "grammar_vocabulary"
+  | "error_pattern";
 
 export type LearningStage =
-  | 'new'
-  | 'explanation'
-  | 'practice'
-  | 'production'
-  | 'review'
-  | 'mastered';
+  | "new"
+  | "explanation"
+  | "practice"
+  | "production"
+  | "review"
+  | "mastered";
 
-export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+export type CEFRLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2";
 
 export interface QueueItem {
   metadataId: string;
@@ -26,12 +26,7 @@ export interface QueueItem {
   nextReviewAt: string | null;
   totalScore: number;
   reason: string;
-  typeSpecificData:
-    | WordData
-    | PhraseData
-    | IrregularVerbData
-    | GrammarRuleData
-    | ErrorPatternData;
+  typeSpecificData: WordData | PhraseData | IrregularVerbData | GrammarRuleData | ErrorPatternData;
 }
 
 export interface WordData {
@@ -87,7 +82,7 @@ export interface ErrorStatistics {
   improvementRate: number;
 }
 
-export type DailySectionKey = 'newWords' | 'grammar' | 'review' | 'errors';
+export type DailySectionKey = "newWords" | "grammar" | "review" | "errors";
 
 export interface DailyPlanPreviewItem {
   metadataId: string;

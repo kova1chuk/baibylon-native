@@ -1,9 +1,9 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { dictionaryApi } from '@/entities/dictionary/api/dictionaryApi';
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { dictionaryApi } from "@/entities/dictionary/api/dictionaryApi";
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
-import { dashboardApi } from './dashboardApi';
+import { dashboardApi } from "./dashboardApi";
 import type {
   FetchHubItemsParams,
   FetchHubWordsResponse,
@@ -14,7 +14,7 @@ import type {
   HubPhraseRow,
   HubIrregularVerbRow,
   HubIrregularAdjectiveRow,
-} from './types';
+} from "./types";
 
 interface NestResponse<T> {
   success: boolean;
@@ -22,44 +22,33 @@ interface NestResponse<T> {
 }
 
 export const hubApi = createApi({
-  reducerPath: 'hubApi',
+  reducerPath: "hubApi",
   baseQuery: nestBaseQuery,
-  tagTypes: [
-    'HubWords',
-    'HubPhrases',
-    'HubIrregularVerbs',
-    'HubIrregularAdjectives',
-  ],
-  endpoints: builder => ({
+  tagTypes: ["HubWords", "HubPhrases", "HubIrregularVerbs", "HubIrregularAdjectives"],
+  endpoints: (builder) => ({
     fetchHubWords: builder.query<FetchHubWordsResponse, FetchHubItemsParams>({
-      query: ({
-        page,
-        pageSize,
-        search = '',
-        langCode = 'en',
-        translationLang = 'uk',
-      }) => ({
-        url: `/hub/words?langCode=${langCode}&translationLang=${translationLang}&limit=${pageSize}&offset=${(page - 1) * pageSize}${search ? `&search=${encodeURIComponent(search)}` : ''}`,
+      query: ({ page, pageSize, search = "", langCode = "en", translationLang = "uk" }) => ({
+        url: `/hub/words?langCode=${langCode}&translationLang=${translationLang}&limit=${pageSize}&offset=${(page - 1) * pageSize}${search ? `&search=${encodeURIComponent(search)}` : ""}`,
       }),
-      providesTags: ['HubWords'],
+      providesTags: ["HubWords"],
       transformResponse: (
         response: NestResponse<HubWordRow[]>,
         _meta,
-        arg: FetchHubItemsParams
+        arg: FetchHubItemsParams,
       ) => {
         const rows = response.data || [];
         const total = rows.length > 0 ? Number(rows[0].total_count) : 0;
 
-        const words = rows.map(row => ({
+        const words = rows.map((row) => ({
           id: row.word_id,
           text: row.text,
-          definition: row.definition || '',
-          phoneticText: row.phonetic_text || '',
-          phoneticAudioLink: row.phonetic_audio_link || '',
-          translation: row.translation || '',
-          translationDefinition: row.translation_definition || '',
+          definition: row.definition || "",
+          phoneticText: row.phonetic_text || "",
+          phoneticAudioLink: row.phonetic_audio_link || "",
+          translation: row.translation || "",
+          translationDefinition: row.translation_definition || "",
           inUserDictionary: row.in_user_dictionary,
-          userStatus: row.user_status || '',
+          userStatus: row.user_status || "",
         }));
 
         return {
@@ -71,38 +60,29 @@ export const hubApi = createApi({
       },
     }),
 
-    fetchHubPhrases: builder.query<
-      FetchHubPhrasesResponse,
-      FetchHubItemsParams
-    >({
-      query: ({
-        page,
-        pageSize,
-        search = '',
-        langCode = 'en',
-        translationLang = 'uk',
-      }) => ({
-        url: `/hub/phrases?langCode=${langCode}&translationLang=${translationLang}&limit=${pageSize}&offset=${(page - 1) * pageSize}${search ? `&search=${encodeURIComponent(search)}` : ''}`,
+    fetchHubPhrases: builder.query<FetchHubPhrasesResponse, FetchHubItemsParams>({
+      query: ({ page, pageSize, search = "", langCode = "en", translationLang = "uk" }) => ({
+        url: `/hub/phrases?langCode=${langCode}&translationLang=${translationLang}&limit=${pageSize}&offset=${(page - 1) * pageSize}${search ? `&search=${encodeURIComponent(search)}` : ""}`,
       }),
-      providesTags: ['HubPhrases'],
+      providesTags: ["HubPhrases"],
       transformResponse: (
         response: NestResponse<HubPhraseRow[]>,
         _meta,
-        arg: FetchHubItemsParams
+        arg: FetchHubItemsParams,
       ) => {
         const rows = response.data || [];
         const total = rows.length > 0 ? Number(rows[0].total_count) : 0;
 
-        const phrases = rows.map(row => ({
+        const phrases = rows.map((row) => ({
           id: row.phrase_id,
           text: row.text,
-          definition: row.definition || '',
-          phoneticText: row.phonetic_text || '',
-          phoneticAudioLink: row.phonetic_audio_link || '',
-          translation: row.translation || '',
-          translationDefinition: row.translation_definition || '',
+          definition: row.definition || "",
+          phoneticText: row.phonetic_text || "",
+          phoneticAudioLink: row.phonetic_audio_link || "",
+          translation: row.translation || "",
+          translationDefinition: row.translation_definition || "",
           inUserDictionary: row.in_user_dictionary,
-          userStatus: row.user_status || '',
+          userStatus: row.user_status || "",
         }));
 
         return {
@@ -114,40 +94,31 @@ export const hubApi = createApi({
       },
     }),
 
-    fetchHubIrregularVerbs: builder.query<
-      FetchHubIrregularVerbsResponse,
-      FetchHubItemsParams
-    >({
-      query: ({
-        page,
-        pageSize,
-        search = '',
-        langCode = 'en',
-        translationLang = 'uk',
-      }) => ({
-        url: `/hub/irregular-verbs?langCode=${langCode}&translationLang=${translationLang}&limit=${pageSize}&offset=${(page - 1) * pageSize}${search ? `&search=${encodeURIComponent(search)}` : ''}`,
+    fetchHubIrregularVerbs: builder.query<FetchHubIrregularVerbsResponse, FetchHubItemsParams>({
+      query: ({ page, pageSize, search = "", langCode = "en", translationLang = "uk" }) => ({
+        url: `/hub/irregular-verbs?langCode=${langCode}&translationLang=${translationLang}&limit=${pageSize}&offset=${(page - 1) * pageSize}${search ? `&search=${encodeURIComponent(search)}` : ""}`,
       }),
-      providesTags: ['HubIrregularVerbs'],
+      providesTags: ["HubIrregularVerbs"],
       transformResponse: (
         response: NestResponse<HubIrregularVerbRow[]>,
         _meta,
-        arg: FetchHubItemsParams
+        arg: FetchHubItemsParams,
       ) => {
         const rows = response.data || [];
         const total = rows.length > 0 ? Number(rows[0].total_count) : 0;
 
-        const irregularVerbs = rows.map(row => ({
+        const irregularVerbs = rows.map((row) => ({
           id: row.irregular_verb_id,
           baseForm: row.base_form,
           pastSimple: row.past_simple,
           pastParticiple: row.past_participle,
-          definition: row.definition || '',
-          phoneticText: row.phonetic_text || '',
-          phoneticAudioLink: row.phonetic_audio_link || '',
-          translation: row.translation || '',
-          translationDefinition: row.translation_definition || '',
+          definition: row.definition || "",
+          phoneticText: row.phonetic_text || "",
+          phoneticAudioLink: row.phonetic_audio_link || "",
+          translation: row.translation || "",
+          translationDefinition: row.translation_definition || "",
           inUserDictionary: row.in_user_dictionary,
-          userStatus: row.user_status || '',
+          userStatus: row.user_status || "",
         }));
 
         return {
@@ -163,27 +134,27 @@ export const hubApi = createApi({
       FetchHubIrregularAdjectivesResponse,
       FetchHubItemsParams
     >({
-      query: ({ page, pageSize, search = '' }) => ({
-        url: `/hub/irregular-adjectives?limit=${pageSize}&offset=${(page - 1) * pageSize}${search ? `&search=${encodeURIComponent(search)}` : ''}`,
+      query: ({ page, pageSize, search = "" }) => ({
+        url: `/hub/irregular-adjectives?limit=${pageSize}&offset=${(page - 1) * pageSize}${search ? `&search=${encodeURIComponent(search)}` : ""}`,
       }),
-      providesTags: ['HubIrregularAdjectives'],
+      providesTags: ["HubIrregularAdjectives"],
       transformResponse: (
         response: NestResponse<HubIrregularAdjectiveRow[]>,
         _meta,
-        arg: FetchHubItemsParams
+        arg: FetchHubItemsParams,
       ) => {
         const rows = response.data || [];
         const total = rows.length > 0 ? Number(rows[0].total) : 0;
 
-        const irregularAdjectives = rows.map(row => ({
+        const irregularAdjectives = rows.map((row) => ({
           id: row.id,
           baseForm: row.base_form,
           comparative: row.comparative,
           superlative: row.superlative,
-          definition: row.definition || '',
-          phoneticText: row.phonetic_text || '',
-          phoneticAudioLink: row.phonetic_audio_link || '',
-          translation: row.translation || '',
+          definition: row.definition || "",
+          phoneticText: row.phonetic_text || "",
+          phoneticAudioLink: row.phonetic_audio_link || "",
+          translation: row.translation || "",
           inUserDictionary: row.in_user_dictionary,
         }));
 
@@ -201,19 +172,16 @@ export const hubApi = createApi({
       { langCode: string; wordId: string }
     >({
       query: ({ langCode, wordId }) => ({
-        url: '/hub/add-word',
-        method: 'POST',
+        url: "/hub/add-word",
+        method: "POST",
         body: { langCode, wordId },
       }),
-      invalidatesTags: ['HubWords'],
-      transformResponse: (response: NestResponse<{ success: boolean }>) =>
-        response.data,
+      invalidatesTags: ["HubWords"],
+      transformResponse: (response: NestResponse<{ success: boolean }>) => response.data,
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(
-          dictionaryApi.util.invalidateTags(['DictionaryStats', 'Words'])
-        );
-        dispatch(dashboardApi.util.invalidateTags(['Dashboard']));
+        dispatch(dictionaryApi.util.invalidateTags(["DictionaryStats", "Words"]));
+        dispatch(dashboardApi.util.invalidateTags(["Dashboard"]));
       },
     }),
   }),

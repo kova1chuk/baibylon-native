@@ -1,11 +1,11 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { BlurView } from 'expo-blur';
+import { BlurView } from "expo-blur";
 
-import { View, Platform } from 'react-native';
+import { View, Platform } from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
-import { cn } from '@/lib/utils';
+import { useTheme } from "@/contexts/ThemeContext";
+import { cn } from "@/lib/utils";
 
 interface GlassViewProps {
   children: React.ReactNode;
@@ -15,17 +15,14 @@ interface GlassViewProps {
 
 function GlassView({ children, intensity = 50, className }: GlassViewProps) {
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
 
-  if (Platform.OS === 'ios') {
+  if (Platform.OS === "ios") {
     return (
       <BlurView
         intensity={intensity}
-        tint={isDark ? 'dark' : 'light'}
-        className={cn(
-          'overflow-hidden rounded-2xl border border-border/50',
-          className
-        )}
+        tint={isDark ? "dark" : "light"}
+        className={cn("overflow-hidden rounded-2xl border border-border/50", className)}
       >
         {children}
       </BlurView>
@@ -35,9 +32,9 @@ function GlassView({ children, intensity = 50, className }: GlassViewProps) {
   return (
     <View
       className={cn(
-        'overflow-hidden rounded-2xl border border-border/50',
-        isDark ? 'bg-card/90' : 'bg-card/80',
-        className
+        "overflow-hidden rounded-2xl border border-border/50",
+        isDark ? "bg-card/90" : "bg-card/80",
+        className,
       )}
     >
       {children}

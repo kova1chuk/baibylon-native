@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from "react";
 
-import { useRouter } from 'expo-router';
-import { ArrowLeft, BarChart3 } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from "expo-router";
+import { ArrowLeft, BarChart3 } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   useStartTutorSessionMutation,
   useEndTutorSessionMutation,
   useGetTutorPreferencesQuery,
-} from '@/shared/api/tutorApi';
-import { useAppDispatch, useAppSelector } from '@/shared/model/store';
+} from "@/shared/api/tutorApi";
+import { useAppDispatch, useAppSelector } from "@/shared/model/store";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
 
 import {
   setView,
@@ -25,28 +25,26 @@ import {
   recordQuizResult,
   updateElapsedMinutes,
   setAllPreferences,
-} from '../model/aiTutorSlice';
-import type { TutorMode } from '../model/aiTutorSlice';
+} from "../model/aiTutorSlice";
+import type { TutorMode } from "../model/aiTutorSlice";
 
-import ChatScreen from './ChatScreen';
-import WelcomeView from './WelcomeView';
+import ChatScreen from "./ChatScreen";
+import WelcomeView from "./WelcomeView";
 
 export default function AITutorScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
-  const isDark = theme === 'dark';
+  const isDark = theme === "dark";
   const colors = useColors();
   const dispatch = useAppDispatch();
 
-  const view = useAppSelector(state => state.aiTutor.view);
-  const mode = useAppSelector(state => state.aiTutor.mode);
-  const sessionStats = useAppSelector(state => state.aiTutor.sessionStats);
-  const currentSessionId = useAppSelector(
-    state => state.aiTutor.currentSessionId
-  );
-  const preferences = useAppSelector(state => state.aiTutor.preferences);
+  const view = useAppSelector((state) => state.aiTutor.view);
+  const mode = useAppSelector((state) => state.aiTutor.mode);
+  const sessionStats = useAppSelector((state) => state.aiTutor.sessionStats);
+  const currentSessionId = useAppSelector((state) => state.aiTutor.currentSessionId);
+  const preferences = useAppSelector((state) => state.aiTutor.preferences);
 
   const [startTutorSession] = useStartTutorSessionMutation();
   const [endTutorSession] = useEndTutorSessionMutation();
@@ -63,21 +61,18 @@ export default function AITutorScreen() {
           showTranslations: serverPrefs.showTranslations,
           difficulty: serverPrefs.difficulty,
           sessionLength: serverPrefs.sessionLength,
-        })
+        }),
       );
     }
   }, [serverPrefs, dispatch]);
 
   useEffect(() => {
-    if (view === 'chat' && currentSessionId) {
+    if (view === "chat" && currentSessionId) {
       timerRef.current = setInterval(() => {
         dispatch(
           updateElapsedMinutes(
-            Math.floor(
-              (Date.now() - new Date(sessionStats.startedAt || '').getTime()) /
-                60000
-            )
-          )
+            Math.floor((Date.now() - new Date(sessionStats.startedAt || "").getTime()) / 60000),
+          ),
         );
       }, 60000);
     }
@@ -104,7 +99,7 @@ export default function AITutorScreen() {
       const sessionId = await startTutorSession({ mode }).unwrap();
       dispatch(startSession(sessionId));
     } catch {
-      dispatch(setView('chat'));
+      dispatch(setView("chat"));
     }
   }, [mode, startTutorSession, dispatch]);
 
@@ -112,16 +107,16 @@ export default function AITutorScreen() {
     (newMode: TutorMode) => {
       dispatch(setMode(newMode));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const handleBack = useCallback(() => {
-    if (view === 'chat') {
+    if (view === "chat") {
       if (currentSessionId) {
         endTutorSession(currentSessionId).catch(() => {});
         dispatch(endSession());
       }
-      dispatch(setView('welcome'));
+      dispatch(setView("welcome"));
     } else {
       router.back();
     }
@@ -131,7 +126,7 @@ export default function AITutorScreen() {
     (correct: boolean, word: string) => {
       dispatch(recordQuizResult({ correct, word }));
     },
-    [dispatch]
+    [dispatch],
   );
 
   return (
@@ -141,31 +136,25 @@ export default function AITutorScreen() {
     >
       <View className="flex-row items-center justify-between px-4 pb-3">
         <Pressable onPress={handleBack} className="p-2 active:opacity-50">
-          <ArrowLeft size={20} color={isDark ? '#FAFAF9' : '#111827'} />
+          <ArrowLeft size={20} color={isDark ? "#FAFAF9" : "#111827"} />
         </Pressable>
 
-        <Text className="text-base font-semibold text-foreground">
-          {t('aiTutor.title')}
-        </Text>
+        <Text className="text-base font-semibold text-foreground">{t("aiTutor.title")}</Text>
 
-        {view === 'chat' ? (
+        {view === "chat" ? (
           <View className="flex-row items-center gap-3">
             <Text className="text-xs text-muted-foreground">
               {sessionStats.correctCount}/{sessionStats.totalCount}
             </Text>
-            <BarChart3 size={18} color={isDark ? '#A1A1AA' : '#6B7280'} />
+            <BarChart3 size={18} color={isDark ? "#A1A1AA" : "#6B7280"} />
           </View>
         ) : (
           <View className="w-10" />
         )}
       </View>
 
-      {view === 'welcome' ? (
-        <WelcomeView
-          mode={mode}
-          onModeChange={handleModeChange}
-          onStartChat={handleStartChat}
-        />
+      {view === "welcome" ? (
+        <WelcomeView mode={mode} onModeChange={handleModeChange} onStartChat={handleStartChat} />
       ) : (
         <ChatScreen
           enableSuggestions={preferences.enableSuggestions}

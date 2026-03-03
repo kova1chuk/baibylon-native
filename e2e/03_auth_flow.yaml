@@ -6,15 +6,15 @@ appId: com.vocairo
 
 # Look for email input field and try signing in
 - tapOn:
-    text: '.*email.*'
+    text: ".*email.*"
     optional: true
 - takeScreenshot: 03_auth_email_field
 
 # Check sign up link exists
 - assertVisible:
-    text: '.*Sign Up.*'
+    text: ".*Sign Up.*"
     optional: true
 - assertVisible:
-    text: '.*Forgot.*'
+    text: ".*Forgot.*"
     optional: true
 - takeScreenshot: 03_auth_flow

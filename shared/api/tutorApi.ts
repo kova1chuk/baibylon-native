@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from './nestBaseQuery';
+import { nestBaseQuery } from "./nestBaseQuery";
 
 export interface TutorSessionRecord {
   id: string;
@@ -70,49 +70,45 @@ export interface TutorPreferences {
 }
 
 export const tutorApi = createApi({
-  reducerPath: 'tutorApi',
+  reducerPath: "tutorApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['TutorSession', 'TutorStats', 'TutorPreferences'],
-  endpoints: builder => ({
+  tagTypes: ["TutorSession", "TutorStats", "TutorPreferences"],
+  endpoints: (builder) => ({
     getTutorSessions: builder.query<TutorSessionRecord[], { limit?: number }>({
       query: ({ limit = 20 }) => ({
         url: `/tutor/sessions?limit=${limit}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response: SessionListResponse) => response.data,
-      providesTags: ['TutorSession'],
+      providesTags: ["TutorSession"],
     }),
 
     getTutorSession: builder.query<TutorSessionRecord, string>({
-      query: sessionId => ({
+      query: (sessionId) => ({
         url: `/tutor/sessions/${sessionId}`,
-        method: 'GET',
+        method: "GET",
       }),
       transformResponse: (response: SessionResponse) => response.data,
-      providesTags: (_result, _error, id) => [{ type: 'TutorSession', id }],
+      providesTags: (_result, _error, id) => [{ type: "TutorSession", id }],
     }),
 
     getActiveSession: builder.query<TutorSessionRecord | null, void>({
       query: () => ({
-        url: '/tutor/sessions/active',
-        method: 'GET',
+        url: "/tutor/sessions/active",
+        method: "GET",
       }),
       transformResponse: (response: SessionResponse) => response.data,
-      providesTags: [{ type: 'TutorSession', id: 'ACTIVE' }],
+      providesTags: [{ type: "TutorSession", id: "ACTIVE" }],
     }),
 
-    startTutorSession: builder.mutation<
-      string,
-      { mode?: string; topic?: string }
-    >({
-      query: body => ({
-        url: '/tutor/sessions',
-        method: 'POST',
+    startTutorSession: builder.mutation<string, { mode?: string; topic?: string }>({
+      query: (body) => ({
+        url: "/tutor/sessions",
+        method: "POST",
         body,
       }),
-      transformResponse: (response: StartSessionResponse) =>
-        response.data.sessionId,
-      invalidatesTags: ['TutorSession'],
+      transformResponse: (response: StartSessionResponse) => response.data.sessionId,
+      invalidatesTags: ["TutorSession"],
     }),
 
     updateTutorSession: builder.mutation<
@@ -125,70 +121,59 @@ export const tutorApi = createApi({
     >({
       query: ({ sessionId, ...body }) => ({
         url: `/tutor/sessions/${sessionId}`,
-        method: 'PATCH',
+        method: "PATCH",
         body,
       }),
     }),
 
     endTutorSession: builder.mutation<TutorSessionRecord | null, string>({
-      query: sessionId => ({
+      query: (sessionId) => ({
         url: `/tutor/sessions/${sessionId}/end`,
-        method: 'POST',
+        method: "POST",
       }),
       transformResponse: (response: SessionResponse) => response.data,
-      invalidatesTags: ['TutorSession', 'TutorStats'],
+      invalidatesTags: ["TutorSession", "TutorStats"],
     }),
 
     getWeeklyStats: builder.query<WeeklyStats, void>({
       query: () => ({
-        url: '/tutor/stats/weekly',
-        method: 'GET',
+        url: "/tutor/stats/weekly",
+        method: "GET",
       }),
-      transformResponse: (response: StatsResponse<WeeklyStats>) =>
-        response.data,
-      providesTags: ['TutorStats'],
+      transformResponse: (response: StatsResponse<WeeklyStats>) => response.data,
+      providesTags: ["TutorStats"],
     }),
 
     getProfileStats: builder.query<ProfileStats, void>({
       query: () => ({
-        url: '/tutor/stats/profile',
-        method: 'GET',
+        url: "/tutor/stats/profile",
+        method: "GET",
       }),
-      transformResponse: (response: StatsResponse<ProfileStats>) =>
-        response.data,
-      providesTags: ['TutorStats'],
+      transformResponse: (response: StatsResponse<ProfileStats>) => response.data,
+      providesTags: ["TutorStats"],
     }),
 
     getTutorPreferences: builder.query<TutorPreferences, void>({
       query: () => ({
-        url: '/tutor/preferences',
-        method: 'GET',
+        url: "/tutor/preferences",
+        method: "GET",
       }),
-      transformResponse: (response: StatsResponse<TutorPreferences>) =>
-        response.data,
-      providesTags: ['TutorPreferences'],
+      transformResponse: (response: StatsResponse<TutorPreferences>) => response.data,
+      providesTags: ["TutorPreferences"],
     }),
 
-    updateTutorPreferences: builder.mutation<
-      TutorPreferences,
-      Partial<TutorPreferences>
-    >({
-      query: body => ({
-        url: '/tutor/preferences',
-        method: 'PUT',
+    updateTutorPreferences: builder.mutation<TutorPreferences, Partial<TutorPreferences>>({
+      query: (body) => ({
+        url: "/tutor/preferences",
+        method: "PUT",
         body,
       }),
-      transformResponse: (response: StatsResponse<TutorPreferences>) =>
-        response.data,
+      transformResponse: (response: StatsResponse<TutorPreferences>) => response.data,
       async onQueryStarted(updates, { dispatch, queryFulfilled }) {
         const patch = dispatch(
-          tutorApi.util.updateQueryData(
-            'getTutorPreferences',
-            undefined,
-            draft => {
-              Object.assign(draft, updates);
-            }
-          )
+          tutorApi.util.updateQueryData("getTutorPreferences", undefined, (draft) => {
+            Object.assign(draft, updates);
+          }),
         );
         try {
           await queryFulfilled;

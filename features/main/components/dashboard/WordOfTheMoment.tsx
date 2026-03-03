@@ -1,20 +1,20 @@
-import React from 'react';
+import React from "react";
 
-import { Volume2 } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
+import { Volume2 } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from "react-native";
 
-import type { DictionaryWordRow } from '@/entities/dictionary/api/types';
+import type { DictionaryWordRow } from "@/entities/dictionary/api/types";
 
 const STATUS_BADGE_COLORS: Record<string, { bg: string; text: string }> = {
-  '1': { bg: '#6B728015', text: '#6B7280' },
-  '2': { bg: '#EF444415', text: '#EF4444' },
-  '3': { bg: '#F9731615', text: '#F97316' },
-  '4': { bg: '#F59E0B15', text: '#F59E0B' },
-  '5': { bg: '#3B82F615', text: '#3B82F6' },
-  '6': { bg: '#10B98115', text: '#10B981' },
-  '7': { bg: '#8B5CF615', text: '#8B5CF6' },
+  "1": { bg: "#6B728015", text: "#6B7280" },
+  "2": { bg: "#EF444415", text: "#EF4444" },
+  "3": { bg: "#F9731615", text: "#F97316" },
+  "4": { bg: "#F59E0B15", text: "#F59E0B" },
+  "5": { bg: "#3B82F615", text: "#3B82F6" },
+  "6": { bg: "#10B98115", text: "#10B981" },
+  "7": { bg: "#8B5CF615", text: "#8B5CF6" },
 };
 
 interface Props {
@@ -30,14 +30,14 @@ export default function WordOfTheMoment({ word, onRefresh }: Props) {
   }
 
   const statusKey = String(word.status);
-  const badge = STATUS_BADGE_COLORS[statusKey] || STATUS_BADGE_COLORS['1'];
+  const badge = STATUS_BADGE_COLORS[statusKey] || STATUS_BADGE_COLORS["1"];
   const statusName = t(`wordStatus.${getStatusKey(statusKey)}`);
 
   return (
     <View className="bg-card rounded-2xl p-4 mx-4 shadow-sm">
       <View className="flex-row items-center justify-between mb-3">
         <Text className="text-lg font-semibold text-foreground">
-          {t('dashboard.wordOfTheMoment')}
+          {t("dashboard.wordOfTheMoment")}
         </Text>
         <Pressable className="p-2 active:opacity-50" onPress={onRefresh}>
           <Text style={{ fontSize: 14 }}>🔄</Text>
@@ -46,15 +46,11 @@ export default function WordOfTheMoment({ word, onRefresh }: Props) {
 
       <View className="gap-2">
         <View className="flex-row items-center gap-2">
-          <Text className="text-2xl font-bold text-foreground">
-            {word.text}
-          </Text>
+          <Text className="text-2xl font-bold text-foreground">{word.text}</Text>
           {word.phonetic_text && (
             <View className="flex-row items-center gap-1">
               <Volume2 size={14} color="#999" />
-              <Text className="text-sm text-muted-foreground">
-                {word.phonetic_text}
-              </Text>
+              <Text className="text-sm text-muted-foreground">{word.phonetic_text}</Text>
             </View>
           )}
         </View>
@@ -66,9 +62,7 @@ export default function WordOfTheMoment({ word, onRefresh }: Props) {
         )}
 
         {word.translation && (
-          <Text className="text-sm text-muted-foreground italic">
-            {word.translation}
-          </Text>
+          <Text className="text-sm text-muted-foreground italic">{word.translation}</Text>
         )}
 
         <View
@@ -86,13 +80,13 @@ export default function WordOfTheMoment({ word, onRefresh }: Props) {
 
 function getStatusKey(status: string): string {
   const map: Record<string, string> = {
-    '1': 'notStarted',
-    '2': 'introduced',
-    '3': 'encountered',
-    '4': 'learning',
-    '5': 'familiar',
-    '6': 'confident',
-    '7': 'mastered',
+    "1": "notStarted",
+    "2": "introduced",
+    "3": "encountered",
+    "4": "learning",
+    "5": "familiar",
+    "6": "confident",
+    "7": "mastered",
   };
-  return map[status] || 'notStarted';
+  return map[status] || "notStarted";
 }

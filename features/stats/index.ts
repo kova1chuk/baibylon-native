@@ -1,1 +1,1 @@
-export { default as StatsScreen } from './components/StatsScreen';
+export { default as StatsScreen } from "./components/StatsScreen";

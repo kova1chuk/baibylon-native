@@ -1,1 +1,1 @@
-export { default as LegalWebViewScreen } from './components/LegalWebViewScreen';
+export { default as LegalWebViewScreen } from "./components/LegalWebViewScreen";

@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import { useRouter } from 'expo-router';
+import { useRouter } from "expo-router";
 
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from "react-native";
 
 export default function NavigationLinks() {
   const router = useRouter();
@@ -15,25 +15,21 @@ export default function NavigationLinks() {
     <View className="gap-4 w-full">
       <Pressable
         className="bg-muted rounded-xl py-3 items-center active:opacity-80"
-        onPress={() => handleNavigation('/dictionary')}
+        onPress={() => handleNavigation("/dictionary")}
       >
-        <Text className="text-foreground font-semibold text-base">
-          Dictionary
-        </Text>
+        <Text className="text-foreground font-semibold text-base">Dictionary</Text>
       </Pressable>
 
       <Pressable
         className="bg-primary rounded-xl py-3 items-center active:opacity-80"
-        onPress={() => handleNavigation('/training')}
+        onPress={() => handleNavigation("/training")}
       >
-        <Text className="text-white font-semibold text-base">
-          Training Words
-        </Text>
+        <Text className="text-white font-semibold text-base">Training Words</Text>
       </Pressable>
 
       <Pressable
         className="bg-primary rounded-xl py-3 items-center active:opacity-80"
-        onPress={() => handleNavigation('/reviews')}
+        onPress={() => handleNavigation("/reviews")}
       >
         <Text className="text-white font-semibold text-base">Reviews</Text>
       </Pressable>

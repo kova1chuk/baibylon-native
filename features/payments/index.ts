@@ -1,1 +1,1 @@
-export { default as PricingScreen } from './components/PricingScreen';
+export { default as PricingScreen } from "./components/PricingScreen";

@@ -1,14 +1,10 @@
-import * as React from 'react';
+import * as React from "react";
 
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
-import { View } from 'react-native';
+import { View } from "react-native";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
 interface ProgressProps {
   value?: number;
@@ -30,14 +26,9 @@ function Progress({ value = 0, className, indicatorClassName }: ProgressProps) {
   }));
 
   return (
-    <View
-      className={cn(
-        'h-2 w-full overflow-hidden rounded-full bg-muted',
-        className
-      )}
-    >
+    <View className={cn("h-2 w-full overflow-hidden rounded-full bg-muted", className)}>
       <Animated.View
-        className={cn('h-full rounded-full bg-primary', indicatorClassName)}
+        className={cn("h-full rounded-full bg-primary", indicatorClassName)}
         style={animatedStyle}
       />
     </View>

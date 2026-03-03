@@ -1,6 +1,6 @@
-import { createApi } from '@reduxjs/toolkit/query/react';
+import { createApi } from "@reduxjs/toolkit/query/react";
 
-import { nestBaseQuery } from '@/shared/api/nestBaseQuery';
+import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 export interface LearningSession {
   id: string;
@@ -36,41 +36,37 @@ export interface DailySessionStats {
 }
 
 export const sessionApi = createApi({
-  reducerPath: 'sessionApi',
+  reducerPath: "sessionApi",
   baseQuery: nestBaseQuery,
-  tagTypes: ['Sessions', 'SessionStats'],
-  endpoints: builder => ({
+  tagTypes: ["Sessions", "SessionStats"],
+  endpoints: (builder) => ({
     listSessions: builder.query<
       { sessions: LearningSession[]; total: number },
       { limit?: number; offset?: number } | void
     >({
-      query: params => ({
-        url: '/sessions',
-        params: params
-          ? { limit: params.limit, offset: params.offset }
-          : undefined,
+      query: (params) => ({
+        url: "/sessions",
+        params: params ? { limit: params.limit, offset: params.offset } : undefined,
       }),
-      providesTags: ['Sessions'],
+      providesTags: ["Sessions"],
     }),
 
-    getDailyStats: builder.query<DailySessionStats[], { days?: number } | void>(
-      {
-        query: params => ({
-          url: '/sessions/stats',
-          params: params ? { days: params.days } : undefined,
-        }),
-        providesTags: ['SessionStats'],
-      }
-    ),
+    getDailyStats: builder.query<DailySessionStats[], { days?: number } | void>({
+      query: (params) => ({
+        url: "/sessions/stats",
+        params: params ? { days: params.days } : undefined,
+      }),
+      providesTags: ["SessionStats"],
+    }),
 
     getActiveSession: builder.query<LearningSession | null, void>({
-      query: () => ({ url: '/sessions/active' }),
-      providesTags: ['Sessions'],
+      query: () => ({ url: "/sessions/active" }),
+      providesTags: ["Sessions"],
     }),
 
     startSession: builder.mutation<LearningSession, void>({
-      query: () => ({ url: '/sessions', method: 'POST' }),
-      invalidatesTags: ['Sessions'],
+      query: () => ({ url: "/sessions", method: "POST" }),
+      invalidatesTags: ["Sessions"],
     }),
 
     updateSession: builder.mutation<
@@ -87,7 +83,7 @@ export const sessionApi = createApi({
     >({
       query: ({ sessionId, ...body }) => ({
         url: `/sessions/${sessionId}`,
-        method: 'PATCH',
+        method: "PATCH",
         body,
       }),
     }),
@@ -95,9 +91,9 @@ export const sessionApi = createApi({
     endSession: builder.mutation<LearningSession, { sessionId: string }>({
       query: ({ sessionId }) => ({
         url: `/sessions/${sessionId}/end`,
-        method: 'POST',
+        method: "POST",
       }),
-      invalidatesTags: ['Sessions', 'SessionStats'],
+      invalidatesTags: ["Sessions", "SessionStats"],
     }),
   }),
 });

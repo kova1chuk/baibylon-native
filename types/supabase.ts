@@ -1,14 +1,8 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[];
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
 export type Database = {
   __InternalSupabase: {
-    PostgrestVersion: '12.2.3 (519615d)';
+    PostgrestVersion: "12.2.3 (519615d)";
   };
   graphql_public: {
     Tables: {
@@ -58,11 +52,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_dictionaries_user_id_fkey';
-            columns: ['user_id'];
+            foreignKeyName: "en_dictionaries_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -70,38 +64,38 @@ export type Database = {
         Row: {
           dictionary_id: string | null;
           last_time_trained_at: string | null;
-          status: Database['public']['Enums']['word_status'];
+          status: Database["public"]["Enums"]["word_status"];
           usagecount: number | null;
           word_id: string | null;
         };
         Insert: {
           dictionary_id?: string | null;
           last_time_trained_at?: string | null;
-          status?: Database['public']['Enums']['word_status'];
+          status?: Database["public"]["Enums"]["word_status"];
           usagecount?: number | null;
           word_id?: string | null;
         };
         Update: {
           dictionary_id?: string | null;
           last_time_trained_at?: string | null;
-          status?: Database['public']['Enums']['word_status'];
+          status?: Database["public"]["Enums"]["word_status"];
           usagecount?: number | null;
           word_id?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: 'en_dictionary_words_dictionary_id_fkey';
-            columns: ['dictionary_id'];
+            foreignKeyName: "en_dictionary_words_dictionary_id_fkey";
+            columns: ["dictionary_id"];
             isOneToOne: false;
-            referencedRelation: 'en_dictionaries';
-            referencedColumns: ['id'];
+            referencedRelation: "en_dictionaries";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'en_dictionary_words_word_id_fkey';
-            columns: ['word_id'];
+            foreignKeyName: "en_dictionary_words_word_id_fkey";
+            columns: ["word_id"];
             isOneToOne: false;
-            referencedRelation: 'en_words';
-            referencedColumns: ['id'];
+            referencedRelation: "en_words";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -120,11 +114,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_from_ua_training_choose_translation_word_id_fkey';
-            columns: ['word_id'];
+            foreignKeyName: "en_from_ua_training_choose_translation_word_id_fkey";
+            columns: ["word_id"];
             isOneToOne: false;
-            referencedRelation: 'en_words';
-            referencedColumns: ['id'];
+            referencedRelation: "en_words";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -146,11 +140,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_review_senteceses_review_id_fkey';
-            columns: ['review_id'];
+            foreignKeyName: "en_review_senteceses_review_id_fkey";
+            columns: ["review_id"];
             isOneToOne: false;
-            referencedRelation: 'en_reviews';
-            referencedColumns: ['id'];
+            referencedRelation: "en_reviews";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -190,11 +184,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_analyses_user_id_fkey';
-            columns: ['user_id'];
+            foreignKeyName: "en_analyses_user_id_fkey";
+            columns: ["user_id"];
             isOneToOne: false;
-            referencedRelation: 'users';
-            referencedColumns: ['id'];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -216,18 +210,18 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_reviews_words_review_id_fkey';
-            columns: ['review_id'];
+            foreignKeyName: "en_reviews_words_review_id_fkey";
+            columns: ["review_id"];
             isOneToOne: false;
-            referencedRelation: 'en_reviews';
-            referencedColumns: ['id'];
+            referencedRelation: "en_reviews";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'en_reviews_words_word_id_fkey';
-            columns: ['word_id'];
+            foreignKeyName: "en_reviews_words_word_id_fkey";
+            columns: ["word_id"];
             isOneToOne: false;
-            referencedRelation: 'en_words';
-            referencedColumns: ['id'];
+            referencedRelation: "en_words";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -246,11 +240,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_to_ua_training_choose_translation_word_id_fkey';
-            columns: ['word_id'];
+            foreignKeyName: "en_to_ua_training_choose_translation_word_id_fkey";
+            columns: ["word_id"];
             isOneToOne: false;
-            referencedRelation: 'en_words';
-            referencedColumns: ['id'];
+            referencedRelation: "en_words";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -272,11 +266,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_to_ua_word_details_word_id_fkey';
-            columns: ['word_id'];
+            foreignKeyName: "en_to_ua_word_details_word_id_fkey";
+            columns: ["word_id"];
             isOneToOne: true;
-            referencedRelation: 'en_words';
-            referencedColumns: ['id'];
+            referencedRelation: "en_words";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -295,11 +289,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_training_shoose_antonyms_word_id_fkey';
-            columns: ['word_id'];
+            foreignKeyName: "en_training_shoose_antonyms_word_id_fkey";
+            columns: ["word_id"];
             isOneToOne: false;
-            referencedRelation: 'en_words';
-            referencedColumns: ['id'];
+            referencedRelation: "en_words";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -318,11 +312,11 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_training_shoose_synonym_word_id_fkey';
-            columns: ['word_id'];
+            foreignKeyName: "en_training_shoose_synonym_word_id_fkey";
+            columns: ["word_id"];
             isOneToOne: false;
-            referencedRelation: 'en_words';
-            referencedColumns: ['id'];
+            referencedRelation: "en_words";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -469,18 +463,18 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'en_reviews_words_review_id_fkey';
-            columns: ['review_id'];
+            foreignKeyName: "en_reviews_words_review_id_fkey";
+            columns: ["review_id"];
             isOneToOne: false;
-            referencedRelation: 'en_reviews';
-            referencedColumns: ['id'];
+            referencedRelation: "en_reviews";
+            referencedColumns: ["id"];
           },
           {
-            foreignKeyName: 'en_reviews_words_word_id_fkey';
-            columns: ['word_id'];
+            foreignKeyName: "en_reviews_words_word_id_fkey";
+            columns: ["word_id"];
             isOneToOne: false;
-            referencedRelation: 'en_words';
-            referencedColumns: ['id'];
+            referencedRelation: "en_words";
+            referencedColumns: ["id"];
           },
         ];
       };
@@ -626,7 +620,7 @@ export type Database = {
           search_text?: string;
           sort_by_usage_count?: string;
           sort_order?: string;
-          status_filter?: Database['public']['Enums']['word_status'][];
+          status_filter?: Database["public"]["Enums"]["word_status"][];
           translation_lang: string;
         };
         Returns: {
@@ -635,7 +629,7 @@ export type Database = {
           in_reviews: boolean;
           phonetic_audio_link: string;
           phonetic_text: string;
-          status: Database['public']['Enums']['word_status'];
+          status: Database["public"]["Enums"]["word_status"];
           synonymous: string;
           text: string;
           total_count: number;
@@ -855,7 +849,7 @@ export type Database = {
       words_stat: { Args: { p_lang_code: string }; Returns: Json };
     };
     Enums: {
-      word_status: '1' | '2' | '3' | '4' | '5' | '6' | '7';
+      word_status: "1" | "2" | "3" | "4" | "5" | "6" | "7";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -863,36 +857,31 @@ export type Database = {
   };
 };
 
-type DatabaseWithoutInternals = Omit<Database, '__InternalSupabase'>;
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">;
 
-type DefaultSchema = DatabaseWithoutInternals[Extract<
-  keyof Database,
-  'public'
->];
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">];
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
-    | keyof (DefaultSchema['Tables'] & DefaultSchema['Views'])
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
-  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'] &
-      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R;
     }
     ? R
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])
-    ? (DefaultSchema['Tables'] &
-        DefaultSchema['Views'])[DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] & DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R;
       }
       ? R
@@ -901,23 +890,23 @@ export type Tables<
 
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I;
     }
     ? I
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I;
       }
       ? I
@@ -926,23 +915,23 @@ export type TablesInsert<
 
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
-    | keyof DefaultSchema['Tables']
+    | keyof DefaultSchema["Tables"]
     | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = DefaultSchemaTableNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U;
     }
     ? U
     : never
-  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema['Tables']
-    ? DefaultSchema['Tables'][DefaultSchemaTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U;
       }
       ? U
@@ -951,36 +940,36 @@ export type TablesUpdate<
 
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
-    | keyof DefaultSchema['Enums']
+    | keyof DefaultSchema["Enums"]
     | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums']
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = DefaultSchemaEnumNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema['Enums']
-    ? DefaultSchema['Enums'][DefaultSchemaEnumNameOrOptions]
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never;
 
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
-    | keyof DefaultSchema['CompositeTypes']
+    | keyof DefaultSchema["CompositeTypes"]
     | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof DatabaseWithoutInternals;
   }
-    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes']
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
 > = PublicCompositeTypeNameOrOptions extends {
   schema: keyof DatabaseWithoutInternals;
 }
-  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions['schema']]['CompositeTypes'][CompositeTypeName]
-  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema['CompositeTypes']
-    ? DefaultSchema['CompositeTypes'][PublicCompositeTypeNameOrOptions]
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never;
 
 export const Constants = {
@@ -989,7 +978,7 @@ export const Constants = {
   },
   public: {
     Enums: {
-      word_status: ['1', '2', '3', '4', '5', '6', '7'],
+      word_status: ["1", "2", "3", "4", "5", "6", "7"],
     },
   },
 } as const;

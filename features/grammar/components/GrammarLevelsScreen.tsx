@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { BookOpen, ChevronRight } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
+import { BookOpen, ChevronRight } from "lucide-react-native";
+import { useTranslation } from "react-i18next";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
   View,
@@ -13,25 +13,25 @@ import {
   Pressable,
   ActivityIndicator,
   StyleSheet,
-} from 'react-native';
+  RefreshControl,
+} from "react-native";
 
-import { useTheme } from '@/contexts/ThemeContext';
-import { useGetGrammarLevelsQuery } from '@/entities/grammar/api/grammarApi';
+import { useTheme } from "@/contexts/ThemeContext";
+import { useGetGrammarLevelsQuery } from "@/entities/grammar/api/grammarApi";
 
-import { useColors } from '@/hooks/useColors';
+import { useColors } from "@/hooks/useColors";
+import { useRefetchOnFocus } from "@/hooks/useRefetchOnFocus";
+import { useRefreshControl } from "@/hooks/useRefreshControl";
 
-import type { GrammarLevelRow } from '@/entities/grammar/api/types';
+import type { GrammarLevelRow } from "@/entities/grammar/api/types";
 
-const LEVEL_COLORS: Record<
-  string,
-  { gradient: [string, string]; primary: string }
-> = {
-  A1: { gradient: ['#6ee7b7', '#10B981'], primary: '#10B981' },
-  A2: { gradient: ['#10B981', '#059669'], primary: '#059669' },
-  B1: { gradient: ['#60a5fa', '#818cf8'], primary: '#3B82F6' },
-  B2: { gradient: ['#a78bfa', '#8b5cf6'], primary: '#A855F7' },
-  C1: { gradient: ['#fbbf24', '#f59e0b'], primary: '#F59E0B' },
-  C2: { gradient: ['#fb7185', '#ef4444'], primary: '#EF4444' },
+const LEVEL_COLORS: Record<string, { gradient: [string, string]; primary: string }> = {
+  A1: { gradient: ["#6ee7b7", "#10B981"], primary: "#10B981" },
+  A2: { gradient: ["#10B981", "#059669"], primary: "#059669" },
+  B1: { gradient: ["#60a5fa", "#818cf8"], primary: "#3B82F6" },
+  B2: { gradient: ["#a78bfa", "#8b5cf6"], primary: "#A855F7" },
+  C1: { gradient: ["#fbbf24", "#f59e0b"], primary: "#F59E0B" },
+  C2: { gradient: ["#fb7185", "#ef4444"], primary: "#EF4444" },
 };
 
 function isCurrentLevel(level: GrammarLevelRow): boolean {
@@ -45,43 +45,30 @@ export default function GrammarLevelsScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
 
-  const {
-    data: levels = [],
-    isLoading,
-    error,
-    refetch,
-  } = useGetGrammarLevelsQuery();
+  const { data: levels = [], isLoading, error, refetch } = useGetGrammarLevelsQuery();
 
-  const foreground = isDark ? 'rgba(250,250,250,0.95)' : '#111827';
-  const muted = isDark ? 'rgba(250,250,250,0.4)' : 'rgba(0,0,0,0.4)';
-  const cardBg = isDark ? 'rgba(17,17,19,0.65)' : 'rgba(255,255,255,0.85)';
-  const cardBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
-  const trackBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-  const separatorColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
+  useRefetchOnFocus([refetch]);
+  const { refreshing, onRefresh } = useRefreshControl([refetch]);
 
-  const totalTopics = useMemo(
-    () => levels.reduce((sum, l) => sum + l.total_topics, 0),
-    [levels]
-  );
+  const foreground = isDark ? "rgba(250,250,250,0.95)" : "#111827";
+  const muted = isDark ? "rgba(250,250,250,0.4)" : "rgba(0,0,0,0.4)";
+  const cardBg = isDark ? "rgba(17,17,19,0.65)" : "rgba(255,255,255,0.85)";
+  const cardBorder = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)";
+  const trackBg = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.06)";
+  const separatorColor = isDark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.04)";
+
+  const totalTopics = useMemo(() => levels.reduce((sum, l) => sum + l.total_topics, 0), [levels]);
   const completedTopics = useMemo(
     () => levels.reduce((sum, l) => sum + l.completed_topics, 0),
-    [levels]
+    [levels],
   );
-  const currentLevel = useMemo(
-    () => levels.find(l => isCurrentLevel(l)),
-    [levels]
-  );
+  const currentLevel = useMemo(() => levels.find((l) => isCurrentLevel(l)), [levels]);
 
   if (isLoading) {
     return (
       <View style={[styles.center, { backgroundColor: colors.background }]}>
-        <ActivityIndicator
-          size="large"
-          color={isDark ? '#6ee7b7' : '#10B981'}
-        />
-        <Text style={{ color: muted, marginTop: 8, fontSize: 13 }}>
-          {t('common.loading')}
-        </Text>
+        <ActivityIndicator size="large" color={isDark ? "#6ee7b7" : "#10B981"} />
+        <Text style={{ color: muted, marginTop: 8, fontSize: 13 }}>{t("common.loading")}</Text>
       </View>
     );
   }
@@ -94,24 +81,24 @@ export default function GrammarLevelsScreen() {
           style={{
             color: foreground,
             fontSize: 16,
-            fontWeight: '600',
+            fontWeight: "600",
             marginTop: 16,
           }}
         >
-          {t('common.error')}
+          {t("common.error")}
         </Text>
         <Text
           style={{
             color: muted,
             fontSize: 13,
-            textAlign: 'center',
+            textAlign: "center",
             marginTop: 4,
             paddingHorizontal: 32,
           }}
         >
-          {'status' in (error as object)
+          {"status" in (error as object)
             ? `Server returned ${(error as { status: number }).status}`
-            : (error as { message?: string })?.message || t('common.tryAgain')}
+            : (error as { message?: string })?.message || t("common.tryAgain")}
         </Text>
         <Pressable
           onPress={refetch}
@@ -120,19 +107,17 @@ export default function GrammarLevelsScreen() {
             paddingHorizontal: 20,
             paddingVertical: 10,
             borderRadius: 10,
-            backgroundColor: isDark
-              ? 'rgba(129,140,248,0.15)'
-              : 'rgba(99,102,241,0.1)',
+            backgroundColor: isDark ? "rgba(129,140,248,0.15)" : "rgba(99,102,241,0.1)",
           }}
         >
           <Text
             style={{
               fontSize: 14,
-              fontWeight: '600',
-              color: '#818cf8',
+              fontWeight: "600",
+              color: "#818cf8",
             }}
           >
-            {t('common.retry') || 'Retry'}
+            {t("common.retry") || "Retry"}
           </Text>
         </Pressable>
       </View>
@@ -147,16 +132,12 @@ export default function GrammarLevelsScreen() {
         paddingTop: 8,
         paddingBottom: insets.bottom + 100,
       }}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       {/* Header card */}
-      <View
-        style={[
-          styles.headerCard,
-          { backgroundColor: cardBg, borderColor: cardBorder },
-        ]}
-      >
+      <View style={[styles.headerCard, { backgroundColor: cardBg, borderColor: cardBorder }]}>
         <LinearGradient
-          colors={['rgba(129,140,248,0.4)', 'rgba(99,102,241,0.3)']}
+          colors={["rgba(129,140,248,0.4)", "rgba(99,102,241,0.3)"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={styles.accentBar}
@@ -166,16 +147,14 @@ export default function GrammarLevelsScreen() {
             style={[
               styles.headerIcon,
               {
-                backgroundColor: isDark
-                  ? 'rgba(129,140,248,0.12)'
-                  : 'rgba(129,140,248,0.08)',
+                backgroundColor: isDark ? "rgba(129,140,248,0.12)" : "rgba(129,140,248,0.08)",
               },
             ]}
           >
             <BookOpen size={22} color="#818cf8" />
           </View>
-          <Text style={{ fontSize: 20, fontWeight: '700', color: foreground }}>
-            {t('grammarPage.title')}
+          <Text style={{ fontSize: 20, fontWeight: "700", color: foreground }}>
+            {t("grammarPage.title")}
           </Text>
         </View>
         <Text
@@ -186,7 +165,7 @@ export default function GrammarLevelsScreen() {
             marginBottom: 14,
           }}
         >
-          {t('grammarPage.description')}
+          {t("grammarPage.description")}
         </Text>
         <View
           style={[
@@ -201,46 +180,46 @@ export default function GrammarLevelsScreen() {
           <View style={styles.statItem}>
             <Text
               style={{
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
                 fontSize: 18,
-                fontWeight: '700',
+                fontWeight: "700",
                 color: foreground,
               }}
             >
               {totalTopics}
             </Text>
             <Text style={[styles.statLabelBase, { color: muted }]}>
-              {t('grammarPage.totalTopics')}
+              {t("grammarPage.totalTopics")}
             </Text>
           </View>
           <View style={styles.statItem}>
             <Text
               style={{
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
                 fontSize: 18,
-                fontWeight: '700',
-                color: '#818cf8',
+                fontWeight: "700",
+                color: "#818cf8",
               }}
             >
               {completedTopics}
             </Text>
             <Text style={[styles.statLabelBase, { color: muted }]}>
-              {t('grammarPage.completed')}
+              {t("grammarPage.completed")}
             </Text>
           </View>
           <View style={styles.statItem}>
             <Text
               style={{
-                fontFamily: 'monospace',
+                fontFamily: "monospace",
                 fontSize: 18,
-                fontWeight: '700',
+                fontWeight: "700",
                 color: foreground,
               }}
             >
-              {currentLevel?.code ?? '\u2014'}
+              {currentLevel?.code ?? "\u2014"}
             </Text>
             <Text style={[styles.statLabelBase, { color: muted }]}>
-              {t('grammarPage.currentLevel')}
+              {t("grammarPage.currentLevel")}
             </Text>
           </View>
         </View>
@@ -248,10 +227,10 @@ export default function GrammarLevelsScreen() {
 
       {/* Level cards */}
       <View style={{ gap: 10, marginTop: 12 }}>
-        {levels.map(level => {
+        {levels.map((level) => {
           const lc = LEVEL_COLORS[level.code] ?? {
-            gradient: ['#6B7280', '#4B5563'] as [string, string],
-            primary: '#6B7280',
+            gradient: ["#6B7280", "#4B5563"] as [string, string],
+            primary: "#6B7280",
           };
           const pct = Math.min(100, Math.round(level.progress_percentage ?? 0));
           const current = isCurrentLevel(level);
@@ -267,11 +246,7 @@ export default function GrammarLevelsScreen() {
                   opacity: pressed ? 0.8 : 1,
                 },
               ]}
-              onPress={() =>
-                router.push(
-                  `/grammar/level/${level.code.toLowerCase()}` as never
-                )
-              }
+              onPress={() => router.push(`/grammar/level/${level.code.toLowerCase()}` as never)}
             >
               <LinearGradient
                 colors={lc.gradient}
@@ -293,7 +268,7 @@ export default function GrammarLevelsScreen() {
                     <Text
                       style={{
                         fontSize: 13,
-                        fontWeight: '700',
+                        fontWeight: "700",
                         color: lc.primary,
                       }}
                     >
@@ -303,15 +278,15 @@ export default function GrammarLevelsScreen() {
                   <View style={{ flex: 1 }}>
                     <View
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
+                        flexDirection: "row",
+                        alignItems: "center",
                         gap: 6,
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 15,
-                          fontWeight: '600',
+                          fontWeight: "600",
                           color: foreground,
                         }}
                       >
@@ -329,11 +304,11 @@ export default function GrammarLevelsScreen() {
                           <Text
                             style={{
                               fontSize: 9,
-                              fontWeight: '600',
+                              fontWeight: "600",
                               color: lc.primary,
                             }}
                           >
-                            {t('grammarPage.current')}
+                            {t("grammarPage.current")}
                           </Text>
                         </View>
                       )}
@@ -355,28 +330,22 @@ export default function GrammarLevelsScreen() {
 
                 <View style={{ marginTop: 12 }}>
                   <View style={styles.progressRow}>
-                    <Text style={{ fontSize: 11, color: muted }}>
-                      {t('grammarPage.progress')}
-                    </Text>
+                    <Text style={{ fontSize: 11, color: muted }}>{t("grammarPage.progress")}</Text>
                     <Text style={{ fontSize: 11 }}>
-                      <Text style={{ color: lc.primary, fontWeight: '600' }}>
+                      <Text style={{ color: lc.primary, fontWeight: "600" }}>
                         {level.completed_topics}
                       </Text>
-                      <Text style={{ color: muted }}>
-                        /{level.total_topics}
-                      </Text>
+                      <Text style={{ color: muted }}>/{level.total_topics}</Text>
                     </Text>
                   </View>
-                  <View
-                    style={[styles.progressTrack, { backgroundColor: trackBg }]}
-                  >
+                  <View style={[styles.progressTrack, { backgroundColor: trackBg }]}>
                     <LinearGradient
                       colors={lc.gradient}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 0 }}
                       style={[
                         styles.progressFill,
-                        { width: pct > 0 ? `${Math.max(2, pct)}%` : '0%' },
+                        { width: pct > 0 ? `${Math.max(2, pct)}%` : "0%" },
                       ]}
                     />
                   </View>
@@ -388,27 +357,27 @@ export default function GrammarLevelsScreen() {
       </View>
 
       {levels.length === 0 && !isLoading && (
-        <View style={{ paddingVertical: 48, alignItems: 'center' }}>
+        <View style={{ paddingVertical: 48, alignItems: "center" }}>
           <BookOpen size={48} color={muted} style={{ opacity: 0.4 }} />
           <Text
             style={{
               fontSize: 16,
-              fontWeight: '600',
+              fontWeight: "600",
               color: foreground,
               marginTop: 16,
               marginBottom: 6,
             }}
           >
-            {t('grammarPage.noLevelsTitle')}
+            {t("grammarPage.noLevelsTitle")}
           </Text>
           <Text
             style={{
               fontSize: 13,
               color: muted,
-              textAlign: 'center',
+              textAlign: "center",
             }}
           >
-            {t('grammarPage.noLevelsDesc')}
+            {t("grammarPage.noLevelsDesc")}
           </Text>
         </View>
       )}
@@ -419,26 +388,26 @@ export default function GrammarLevelsScreen() {
 const styles = StyleSheet.create({
   center: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   headerCard: {
     borderRadius: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
     borderWidth: 1,
     padding: 16,
     paddingTop: 19,
   },
   accentBar: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     height: 3,
   },
   headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 10,
     marginBottom: 8,
   },
@@ -446,54 +415,54 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   statItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   statLabelBase: {
-    fontFamily: 'monospace' as const,
+    fontFamily: "monospace" as const,
     fontSize: 8,
     letterSpacing: 0.5,
-    textTransform: 'uppercase' as const,
+    textTransform: "uppercase" as const,
     marginTop: 2,
   },
   levelCard: {
     borderRadius: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
     borderWidth: 1,
   },
   levelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 10,
   },
   levelBadge: {
     width: 42,
     height: 42,
     borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 1,
   },
   progressRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 6,
   },
   progressTrack: {
     height: 4,
     borderRadius: 100,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     borderRadius: 100,
   },
 });
