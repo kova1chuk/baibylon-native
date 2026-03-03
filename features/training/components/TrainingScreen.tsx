@@ -5,7 +5,7 @@ import { X } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text, Pressable, ActivityIndicator, Alert } from "react-native";
+import { ActivityIndicator, Alert, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import {
@@ -19,16 +19,16 @@ import {
   isTypeTheWordContent,
 } from "@/entities/exercise/api/exerciseApi";
 import {
+  useEndMultiSessionMutation,
   useStartMultiSessionMutation,
   useSubmitExerciseResultMutation,
-  useEndMultiSessionMutation,
 } from "@/entities/learning-queue/api/multiSessionApi";
 import {
-  startMultiSession as startMultiSessionAction,
-  setCurrentExercise,
-  recordExerciseResult,
   endMultiSession as endMultiSessionAction,
+  recordExerciseResult,
   resetMultiSession,
+  setCurrentExercise,
+  startMultiSession as startMultiSessionAction,
 } from "@/entities/learning-queue/model/learningQueueSlice";
 import { useAppDispatch, useAppSelector } from "@/shared/model/store";
 

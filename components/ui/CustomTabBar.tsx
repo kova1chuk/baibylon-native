@@ -3,11 +3,11 @@ import React from "react";
 import { BlurView } from "expo-blur";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
-import { LayoutDashboard, Sparkles, GraduationCap, Target, Play } from "lucide-react-native";
+import { GraduationCap, LayoutDashboard, Play, Sparkles, Target } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text, Pressable, Platform, StyleSheet } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 

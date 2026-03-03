@@ -5,9 +5,9 @@ import { dashboardApi } from "@/features/hub/api/dashboardApi";
 import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type {
-  FetchIrregularAdjectivesPageResponse,
-  FetchIrregularAdjectivesPageParams,
   DictionaryIrregularAdjectiveRow,
+  FetchIrregularAdjectivesPageParams,
+  FetchIrregularAdjectivesPageResponse,
 } from "./types";
 
 import type { WordStatus } from "@/shared/types";

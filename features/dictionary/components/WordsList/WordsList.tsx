@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { Volume2 } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable, FlatList, ActivityIndicator, RefreshControl } from "react-native";
+import { ActivityIndicator, FlatList, Pressable, RefreshControl, Text, View } from "react-native";
 
 import type { Word } from "@/entities/word/types";
 import type { WordStatus } from "@/shared/types";

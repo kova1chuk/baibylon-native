@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { io, Socket } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { API_BASE_URL } from "@/shared/config/api";

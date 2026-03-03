@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 import { useAuth } from "@/contexts/AuthContext";
 

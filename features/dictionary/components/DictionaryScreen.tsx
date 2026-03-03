@@ -4,13 +4,13 @@ import { Plus, Search } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text, Pressable, ActivityIndicator, TextInput } from "react-native";
+import { ActivityIndicator, Pressable, Text, TextInput, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import {
-  useGetDictStatsQuery,
-  useFetchWordsPageQuery,
   useAddNewWordMutation,
+  useFetchWordsPageQuery,
+  useGetDictStatsQuery,
 } from "@/entities/dictionary/api/dictionaryApi";
 
 import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";

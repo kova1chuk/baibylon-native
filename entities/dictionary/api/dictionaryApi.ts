@@ -3,15 +3,15 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type {
-  GetDictStatsResponse,
-  UserDictionaryStatsResponse,
-  FetchWordsPageResponse,
-  FetchWordsPageParams,
   DictionaryWordRow,
+  FetchWordsPageParams,
+  FetchWordsPageResponse,
+  GetDictStatsResponse,
   QueueDictionaryWordRow,
-  TrainingQueueRow,
   TrainingQueueParams,
+  TrainingQueueRow,
   UnifiedQueueItem,
+  UserDictionaryStatsResponse,
 } from "./types";
 
 import type { WordStatus } from "@/shared/types";

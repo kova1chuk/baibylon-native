@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import type { Word } from "@/entities/word/types";
 

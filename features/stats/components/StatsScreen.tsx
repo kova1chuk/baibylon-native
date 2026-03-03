@@ -3,12 +3,12 @@ import React from "react";
 import { BarChart3, BookOpen, Clock, Target, TrendingUp, Trophy, Zap } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from "react-native";
+import { ActivityIndicator, RefreshControl, ScrollView, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import {
-  useGetStreakInfoQuery,
   useGetLearningStatisticsQuery,
+  useGetStreakInfoQuery,
 } from "@/entities/learning-queue/api/multiSessionApi";
 import { useGetActivityHeatmapQuery } from "@/features/hub/api/dashboardApi";
 

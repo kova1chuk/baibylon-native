@@ -4,13 +4,13 @@ import { useLocalSearchParams } from "expo-router";
 import { BookOpen, Check, ChevronDown, RefreshCw, X } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   useGetTopicContentQuery,
-  useUpdateTopicProgressMutation,
   useUpdateRuleProgressMutation,
+  useUpdateTopicProgressMutation,
 } from "@/entities/grammar/api/grammarApi";
 
 import { useColors } from "@/hooks/useColors";

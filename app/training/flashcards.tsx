@@ -5,7 +5,7 @@ import { ArrowLeft, RotateCcw } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text, Pressable, ActivityIndicator, Animated } from "react-native";
+import { ActivityIndicator, Animated, Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import {

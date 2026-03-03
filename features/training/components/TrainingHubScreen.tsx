@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
@@ -17,9 +17,9 @@ import {
   HelpCircle,
   Image,
   Layers,
-  ListChecks,
-  Link2,
   LayoutGrid,
+  Link2,
+  ListChecks,
   Mail,
   MessageSquare,
   Mic,
@@ -34,13 +34,13 @@ import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
   ActivityIndicator,
-  StyleSheet,
+  Pressable,
   RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";

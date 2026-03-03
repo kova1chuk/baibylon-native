@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { AlertTriangle, RefreshCw } from "lucide-react-native";
 
-import { View, Text, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 interface Props {
   children: React.ReactNode;

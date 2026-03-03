@@ -4,14 +4,14 @@ import { Send } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
 import {
-  View,
-  Text,
+  ActivityIndicator,
   FlatList,
-  TextInput,
-  Pressable,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
+  Pressable,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";

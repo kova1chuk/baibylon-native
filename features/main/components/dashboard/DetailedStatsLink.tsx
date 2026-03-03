@@ -3,7 +3,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import { ArrowRight, BarChart3 } from "lucide-react-native";
 
-import { View, Text, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 

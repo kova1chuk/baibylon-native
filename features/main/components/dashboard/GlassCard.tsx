@@ -3,7 +3,7 @@ import React from "react";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { View, Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 

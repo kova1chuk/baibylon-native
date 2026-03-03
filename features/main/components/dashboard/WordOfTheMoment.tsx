@@ -3,7 +3,7 @@ import React from "react";
 import { Volume2 } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import type { DictionaryWordRow } from "@/entities/dictionary/api/types";
 

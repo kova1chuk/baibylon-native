@@ -4,13 +4,13 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { BookOpen, ChevronDown, ChevronRight } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, ScrollView, Pressable, ActivityIndicator, RefreshControl } from "react-native";
+import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import {
+  useGetCategoryTopicsQuery,
   useGetGrammarLevelsQuery,
   useGetLevelCategoriesQuery,
-  useGetCategoryTopicsQuery,
 } from "@/entities/grammar/api/grammarApi";
 
 import { useColors } from "@/hooks/useColors";

@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { BlurView } from "expo-blur";
 
-import { View, Platform } from "react-native";
+import { Platform, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import { cn } from "@/lib/utils";

@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 import { Eye } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, TextInput, Pressable } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 

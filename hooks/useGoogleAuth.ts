@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { makeRedirectUri } from "expo-auth-session";
 import * as Linking from "expo-linking";

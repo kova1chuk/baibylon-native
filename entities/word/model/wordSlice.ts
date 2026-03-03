@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-import { Word, WordState, UpdateWordRequest } from "../types";
+import { UpdateWordRequest, Word, WordState } from "../types";
 
 const initialState: WordState = {
   words: [],

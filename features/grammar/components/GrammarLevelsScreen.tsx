@@ -7,13 +7,13 @@ import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
   ActivityIndicator,
-  StyleSheet,
+  Pressable,
   RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";

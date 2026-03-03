@@ -1,9 +1,9 @@
 import React from "react";
 
-import { CheckCircle, XCircle, Clock, Zap } from "lucide-react-native";
+import { CheckCircle, Clock, XCircle, Zap } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, ScrollView, Pressable } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 

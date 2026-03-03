@@ -2,7 +2,7 @@ import React from "react";
 
 import { useTranslation } from "react-i18next";
 
-import { View, Text } from "react-native";
+import { Text, View } from "react-native";
 
 import type { DashboardSummary } from "@/features/hub/types/dashboard";
 

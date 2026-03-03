@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { useRouter } from "expo-router";
 
-import { View, ScrollView, Text, Pressable, Switch, Alert } from "react-native";
+import { Alert, Pressable, ScrollView, Switch, Text, View } from "react-native";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";

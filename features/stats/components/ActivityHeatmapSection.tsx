@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { View, Text } from "react-native";
+import { Text, View } from "react-native";
 
 const CELL_SIZE = 14;
 const CELL_GAP = 3;

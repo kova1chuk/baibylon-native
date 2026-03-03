@@ -2,7 +2,7 @@ import React from "react";
 
 import { useRouter } from "expo-router";
 
-import { View, Text, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 export default function NavigationLinks() {
   const router = useRouter();

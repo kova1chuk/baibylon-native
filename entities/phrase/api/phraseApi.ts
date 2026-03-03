@@ -5,9 +5,9 @@ import { dashboardApi } from "@/features/hub/api/dashboardApi";
 import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type {
-  FetchPhrasesPageResponse,
-  FetchPhrasesPageParams,
   DictionaryPhraseRow,
+  FetchPhrasesPageParams,
+  FetchPhrasesPageResponse,
 } from "./types";
 
 import type { WordStatus } from "@/shared/types";

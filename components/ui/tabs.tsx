@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { View, Pressable, Text } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { cn } from "@/lib/utils";
 

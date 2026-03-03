@@ -5,26 +5,26 @@ import { ArrowLeft, BarChart3 } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, Text, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import {
-  useStartTutorSessionMutation,
   useEndTutorSessionMutation,
   useGetTutorPreferencesQuery,
+  useStartTutorSessionMutation,
 } from "@/shared/api/tutorApi";
 import { useAppDispatch, useAppSelector } from "@/shared/model/store";
 
 import { useColors } from "@/hooks/useColors";
 
 import {
-  setView,
-  setMode,
-  startSession,
   endSession,
   recordQuizResult,
-  updateElapsedMinutes,
   setAllPreferences,
+  setMode,
+  setView,
+  startSession,
+  updateElapsedMinutes,
 } from "../model/aiTutorSlice";
 import type { TutorMode } from "../model/aiTutorSlice";
 

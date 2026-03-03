@@ -3,10 +3,10 @@ import React, { useCallback, useMemo, useState } from "react";
 import { BookOpen, FileText, Search, Trash2, X } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, FlatList, Pressable, Alert, ActivityIndicator, TextInput } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Pressable, Text, TextInput, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
-import { useGetReviewsQuery, useDeleteReviewMutation } from "@/entities/review/api/reviewApi";
+import { useDeleteReviewMutation, useGetReviewsQuery } from "@/entities/review/api/reviewApi";
 
 import { useColors } from "@/hooks/useColors";
 import { useRefetchOnFocus } from "@/hooks/useRefetchOnFocus";

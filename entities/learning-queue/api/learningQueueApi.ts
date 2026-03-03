@@ -4,7 +4,7 @@ import { dictionaryApi } from "@/entities/dictionary/api/dictionaryApi";
 import { dashboardApi } from "@/features/hub/api/dashboardApi";
 import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
-import type { QueueItem, UserLearningPreferences, ErrorStatistics } from "./types";
+import type { ErrorStatistics, QueueItem, UserLearningPreferences } from "./types";
 
 interface NestResponse<T> {
   success: boolean;

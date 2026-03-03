@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { WebView } from "react-native-webview";
 
-import { View, ActivityIndicator } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 

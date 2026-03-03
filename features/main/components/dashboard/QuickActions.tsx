@@ -1,10 +1,10 @@
 import React from "react";
 
 import { useRouter } from "expo-router";
-import { ChevronRight, BookOpen, GraduationCap, RotateCcw, Bot, Type } from "lucide-react-native";
+import { BookOpen, Bot, ChevronRight, GraduationCap, RotateCcw, Type } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 

@@ -3,8 +3,8 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type {
-  GrammarLevelRow,
   GrammarCategoryRow,
+  GrammarLevelRow,
   GrammarTopicRow,
   TopicContentData,
 } from "./types";

@@ -3,7 +3,7 @@ import * as React from "react";
 import { ChevronDown } from "lucide-react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
-import { View, Pressable, Text } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { cn } from "@/lib/utils";
 

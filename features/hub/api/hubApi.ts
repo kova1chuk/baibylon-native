@@ -5,15 +5,15 @@ import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import { dashboardApi } from "./dashboardApi";
 import type {
-  FetchHubItemsParams,
-  FetchHubWordsResponse,
-  FetchHubPhrasesResponse,
-  FetchHubIrregularVerbsResponse,
   FetchHubIrregularAdjectivesResponse,
-  HubWordRow,
-  HubPhraseRow,
-  HubIrregularVerbRow,
+  FetchHubIrregularVerbsResponse,
+  FetchHubItemsParams,
+  FetchHubPhrasesResponse,
+  FetchHubWordsResponse,
   HubIrregularAdjectiveRow,
+  HubIrregularVerbRow,
+  HubPhraseRow,
+  HubWordRow,
 } from "./types";
 
 interface NestResponse<T> {

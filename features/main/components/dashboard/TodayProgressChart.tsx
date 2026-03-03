@@ -1,8 +1,8 @@
 import React, { useMemo } from "react";
 
-import Svg, { Path, Circle, Line, Defs, LinearGradient, Stop } from "react-native-svg";
+import Svg, { Circle, Defs, Line, LinearGradient, Path, Stop } from "react-native-svg";
 
-import { View, Text } from "react-native";
+import { Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 

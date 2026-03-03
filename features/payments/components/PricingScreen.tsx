@@ -4,13 +4,13 @@ import { Check, Crown, ExternalLink, Minus, Sparkles, Zap } from "lucide-react-n
 import { useTranslation } from "react-i18next";
 
 import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
   ActivityIndicator,
   Linking,
+  Pressable,
   RefreshControl,
+  ScrollView,
+  Text,
+  View,
 } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";

@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 
 import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withRepeat,
-  withTiming,
-  withSequence,
   Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
 } from "react-native-reanimated";
 import Svg, { Defs, RadialGradient, Stop, Circle as SvgCircle } from "react-native-svg";
 

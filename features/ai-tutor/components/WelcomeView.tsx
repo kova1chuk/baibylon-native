@@ -3,7 +3,7 @@ import React, { useCallback } from "react";
 import { Bot, MessageSquare, Sparkles, Type } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 
-import { View, Text, Pressable, ScrollView } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import { useGetWeeklyStatsQuery } from "@/shared/api/tutorApi";

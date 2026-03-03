@@ -1,16 +1,16 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
 import { useRouter } from "expo-router";
-import { User, LogOut, BarChart3, Moon, Sun, ChevronDown } from "lucide-react-native";
+import { BarChart3, ChevronDown, LogOut, Moon, Sun, User } from "lucide-react-native";
 
 import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
   Modal,
-  TouchableWithoutFeedback,
+  Pressable,
   Animated as RNAnimated,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
 
 import { useAuth } from "@/contexts/AuthContext";

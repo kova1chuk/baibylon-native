@@ -11,9 +11,9 @@ import { Text } from "@/components/ui/text";
 import { useColors } from "@/hooks/useColors";
 
 import {
-  useSubmitLanguagesMutation,
-  useSubmitGoalMutation,
   useCompleteOnboardingMutation,
+  useSubmitGoalMutation,
+  useSubmitLanguagesMutation,
 } from "../api/onboardingApi";
 import type { AssessmentResult, GoalIntensity } from "../api/onboardingApi";
 import AssessmentStep from "../components/AssessmentStep";

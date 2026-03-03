@@ -2,7 +2,7 @@ import React from "react";
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { View, ScrollView, RefreshControl } from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { useGetDashboardHomeQuery } from "@/features/hub/api/dashboardApi";

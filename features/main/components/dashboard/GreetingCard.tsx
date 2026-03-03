@@ -2,7 +2,7 @@ import React from "react";
 
 import { Lightbulb } from "lucide-react-native";
 
-import { View, Text } from "react-native";
+import { Text, View } from "react-native";
 
 import { useTheme } from "@/contexts/ThemeContext";
 

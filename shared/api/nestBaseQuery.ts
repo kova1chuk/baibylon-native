@@ -1,8 +1,8 @@
 import {
-  fetchBaseQuery,
   type BaseQueryFn,
   type FetchArgs,
   type FetchBaseQueryError,
+  fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 
 import { supabase } from "@/lib/supabase";

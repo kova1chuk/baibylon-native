@@ -6,7 +6,7 @@ import { nestBaseQuery } from "@/shared/api/nestBaseQuery";
 
 import type { ExerciseType, FocusFilter } from "../model/learningQueueSlice";
 
-import type { LearningItemType, LearningStage, CEFRLevel, DailyPlanData } from "./types";
+import type { CEFRLevel, DailyPlanData, LearningItemType, LearningStage } from "./types";
 
 interface StartSessionResponse {
   success: boolean;

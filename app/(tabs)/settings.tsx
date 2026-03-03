@@ -10,32 +10,32 @@ import {
   LogOut,
   Monitor,
   Moon,
+  RotateCcw,
   Shield,
   ShieldCheck,
   Sun,
   Trash2,
-  RotateCcw,
 } from "lucide-react-native";
 import { useTranslation } from "react-i18next";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import {
-  Alert,
-  View,
-  Text,
-  ScrollView,
-  Pressable,
   ActivityIndicator,
+  Alert,
+  Pressable,
   RefreshControl,
+  ScrollView,
+  Text,
+  View,
 } from "react-native";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { useTheme, ThemePreference } from "@/contexts/ThemeContext";
+import { ThemePreference, useTheme } from "@/contexts/ThemeContext";
 import DashboardHeader from "@/features/main/components/dashboard/DashboardHeader";
 import {
+  useDeleteAccountMutation,
   useGetProfileQuery,
   useResetProgressMutation,
-  useDeleteAccountMutation,
 } from "@/features/profile/api/accountApi";
 
 import { useBottomTabOverflow } from "@/components/ui/TabBarBackground";
